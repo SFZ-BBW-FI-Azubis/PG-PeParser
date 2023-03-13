@@ -18,6 +18,10 @@ int main()
 	cout <<
 		PEParserNamespace::getFileSize<>(&peparser).dwFileSize
 		<< endl;
+	PEParserNamespace::allocMemory<>(&peparser);
+	PEParserNamespace::readFile<>(&peparser);
+	PEParserNamespace::getImageHeaders<>(&peparser);
+	PEParserNamespace::checkHeader<>(&peparser);
 	
 	wchar_t fileName[UINT16_MAX] = L"C:/NeuerOrdner(2)/depends.exe";
 	cout <<
