@@ -22,5 +22,6 @@ int main()
 		PEParserNamespace::openFile<const wchar_t*>(fileName, &peparser).hFile
 		<< endl;
 	*/
+
 	return 0;
 }
