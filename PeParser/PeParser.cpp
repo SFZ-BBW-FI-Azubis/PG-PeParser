@@ -9,10 +9,9 @@
 using namespace std;
 int main()
 {
-	wchar_t fileName[UINT16_MAX] = L"C:/NeuerOrdner(2)/depends.exe";
-	PEParserNamespace::PEParser peparser(fileName);
-	std::cout<< peparser.hFile<<"\n";
-	/*char fileNamee[UINT16_MAX] = "C:/NeuerOrdner(2)/depends.exe";
+	PEParserNamespace::PEParser peparser;
+
+	char fileNamee[UINT16_MAX] = "C:/NeuerOrdner(2)/depends.exe";
 	cout <<
 		PEParserNamespace::openFile<const char*>(fileNamee, &peparser).hFile
 		<<endl;
@@ -21,7 +20,5 @@ int main()
 	cout <<
 		PEParserNamespace::openFile<const wchar_t*>(fileName, &peparser).hFile
 		<< endl;
-	*/
-
 	return 0;
 }

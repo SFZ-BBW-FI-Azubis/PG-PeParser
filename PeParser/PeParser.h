@@ -11,10 +11,8 @@ namespace PEParserNamespace {
 	template<typename T> concept is_wchar_t = std::same_as<T, const wchar_t*>;
 	template<class T> concept impl_PEParserBase = requires(T type) {
 		{type.hFile};
+		{type.dwFileSize};
 
-	};
-	template<typename T> concept has_this = requires(T type) {
-		true;
 	};
 	//openFile declaration
 	template<typename T = const wchar_t*, class PEParserBaseImpl = PEParser>
@@ -26,16 +24,8 @@ namespace PEParserNamespace {
 		HANDLE hFile;
 		DWORD dwFileSize;
 	};
-	//friends/hosts methods
+	
 	class PEParser : public PEParserBase{
-	public:
-		PEParser(const wchar_t* lpFileName) {
-			openFile<const wchar_t*, PEParser>(lpFileName, this);
-		}
-		PEParser() {
-		};
-		template<typename T, class PEParserBaseImpl>
-		friend inline PEParser& openFile<T, PEParserBaseImpl>(T, PEParserBaseImpl*) noexcept;
 	};
 	//openFile implementation
 	//"thin" wrapper for CreateFile
