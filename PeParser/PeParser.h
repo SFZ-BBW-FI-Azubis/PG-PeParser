@@ -18,6 +18,9 @@ namespace PEParserNamespace {
 	template<typename T = const wchar_t*, class PEParserBaseImpl = PEParser>
 		requires (is_char<T> || is_wchar_t<T>) && impl_PEParserBase<PEParserBaseImpl>
 	inline PEParserBaseImpl & openFile(T lpFileName, PEParserBaseImpl * pPEParserBaseImpl) noexcept;
+	template<class PEParserBaseImpl = PEParser>
+		requires impl_PEParserBase<PEParserBaseImpl>
+	inline PEParserBaseImpl& getFileSize(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
 	class PEParserBase {
 	public:
@@ -45,8 +48,10 @@ namespace PEParserNamespace {
 		}
 		return *pPEParserBaseImpl;
 	};
-	void test() {
-		PEParser pepeDeFrog;
-		
-	};
+	template<class PEParserBaseImpl>
+	requires impl_PEParserBase<PEParserBaseImpl>
+	inline PEParserBaseImpl& getFileSize(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
+		pPEParserBaseImpl->dwFileSize = GetFileSize(pPEParserBaseImpl->hFile, 0);
+		return *pPEParserBaseImpl;
+	}
 }
