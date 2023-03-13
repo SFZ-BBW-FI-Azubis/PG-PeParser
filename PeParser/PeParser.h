@@ -11,6 +11,7 @@ namespace PEParserNamespace {
 	template<typename T> concept is_wchar_t = std::same_as<T, const wchar_t*>;
 	template<class T> concept impl_PEParserBase = requires(T type) {
 		{type.hFile};
+
 	};
 	template<typename T> concept has_this = requires(T type) {
 		true;
