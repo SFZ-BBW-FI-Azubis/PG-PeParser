@@ -20,25 +20,32 @@ namespace PEParserNamespace {
 	//declarations
 	template<typename T = const wchar_t*, class PEParserBaseImpl = PEParser>
 	requires (is_char<T> || is_wchar_t<T>) && impl_PEParserBase<PEParserBaseImpl>
-	inline PEParserBaseImpl & openFile(T lpFileName, PEParserBaseImpl * pPEParserBaseImpl) noexcept;
+		inline PEParserBaseImpl & openFile(T lpFileName, PEParserBaseImpl * pPEParserBaseImpl) noexcept;
+	
 	template<class PEParserBaseImpl = PEParser>
 	requires impl_PEParserBase<PEParserBaseImpl>
-	inline PEParserBaseImpl& getFileSize(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
+		inline PEParserBaseImpl& getFileSize(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
+	
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
-	inline PEParserBaseImpl& allocMemory(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
+		inline PEParserBaseImpl& allocMemory(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
+	
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
-	inline PEParserBaseImpl& readFile(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
+		inline PEParserBaseImpl& readFile(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
+	
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
-	inline PEParserBaseImpl& getImageHeaders(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
+		inline PEParserBaseImpl& getImageHeaders(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
+	
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 	inline PEParserBaseImpl& checkHeader(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
-	inline PIMAGE_SECTION_HEADER SECHDROFFSET(void*) noexcept;
-	inline PIMAGE_SECTION_HEADER NTHDROFFSET(void*, LONG*) noexcept;
-
+	
+	constexpr inline PIMAGE_SECTION_HEADER SECHDROFFSET(void*) noexcept;
+	constexpr inline PIMAGE_NT_HEADERS NTHDROFFSET(void*) noexcept;
+	constexpr inline PIMAGE_DOS_HEADER DOSHDROFFSET(void*) noexcept;
+	
 	class PEParserBase {
 	public:
 		HANDLE hFile;
@@ -93,8 +100,8 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 	inline PEParserBaseImpl& getImageHeaders(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
-		pPEParserBaseImpl->pDosH = (PIMAGE_DOS_HEADER)pPEParserBaseImpl->fileBuffer;
-		pPEParserBaseImpl->pNtH = NTHDROFFSET(pPEParserBaseImpl->fileBuffer, pPEParserBaseImpl->pDosH->e_lfanew)/*(PIMAGE_NT_HEADERS)(pPEParserBaseImpl->fileBuffer + (pPEParserBaseImpl->pDosH->e_lfanew))*/;
+		pPEParserBaseImpl->pDosH = DOSHDROFFSET(pPEParserBaseImpl->fileBuffer);
+		pPEParserBaseImpl->pNtH = NTHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->pSecH = SECHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		return *pPEParserBaseImpl;
 	}
@@ -112,10 +119,19 @@ namespace PEParserNamespace {
 		std::cout << "all signatures found";
 		return *pPEParserBaseImpl;
 	}
-	inline PIMAGE_SECTION_HEADER SECHDROFFSET(void* a) noexcept {
+
+	// I am not sure if that constexpr works like makros
+	// here I calculate the offsets off the Headers from the file, 
+	constexpr inline PIMAGE_DOS_HEADER DOSHDROFFSET(void* a) noexcept {
+		return (PIMAGE_DOS_HEADER)a;
+	}
+	constexpr inline PIMAGE_SECTION_HEADER SECHDROFFSET(void* a) noexcept {
 		return (PIMAGE_SECTION_HEADER)((LPVOID)((LPBYTE)a + ((PIMAGE_DOS_HEADER)a)->e_lfanew + sizeof(IMAGE_NT_HEADERS)));
 	}
-	inline PIMAGE_SECTION_HEADER NTHDROFFSET(void* a, long& e_lfanew) noexcept {
-		return (PIMAGE_NT_HEADERS)(a + e_lfanew);
+	constexpr inline PIMAGE_NT_HEADERS NTHDROFFSET(void* a) noexcept {
+		return (PIMAGE_NT_HEADERS)(((LPBYTE)a) + (((PIMAGE_DOS_HEADER)a)->e_lfanew));
 	}
 }
+
+// P in typename stands for (near) pointer (*)
+// LP stands for far pointer
