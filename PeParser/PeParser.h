@@ -42,10 +42,10 @@ namespace PEParserNamespace {
 	requires impl_PEParserBase<PEParserBaseImpl>
 	inline PEParserBaseImpl& checkHeader(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 	
-	constexpr inline PIMAGE_SECTION_HEADER SECHDROFFSET(void*) noexcept;
-	constexpr inline PIMAGE_NT_HEADERS NTHDROFFSET(void*) noexcept;
 	constexpr inline PIMAGE_DOS_HEADER DOSHDROFFSET(void*) noexcept;
-	
+	constexpr inline PIMAGE_NT_HEADERS NTHDROFFSET(void*) noexcept;
+	constexpr inline PIMAGE_SECTION_HEADER SECHDROFFSET(void*) noexcept;
+
 	class PEParserBase {
 	public:
 		HANDLE hFile;
@@ -122,14 +122,22 @@ namespace PEParserNamespace {
 
 	// I am not sure if that constexpr works like makros
 	// here I calculate the offsets off the Headers from the file, 
+	/*reinterpret_cast<PIMAGE_DOS_HEADER>(a);   //C3615	The constexpr - Function "PEParserNamespace::DOSHDROFFSET" cannot result in a constant expression..
+	constexpr explicitly does not work with reinterpretcast,
+	but as far as I know (Newtype)a / Newtype(a) should reduce to reinterpret_cast<PIMAGE_DOS_HEADER>(a)
+	*/
 	constexpr inline PIMAGE_DOS_HEADER DOSHDROFFSET(void* a) noexcept {
 		return (PIMAGE_DOS_HEADER)a;
 	}
-	constexpr inline PIMAGE_SECTION_HEADER SECHDROFFSET(void* a) noexcept {
-		return (PIMAGE_SECTION_HEADER)((LPVOID)((LPBYTE)a + ((PIMAGE_DOS_HEADER)a)->e_lfanew + sizeof(IMAGE_NT_HEADERS)));
+	constexpr inline PIMAGE_FILE_HEADER FILEHDROFFSET(void* a) noexcept {
+
 	}
 	constexpr inline PIMAGE_NT_HEADERS NTHDROFFSET(void* a) noexcept {
-		return (PIMAGE_NT_HEADERS)(((LPBYTE)a) + (((PIMAGE_DOS_HEADER)a)->e_lfanew));
+		return (PIMAGE_NT_HEADERS) (((LPBYTE)a) + (((PIMAGE_DOS_HEADER)a)->e_lfanew));
+	}
+	/*(PIMAGE_DOS_HEADER)->e_lfanew = last member of DOS Header / beginning of NT Header*/
+	constexpr inline PIMAGE_SECTION_HEADER SECHDROFFSET(void* a) noexcept {
+		return (PIMAGE_SECTION_HEADER)((LPVOID)((LPBYTE)a + ((PIMAGE_DOS_HEADER)a)->e_lfanew + sizeof(IMAGE_NT_HEADERS)));
 	}
 }
 
