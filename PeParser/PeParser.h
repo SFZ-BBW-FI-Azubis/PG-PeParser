@@ -44,6 +44,7 @@ namespace PEParserNamespace {
 	
 	constexpr inline PIMAGE_DOS_HEADER DOSHDROFFSET(void*) noexcept;
 	constexpr inline PIMAGE_NT_HEADERS NTHDROFFSET(void*) noexcept;
+	constexpr inline IMAGE_FILE_HEADER FILEHDROFFSET(void*) noexcept;
 	constexpr inline PIMAGE_SECTION_HEADER SECHDROFFSET(void*) noexcept;
 
 	class PEParserBase {
@@ -129,17 +130,17 @@ namespace PEParserNamespace {
 	constexpr inline PIMAGE_DOS_HEADER DOSHDROFFSET(void* a) noexcept {
 		return (PIMAGE_DOS_HEADER)a;
 	}
-	constexpr inline PIMAGE_FILE_HEADER FILEHDROFFSET(void* a) noexcept {
-
-	}
 	constexpr inline PIMAGE_NT_HEADERS NTHDROFFSET(void* a) noexcept {
-		return (PIMAGE_NT_HEADERS) (((LPBYTE)a) + (((PIMAGE_DOS_HEADER)a)->e_lfanew));
+		return (PIMAGE_NT_HEADERS) (((LPBYTE)a) + (DOSHDROFFSET(a)->e_lfanew));
+	}
+	constexpr inline IMAGE_FILE_HEADER FILEHDROFFSET(void* a) noexcept {
+		return NTHDROFFSET(a)->FileHeader;
 	}
 	/*(PIMAGE_DOS_HEADER)->e_lfanew = last member of DOS Header / beginning of NT Header*/
 	constexpr inline PIMAGE_SECTION_HEADER SECHDROFFSET(void* a) noexcept {
-		return (PIMAGE_SECTION_HEADER)((LPVOID)((LPBYTE)a + ((PIMAGE_DOS_HEADER)a)->e_lfanew + sizeof(IMAGE_NT_HEADERS)));
+		return (PIMAGE_SECTION_HEADER)((LPVOID)((LPBYTE)a + DOSHDROFFSET(a)->e_lfanew + sizeof(IMAGE_NT_HEADERS)));
 	}
 }
 
-// P in typename stands for (near) pointer (*)
-// LP stands for far pointer
+// P in typename stands for (near) pointer (type*) (near)
+// LP stands for far pointer (type*) far
