@@ -41,10 +41,15 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 	inline PEParserBaseImpl& checkHeader(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
+
+	template<class PEParserBaseImpl>
+	requires impl_PEParserBase<PEParserBaseImpl>
+	inline PEParserBaseImpl& getSection(PEParserBaseImpl*, const unsigned char*) noexcept;
 	
 	constexpr inline PIMAGE_DOS_HEADER DOSHDROFFSET(void*) noexcept;
 	constexpr inline PIMAGE_NT_HEADERS NTHDROFFSET(void*) noexcept;
 	constexpr inline IMAGE_FILE_HEADER FILEHDROFFSET(void*) noexcept;
+	constexpr inline IMAGE_OPTIONAL_HEADER OPTHDROFFSET(void*) noexcept;
 	constexpr inline PIMAGE_SECTION_HEADER SECHDROFFSET(void*) noexcept;
 
 	class PEParserBase {
@@ -59,6 +64,9 @@ namespace PEParserNamespace {
 		PIMAGE_DOS_HEADER		pDosH;
 		PIMAGE_NT_HEADERS		pNtH;
 		PIMAGE_SECTION_HEADER	pSecH;
+		PIMAGE_SECTION_HEADER	pTextSec;
+		IMAGE_FILE_HEADER		FileH;
+		IMAGE_OPTIONAL_HEADER	OptH;
 	};
 	class PEParser : public PEParserBase, public PEHEADER{
 	};
@@ -103,6 +111,8 @@ namespace PEParserNamespace {
 	inline PEParserBaseImpl& getImageHeaders(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		pPEParserBaseImpl->pDosH = DOSHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->pNtH = NTHDROFFSET(pPEParserBaseImpl->fileBuffer);
+		pPEParserBaseImpl->FileH = FILEHDROFFSET(pPEParserBaseImpl->fileBuffer);
+		pPEParserBaseImpl->OptH = OPTHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->pSecH = SECHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		return *pPEParserBaseImpl;
 	}
@@ -117,7 +127,42 @@ namespace PEParserNamespace {
 			std::cout << "IMAGE_NT_SIGNATURE not found";
 			return *pPEParserBaseImpl;
 		}
-		std::cout << "all signatures found";
+		std::cout << "all signatures found\n";
+		switch (pPEParserBaseImpl->OptH.Magic) {
+		case 0x10b:
+			std::cout << "PE32 format\n";
+			return *pPEParserBaseImpl;
+		case 0x20b:
+			std::cout << "PE32+ format\n";
+			return *pPEParserBaseImpl;
+		default:
+			std::cout << "invalid format\n";
+			return *pPEParserBaseImpl;
+		}
+		//dont care about Rich Header, its undocumented anyways
+		return *pPEParserBaseImpl;
+	}
+
+	template<class PEParserBaseImpl>
+	requires impl_PEParserBase<PEParserBaseImpl>
+	inline PEParserBaseImpl& getSection(PEParserBaseImpl* pPEParserBaseImpl, const unsigned char* name) noexcept {
+		size_t nameLen = strlen((const char*)name);
+		pPEParserBaseImpl->pTextSec = pPEParserBaseImpl->pSecH;
+		if (nameLen <= (size_t)IMAGE_SIZEOF_SHORT_NAME) {
+			size_t counter = 0;
+			unsigned short totalSectionCount = pPEParserBaseImpl->FileH.NumberOfSections;
+			while ((memcmp((const char*)pPEParserBaseImpl->pTextSec->Name, (const char*)name, nameLen) != 0) || (counter < totalSectionCount)) {
+				std::cout << "SectionNO :" << counter << " out of " << totalSectionCount << "\n" << pPEParserBaseImpl->pTextSec->Name << " is not " << name << "\n";
+				pPEParserBaseImpl->pTextSec++;
+				counter++;
+			};
+			if ((pPEParserBaseImpl->FileH.NumberOfSections < counter))
+			{
+				std::cout << name << " Section found\n" << nameLen << "\n";
+				return *pPEParserBaseImpl;
+			}
+		}
+		std::cout << name << " Section not found\n";
 		return *pPEParserBaseImpl;
 	}
 
@@ -135,6 +180,9 @@ namespace PEParserNamespace {
 	}
 	constexpr inline IMAGE_FILE_HEADER FILEHDROFFSET(void* a) noexcept {
 		return NTHDROFFSET(a)->FileHeader;
+	}
+	constexpr inline IMAGE_OPTIONAL_HEADER OPTHDROFFSET(void* a) noexcept {
+		return NTHDROFFSET(a)->OptionalHeader;
 	}
 	/*(PIMAGE_DOS_HEADER)->e_lfanew = last member of DOS Header / beginning of NT Header*/
 	constexpr inline PIMAGE_SECTION_HEADER SECHDROFFSET(void* a) noexcept {

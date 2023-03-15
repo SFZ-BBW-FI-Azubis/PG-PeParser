@@ -22,6 +22,7 @@ int main()
 	PEParserNamespace::readFile<>(&peparser);
 	PEParserNamespace::getImageHeaders<>(&peparser);
 	PEParserNamespace::checkHeader<>(&peparser);
+	PEParserNamespace::getSection<>(&peparser, (const unsigned char*)".text");
 	
 	wchar_t fileName[UINT16_MAX] = L"C:/NeuerOrdner(2)/depends.exe";
 	cout <<
