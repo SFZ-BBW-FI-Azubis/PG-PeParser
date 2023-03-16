@@ -5,7 +5,6 @@
 
 #include <iostream>
 #include <Windows.h>
-#include <typeinfo>
 namespace PEParserNamespace {
 	//concepts
 	int test;
@@ -68,12 +67,19 @@ namespace PEParserNamespace {
 		IMAGE_FILE_HEADER		FileH;
 		IMAGE_OPTIONAL_HEADER	OptH;
 	};
-	class PEParser : public PEParserBase, public PEHEADER{
+	class PESeaction {
+	public:
+		const unsigned char* name;
+		PIMAGE_SECTION_HEADER	pSec;
+	};
+	class PEParser : public PEParserBase, public PEHEADER	{
+
 	};
 	//openFile implementation
-	//"thin" wrapper for CreateFile
+	//"thin" wrapper
+//___________________________________________________________________________________________________________________PEParserBase
 	template<typename T, class PEParserBaseImpl>
-	requires (is_char<T> || is_wchar_t<T>) && impl_PEParserBase<PEParserBaseImpl>
+		requires (is_char<T> || is_wchar_t<T>) && impl_PEParserBase<PEParserBaseImpl>
 	inline PEParserBaseImpl& openFile(T lpFileName , PEParserBaseImpl * pPEParserBaseImpl) noexcept {
 		if constexpr (is_char<T>) {
 			pPEParserBaseImpl->hFile = CreateFileA(lpFileName, GENERIC_READ | GENERIC_WRITE,
@@ -89,25 +95,26 @@ namespace PEParserNamespace {
 		return *pPEParserBaseImpl;
 	};
 	template<class PEParserBaseImpl>
-	requires impl_PEParserBase<PEParserBaseImpl>
+		requires impl_PEParserBase<PEParserBaseImpl>
 	inline PEParserBaseImpl& getFileSize(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		pPEParserBaseImpl->dwFileSize = GetFileSize(pPEParserBaseImpl->hFile, 0);
 		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl>
-	requires impl_PEParserBase<PEParserBaseImpl>
+		requires impl_PEParserBase<PEParserBaseImpl>
 	inline PEParserBaseImpl& allocMemory(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		pPEParserBaseImpl->fileBuffer = new char[pPEParserBaseImpl->dwFileSize];							//could cause some problems (pPEParserBaseImpl->dwFileSize)-1 ?
 		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl>
-	requires impl_PEParserBase<PEParserBaseImpl>
+		requires impl_PEParserBase<PEParserBaseImpl>
 	inline PEParserBaseImpl& readFile(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		ReadFile(pPEParserBaseImpl->hFile, pPEParserBaseImpl->fileBuffer, pPEParserBaseImpl->dwFileSize, &pPEParserBaseImpl->bytes, 0);
 		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl>
-	requires impl_PEParserBase<PEParserBaseImpl>
+		requires impl_PEParserBase<PEParserBaseImpl>
+//___________________________________________________________________________________________________________________PEHEADER
 	inline PEParserBaseImpl& getImageHeaders(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		pPEParserBaseImpl->pDosH = DOSHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->pNtH = NTHDROFFSET(pPEParserBaseImpl->fileBuffer);
@@ -117,7 +124,7 @@ namespace PEParserNamespace {
 		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl>
-	requires impl_PEParserBase<PEParserBaseImpl>
+		requires impl_PEParserBase<PEParserBaseImpl>
 	inline PEParserBaseImpl& checkHeader(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		if (pPEParserBaseImpl->pDosH->e_magic != IMAGE_DOS_SIGNATURE)	{
 			std::cout << "IMAGE_DOS_SIGNATURE not found";
@@ -142,9 +149,10 @@ namespace PEParserNamespace {
 		//dont care about Rich Header, its undocumented anyways
 		return *pPEParserBaseImpl;
 	}
+//___________________________________________________________________________________________________________________PESection
 	//this is ugly kind of nut its working :)
 	template<class PEParserBaseImpl>
-	requires impl_PEParserBase<PEParserBaseImpl>
+		requires impl_PEParserBase<PEParserBaseImpl>
 	inline PEParserBaseImpl& getSection(PEParserBaseImpl* pPEParserBaseImpl, const unsigned char* name) noexcept {
 		size_t nameLen = strlen((const char*)name);
 		pPEParserBaseImpl->pTextSec = pPEParserBaseImpl->pSecH;
