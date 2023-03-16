@@ -43,7 +43,7 @@ namespace PEParserNamespace {
 
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
-	inline PEParserBaseImpl& getSection(PEParserBaseImpl*, const unsigned char*) noexcept;
+	PEParserBaseImpl& getSection(PEParserBaseImpl*, const unsigned char*) noexcept;
 	
 	constexpr inline PIMAGE_DOS_HEADER DOSHDROFFSET(void*) noexcept;
 	constexpr inline PIMAGE_NT_HEADERS NTHDROFFSET(void*) noexcept;
@@ -152,8 +152,8 @@ namespace PEParserNamespace {
 //___________________________________________________________________________________________________________________PESection
 	//this is ugly kind of nut its working :)
 	template<class PEParserBaseImpl>
-		requires impl_PEParserBase<PEParserBaseImpl>
-	inline PEParserBaseImpl& getSection(PEParserBaseImpl* pPEParserBaseImpl, const unsigned char* name) noexcept {
+		requires impl_PEParserBase<PEParserBaseImpl>	/*inline is propably not the best option*/
+	PEParserBaseImpl& getSection(PEParserBaseImpl* pPEParserBaseImpl, const unsigned char* name) noexcept {
 		size_t nameLen = strlen((const char*)name);
 		pPEParserBaseImpl->pTextSec = pPEParserBaseImpl->pSecH;
 		if (nameLen <= (size_t)IMAGE_SIZEOF_SHORT_NAME) {
