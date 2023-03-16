@@ -142,7 +142,7 @@ namespace PEParserNamespace {
 		//dont care about Rich Header, its undocumented anyways
 		return *pPEParserBaseImpl;
 	}
-
+	//this is ugly kind of nut its working :)
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 	inline PEParserBaseImpl& getSection(PEParserBaseImpl* pPEParserBaseImpl, const unsigned char* name) noexcept {
@@ -151,12 +151,14 @@ namespace PEParserNamespace {
 		if (nameLen <= (size_t)IMAGE_SIZEOF_SHORT_NAME) {
 			size_t counter = 0;
 			unsigned short totalSectionCount = pPEParserBaseImpl->FileH.NumberOfSections;
-			while ((memcmp((const char*)pPEParserBaseImpl->pTextSec->Name, (const char*)name, nameLen) != 0) || (counter < totalSectionCount)) {
+			while ((memcmp((const char*)pPEParserBaseImpl->pTextSec->Name, (const char*)name, nameLen) != 0) && 
+				(strlen((const char*)pPEParserBaseImpl->pTextSec->Name) == nameLen) && 
+				(counter < totalSectionCount)) {
 				std::cout << "SectionNO :" << counter << " out of " << totalSectionCount << "\n" << pPEParserBaseImpl->pTextSec->Name << " is not " << name << "\n";
 				pPEParserBaseImpl->pTextSec++;
 				counter++;
 			};
-			if ((pPEParserBaseImpl->FileH.NumberOfSections < counter))
+			if ((counter < totalSectionCount) && (strlen((const char*)pPEParserBaseImpl->pTextSec->Name) == nameLen))
 			{
 				std::cout << name << " Section found\n" << nameLen << "\n";
 				return *pPEParserBaseImpl;
