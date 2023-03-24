@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <Windows.h>
+#include <vector>
 namespace PEParserNamespace {
 	//concepts
 	int test;
@@ -50,6 +51,11 @@ namespace PEParserNamespace {
 	constexpr inline IMAGE_FILE_HEADER FILEHDROFFSET(void*) noexcept;
 	constexpr inline IMAGE_OPTIONAL_HEADER OPTHDROFFSET(void*) noexcept;
 	constexpr inline PIMAGE_SECTION_HEADER SECHDROFFSET(void*) noexcept;
+	constexpr inline DWORD SecVSize(void*) noexcept;
+
+	class PEParserBase;
+	class PEHEADER;
+	class PEParser;
 
 	class PEParserBase {
 	public:
@@ -62,15 +68,11 @@ namespace PEParserNamespace {
 	public:
 		PIMAGE_DOS_HEADER		pDosH;
 		PIMAGE_NT_HEADERS		pNtH;
-		PIMAGE_SECTION_HEADER	pSecH;
+		PIMAGE_SECTION_HEADER	pSecH;					
 		PIMAGE_SECTION_HEADER	pTextSec;
+		PIMAGE_SECTION_HEADER * pSecHs;			// is const and immutable, but not the Data its pointing on. SecCount in FileHeader
 		IMAGE_FILE_HEADER		FileH;
 		IMAGE_OPTIONAL_HEADER	OptH;
-	};
-	class PESeaction {
-	public:
-		const unsigned char* name;
-		PIMAGE_SECTION_HEADER	pSec;
 	};
 	class PEParser : public PEParserBase, public PEHEADER	{
 
@@ -112,15 +114,18 @@ namespace PEParserNamespace {
 		ReadFile(pPEParserBaseImpl->hFile, pPEParserBaseImpl->fileBuffer, pPEParserBaseImpl->dwFileSize, &pPEParserBaseImpl->bytes, 0);
 		return *pPEParserBaseImpl;
 	}
-	template<class PEParserBaseImpl>
-		requires impl_PEParserBase<PEParserBaseImpl>
 //___________________________________________________________________________________________________________________PEHEADER
+	template<class PEParserBaseImpl>
+	requires impl_PEParserBase<PEParserBaseImpl>
 	inline PEParserBaseImpl& getImageHeaders(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		pPEParserBaseImpl->pDosH = DOSHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->pNtH = NTHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->FileH = FILEHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->OptH = OPTHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->pSecH = SECHDROFFSET(pPEParserBaseImpl->fileBuffer);
+		for (unsigned long i = 0; i < pPEParserBaseImpl->FileH.NumberOfSections; i++)	{
+
+		}
 		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl>
@@ -197,6 +202,9 @@ namespace PEParserNamespace {
 	/*(PIMAGE_DOS_HEADER)->e_lfanew = last member of DOS Header / beginning of NT Header*/
 	constexpr inline PIMAGE_SECTION_HEADER SECHDROFFSET(void* a) noexcept {
 		return (PIMAGE_SECTION_HEADER)((LPVOID)((LPBYTE)a + DOSHDROFFSET(a)->e_lfanew + sizeof(IMAGE_NT_HEADERS)));
+	}
+	constexpr inline DWORD SecVSize(void* a) noexcept {
+		return PIMAGE_SECTION_HEADER(a)->Misc.VirtualSize;
 	}
 }
 
