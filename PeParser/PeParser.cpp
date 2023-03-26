@@ -3,9 +3,6 @@
 #pragma once
 #include "PeParser.h"
 #include <Windows.h>
-#include <type_traits>
-#include <concepts>
-#include "PeParser.h"
 using namespace std;
 int main()
 {
