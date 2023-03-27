@@ -10,4 +10,5 @@ namespace PEParserNamespace {
 		{type.dwFileSize} -> std::convertible_to<DWORD>;
 		{type.bytes} -> std::convertible_to<DWORD>;
 	};
+	template<
 }
