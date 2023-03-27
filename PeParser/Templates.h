@@ -5,7 +5,6 @@
 #include <Windows.h>
 #include <iostream>
 namespace PEParserNamespace {
-
 	template<typename T, class PEParserBaseImpl>
 	requires (is_char<T> || is_wchar_t<T>) && impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& openFile(T lpFileName, PEParserBaseImpl* pPEParserBaseImpl) noexcept {
