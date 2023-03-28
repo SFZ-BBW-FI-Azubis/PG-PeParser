@@ -1,7 +1,11 @@
 #include "pch.h"
 #include <windows.h>
 #include <stdio.h>
-//#include <Python.h>
+
+extern "C" __declspec(dllexport) int _cdecl test() {
+    return 1234;
+}
+
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved) {
     switch (fdwReason)  {
         case DLL_PROCESS_ATTACH:    {

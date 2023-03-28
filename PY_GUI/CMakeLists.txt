@@ -1,0 +1,7 @@
+add_custom_target(DEL COMMAND powershell -Command del "${CMAKE_SOURCE_DIR}/PY_GUI/PeParserPythonWrapper.dll")
+add_custom_target(COPY COMMAND powershell -Command copy "${CMAKE_BINARY_DIR}/PeParser/PeParserPythonWrapper.dll" "${CMAKE_SOURCE_DIR}/PY_GUI")
+add_custom_target(ECHO COMMAND powershell -Command echo "halalalalalalal")
+add_custom_target(DEL_COPY COMMAND powershell -Command del "${CMAKE_SOURCE_DIR}/PY_GUI/PeParserPythonWrapper.dll" && copy "${CMAKE_BINARY_DIR}/PeParser/PeParserPythonWrapper.dll" "${CMAKE_SOURCE_DIR}/PY_GUI")
+message("my Message_____________________________-")
+message(${CMAKE_SOURCE_DIR})
+message(${CMAKE_BINARY_DIR})

@@ -8,3 +8,4 @@ project ("PeParser")
 
 # Schließen Sie Unterprojekte ein.
 add_subdirectory ("PeParser")
+add_subdirectory ("PY_GUI")
