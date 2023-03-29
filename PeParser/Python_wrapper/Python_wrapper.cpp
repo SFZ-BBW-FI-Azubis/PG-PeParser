@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 extern "C" __declspec(dllexport) int _cdecl test() {
+    printf("asdfasdfasdfasdfasdf\n");
     return 1234;
 }
 
