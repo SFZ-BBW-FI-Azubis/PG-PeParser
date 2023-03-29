@@ -32,6 +32,7 @@ int main()
 	cout <<
 		PEParserNamespace::getFileSize<>(&peparser).dwFileSize
 		<< endl;
+	std::cout << sizeof(IMAGE_SECTION_HEADER) << std::endl;
 	return 0;
 }
 //test test

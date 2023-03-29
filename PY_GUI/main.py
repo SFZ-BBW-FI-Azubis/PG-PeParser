@@ -1,7 +1,10 @@
 #Paul stinkt
-class PeParser:
-    x=5
 import ctypes
+class PEParserBase:
+    ctypes.c_void_p hFile
+class PEHEADER
+    
+
 print("hallo welt")
 _test = ctypes.CDLL('PeParserPythonWrapper.dll')
 _test.test()
