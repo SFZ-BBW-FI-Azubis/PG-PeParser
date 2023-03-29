@@ -6,7 +6,8 @@
 using namespace std;
 int main()
 {
-	PEParserNamespace::PEParser peparser;
+	typedef PEParserNamespace::PEParser PEParser;
+	PEParser peparser;
 
 	char fileNamee[UINT16_MAX] = "C:/NeuerOrdner(2)/depends.exe";
 	cout <<

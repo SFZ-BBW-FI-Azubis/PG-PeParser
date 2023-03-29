@@ -1,9 +1,10 @@
+#include "../PeParser.h"
 #include "pch.h"
 #include <windows.h>
 #include <stdio.h>
 
 extern "C" __declspec(dllexport) int _cdecl test() {
-    printf("asdfasdfasdfasdfasdf\n");
+    printf("lolololololol\n");
     return 1234;
 }
 
