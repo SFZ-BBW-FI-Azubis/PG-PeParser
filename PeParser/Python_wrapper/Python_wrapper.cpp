@@ -3,11 +3,12 @@
 #include <windows.h>
 #include <stdio.h>
 
-extern "C" __declspec(dllexport) int _cdecl test() {
-    printf("lolololololol\n");
+extern "C" __declspec(dllexport) int _cdecl test(PEParserNamespace::PEParserBase* base) {
+    printf("shitzt\n");
     return 1234;
 }
-
+extern "C" __declspec(dllexport) PEParserNamespace::PEParser pEParser;
+extern "C" __declspec(dllexport) int x = 100;
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved) {
     switch (fdwReason)  {
         case DLL_PROCESS_ATTACH:    {
