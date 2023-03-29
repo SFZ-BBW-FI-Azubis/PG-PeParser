@@ -3,9 +3,10 @@
 #include <windows.h>
 #include <stdio.h>
 
-extern "C" __declspec(dllexport) int _cdecl test(PEParserNamespace::PEParserBase* base) {
-    printf("shitzt\n");
-    return 1234;
+extern "C" __declspec(dllexport) PEParserNamespace::PEParserBase& _cdecl test(PEParserNamespace::PEParserBase* base) {
+    printf("shitzttttttttttTTT\n");
+    base->bytes = 12341234;
+    return *base;
 }
 extern "C" __declspec(dllexport) PEParserNamespace::PEParser pEParser;
 extern "C" __declspec(dllexport) int x = 100;

@@ -10,12 +10,12 @@ class PEHEADER(ctypes.Structure):
 def testWrapper(peParserBase):
     print("Hallo welt")
 pEParserBase = PEParserBase()
-pEParserBase._fields_[0]
 print("hallo welt")
 _test = ctypes.CDLL('PeParserPythonWrapper.dll')
 _test.test.argtypes = [ctypes.POINTER(PEParserBase)]
-_test.test.restype = ctypes.c_int
-print(_test.test(ctypes.byref(pEParserBase)))
+_test.test.restype = ctypes.POINTER(PEParserBase)
+result = _test.test(ctypes.byref(pEParserBase))
+print(ctypes.byref(result))
 x = ctypes.c_int.in_dll(_test, "x")
 print(x);
 testWrapper
