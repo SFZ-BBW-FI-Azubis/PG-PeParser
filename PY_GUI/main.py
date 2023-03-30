@@ -20,5 +20,6 @@ _test = ctypes.CDLL('PeParserPythonWrapper.dll')
 
 #x = ctypes.c_int.in_dll(_test, "x")
 #print(x);
-print(testWrapper(pEParserBase, _test).bytes)
-print(pEParserBase.bytes)
+#id should be the same, but it is not
+print(id(testWrapper(pEParserBase, _test)))
+print(id(pEParserBase))

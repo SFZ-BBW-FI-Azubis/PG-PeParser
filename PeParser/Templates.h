@@ -80,29 +80,43 @@ namespace PEParserNamespace {
 		return *pPEParserBaseImpl;
 	}
 	//___________________________________________________________________________________________________________________PESection
-		//this is ugly kind of nut its working :)
-	template<class PEParserBaseImpl>
-	requires impl_PEParserBase<PEParserBaseImpl>	/*inline is propably not the best option*/
-		PEParserBaseImpl& getSection(PEParserBaseImpl* pPEParserBaseImpl, const unsigned char* name) noexcept {
-		size_t nameLen = strlen((const char*)name);
+		//this is ugly kind of but its working :)
+
+	template<class PEParserBaseImpl, typename T>
+	requires impl_PEParserBase<PEParserBaseImpl> && (is_byte<T> || is_uchar<T>)
+		inline bool mcompare(PEParserBaseImpl* pPEParserBaseImpl, size_t i, T n) {
+		size_t totalSectionCount = pPEParserBaseImpl->FileH.NumberOfSections;
+		if constexpr (is_byte<T>) {
+			return ((i <= n) && (i <= totalSectionCount));
+		}
+		return (memcmp((const char*)pPEParserBaseImpl->pTextSec->Name, (const char*)n, strlen((const char*)n)) != 0);
+	}
+
+	template<class PEParserBaseImpl, typename T>
+	requires impl_PEParserBase<PEParserBaseImpl> && (is_uchar<T> || is_byte<T>)	/*inline is propably not the best option*/
+		PEParserBaseImpl& getSection(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
+		size_t totalSectionCount = pPEParserBaseImpl->FileH.NumberOfSections;
+		for (size_t i = 0; mcompare<PEParserBaseImpl, T>(pPEParserBaseImpl, i, n); i++) {
+
+		}
+		size_t nameLen = strlen((const char*)n);
 		pPEParserBaseImpl->pTextSec = pPEParserBaseImpl->pSecH;
 		if (nameLen <= (size_t)IMAGE_SIZEOF_SHORT_NAME) {
 			size_t counter = 0;
-			unsigned short totalSectionCount = pPEParserBaseImpl->FileH.NumberOfSections;
-			while ((memcmp((const char*)pPEParserBaseImpl->pTextSec->Name, (const char*)name, nameLen) != 0) &&
+			while ((memcmp((const char*)pPEParserBaseImpl->pTextSec->Name, (const char*)n, nameLen) != 0) &&
 				(strlen((const char*)pPEParserBaseImpl->pTextSec->Name) == nameLen) &&
 				(counter < totalSectionCount)) {
-				std::cout << "SectionNO :" << counter << " out of " << totalSectionCount << "\n" << pPEParserBaseImpl->pTextSec->Name << " is not " << name << "\n";
+				std::cout << "SectionNO :" << counter << " out of " << totalSectionCount << "\n" << pPEParserBaseImpl->pTextSec->Name << " is not " << n << "\n";
 				pPEParserBaseImpl->pTextSec++;
 				counter++;
 			};
 			if ((counter < totalSectionCount) && (strlen((const char*)pPEParserBaseImpl->pTextSec->Name) == nameLen))
 			{
-				std::cout << name << " Section found\n" << nameLen << "\n";
+				std::cout << n << " Section found\n" << nameLen << "\n";
 				return *pPEParserBaseImpl;
 			}
 		}
-		std::cout << name << " Section not found\n";
+		std::cout << n << " Section not found\n";
 		return *pPEParserBaseImpl;
 	}
 }
