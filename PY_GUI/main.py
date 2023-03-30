@@ -13,9 +13,9 @@ pEParserBase = PEParserBase()
 print("hallo welt")
 _test = ctypes.CDLL('PeParserPythonWrapper.dll')
 _test.test.argtypes = [ctypes.POINTER(PEParserBase)]
-_test.test.restype = ctypes.POINTER(PEParserBase)
+_test.test.restype = PEParserBase
 result = _test.test(ctypes.byref(pEParserBase))
-print(ctypes.byref(result))
+print(result.bytes)
 x = ctypes.c_int.in_dll(_test, "x")
 print(x);
 testWrapper
