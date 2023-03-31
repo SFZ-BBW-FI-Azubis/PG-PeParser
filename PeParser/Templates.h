@@ -100,7 +100,7 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl, typename T>
 	requires impl_PEParserBase<PEParserBaseImpl> && (is_uchar<T> || is_byte<T>)	/*inline is propably not the best option*/
 		PEParserBaseImpl& getSection(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
-		size_t totalSectionCount = pPEParserBaseImpl->FileH.NumberOfSections;
+		unsigned short& totalSectionCount = pPEParserBaseImpl->FileH.NumberOfSections;
 		pPEParserBaseImpl->pSecHSingle = pPEParserBaseImpl->pSecH;							//reset secHSingle to firstSecH
 		size_t i;
 		for (i = 0; mcompare<PEParserBaseImpl, T>(pPEParserBaseImpl, i, n); i++) {
