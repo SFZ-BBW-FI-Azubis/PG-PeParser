@@ -4,8 +4,17 @@
 #include <stdio.h>
 
 extern "C" __declspec(dllexport) PEParserNamespace::PEParserBase& _cdecl test(PEParserNamespace::PEParserBase* base) {
-    printf("shitzttttttttttTTTstorm\n");
+    printf("shitorm\n");
     base->bytes = 12345;
+    return *base;
+}
+class PEHEADER {
+public:
+    PEParserNamespace::PEParserBase test;
+};
+extern "C" __declspec(dllexport) PEHEADER & _cdecl test2(PEHEADER * base) {
+    printf("torm\n");
+    base->test.bytes = 12345;
     return *base;
 }
 extern "C" __declspec(dllexport) PEParserNamespace::PEParser pEParser;

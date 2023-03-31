@@ -104,14 +104,13 @@ namespace PEParserNamespace {
 		pPEParserBaseImpl->pSecHSingle = pPEParserBaseImpl->pSecH;							//reset secHSingle to firstSecH
 		size_t i;
 		for (i = 0; mcompare<PEParserBaseImpl, T>(pPEParserBaseImpl, i, n); i++) {
-			std::cout << pPEParserBaseImpl->pSecHSingle->Name << " is not " << n << std::endl;
 			pPEParserBaseImpl->pSecHSingle++;
 		}
 		if (i == pPEParserBaseImpl->FileH.NumberOfSections)	{
-			std::cout << n <<" not found" << std::endl;
+			std::cout << n <<"	not found" << std::endl;
 			return *pPEParserBaseImpl;
 		}
-		std::cout << pPEParserBaseImpl->pSecHSingle->Name << " is " << n << std::endl;
+		std::cout << pPEParserBaseImpl->pSecHSingle->Name << "	found"<< std::endl;
 		return *pPEParserBaseImpl;
 	}
 }
