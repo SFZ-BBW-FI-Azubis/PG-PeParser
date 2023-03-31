@@ -23,6 +23,7 @@ int main()
 	PEParserNamespace::getSection<>(&peparser, (const unsigned char*)".data");
 	PEParserNamespace::getSection<>(&peparser, (const unsigned char*)".text");
 	PEParserNamespace::getSection<>(&peparser, (const unsigned char*)"dataas");
+	PEParserNamespace::getSection<>(&peparser, (BYTE)5);
 	//std::cout <<"SecVSize  "<<PEParserNamespace::SecVSize(peparser.pSecH) << std::endl;
 	
 	wchar_t fileName[UINT16_MAX] = L"C:/NeuerOrdner(2)/depends.exe";

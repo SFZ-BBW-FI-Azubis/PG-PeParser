@@ -84,15 +84,16 @@ namespace PEParserNamespace {
 	requires impl_PEParserBase<PEParserBaseImpl> && (is_byte<T> || is_uchar<T>)
 		inline bool mcompare(PEParserBaseImpl* pPEParserBaseImpl, size_t i, T n) {
 		size_t totalSectionCount = pPEParserBaseImpl->FileH.NumberOfSections;
-		if (i > totalSectionCount)	{
+		if (i >= totalSectionCount)	{
+			pPEParserBaseImpl->pSecHSingle--;
 			return false;
 		}
 		if constexpr (is_byte<T>) {
-			return (i <= n);
+			return (i < n);
 		} else	{
 			size_t nLength = strlen((const char*)n);
 			constexpr size_t nMaxLength = (size_t)IMAGE_SIZEOF_SHORT_NAME;
-			return (nLength <= nMaxLength)||(memcmp((const char*)pPEParserBaseImpl->pSecHSingle->Name, (const char*)n, nLength) != 0);
+			return (nLength <= nMaxLength)&&(memcmp((const char*)pPEParserBaseImpl->pSecHSingle->Name, (const char*)n, nLength) != 0);
 		}
 	}
 
@@ -101,9 +102,16 @@ namespace PEParserNamespace {
 		PEParserBaseImpl& getSection(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
 		size_t totalSectionCount = pPEParserBaseImpl->FileH.NumberOfSections;
 		pPEParserBaseImpl->pSecHSingle = pPEParserBaseImpl->pSecH;							//reset secHSingle to firstSecH
-		for (size_t i = 0; mcompare<PEParserBaseImpl, T>(pPEParserBaseImpl, i, n); i++) {
+		size_t i;
+		for (i = 0; mcompare<PEParserBaseImpl, T>(pPEParserBaseImpl, i, n); i++) {
+			std::cout << pPEParserBaseImpl->pSecHSingle->Name << " is not " << n << std::endl;
 			pPEParserBaseImpl->pSecHSingle++;
 		}
+		if (i == pPEParserBaseImpl->FileH.NumberOfSections)	{
+			std::cout << n <<" not found" << std::endl;
+			return *pPEParserBaseImpl;
+		}
+		std::cout << pPEParserBaseImpl->pSecHSingle->Name << " is " << n << std::endl;
 		return *pPEParserBaseImpl;
 	}
 }
