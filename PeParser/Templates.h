@@ -113,4 +113,10 @@ namespace PEParserNamespace {
 		std::cout << pPEParserBaseImpl->pSecHSingle->Name << "	found"<< std::endl;
 		return *pPEParserBaseImpl;
 	}
+	template<class PEParserBaseImpl, typename T = const unsigned char*>
+	requires impl_PEParserBase<PEParserBaseImpl> && (is_uchar<T> || is_byte<T>)
+		PEParserBaseImpl& getDataDirectoryEntry(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
+
+		return *pPEParserBaseImpl;
+	}
 }
