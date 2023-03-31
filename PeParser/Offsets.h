@@ -20,6 +20,9 @@ namespace PEParserNamespace {
 	constexpr inline DWORD SecVSize(void* a) noexcept {
 		return PIMAGE_SECTION_HEADER(a)->Misc.VirtualSize;
 	}
+	constexpr inline DWORD SecRawSize(void* a) noexcept {
+		return PIMAGE_SECTION_HEADER(a)->SizeOfRawData;
+	}
 }
 // I am not sure if that constexpr works like makros
 // here I calculate the offsets off the Headers from the file, 
