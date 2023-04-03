@@ -19,12 +19,24 @@ namespace PEParserNamespace {
 				FILE_ATTRIBUTE_NORMAL, NULL);
 			std::wcout << std::endl << lpFileName << std::endl;
 		}
+		if (pPEParserBaseImpl->hFile == INVALID_HANDLE_VALUE)	{
+			std::cout << "INVALID_HANDLE_VALUE\n";
+			pPEParserBaseImpl->failed = true;
+			return *pPEParserBaseImpl;
+		}
+		pPEParserBaseImpl->failed = false;
 		return *pPEParserBaseImpl;
 	};
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& getFileSize(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		pPEParserBaseImpl->dwFileSize = GetFileSize(pPEParserBaseImpl->hFile, 0);
+		if (pPEParserBaseImpl->dwFileSize == INVALID_FILE_SIZE) {
+			std::cout << "INVALID_FILE_SIZE\n";
+			pPEParserBaseImpl->failed = true;
+			return *pPEParserBaseImpl;
+		}
+		pPEParserBaseImpl->failed = false;
 		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl>
