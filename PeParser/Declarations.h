@@ -33,6 +33,7 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl, typename T = const unsigned char*>
 	requires impl_PEParserBase<PEParserBaseImpl> && (is_uchar<T> || is_byte<T>)
 		PEParserBaseImpl& getSection(PEParserBaseImpl*, T) noexcept;
+
 	template<class PEParserBaseImpl, typename T = const unsigned char*>
 	requires impl_PEParserBase<PEParserBaseImpl> && (is_uchar<T> || is_byte<T>)
 		PEParserBaseImpl& getDataDirectoryEntry(PEParserBaseImpl*, T) noexcept;

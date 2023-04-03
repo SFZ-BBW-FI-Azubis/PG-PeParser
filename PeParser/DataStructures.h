@@ -19,7 +19,11 @@ namespace PEParserNamespace {
 		IMAGE_FILE_HEADER		FileH;
 		IMAGE_OPTIONAL_HEADER	OptH;
 	};
-	class PEParser : public PEParserBase, public PEHEADER {
+	class functionExecutionLog {
+	public:
+		bool failed;
+	};
+	class PEParser : public PEParserBase, public PEHEADER, public functionExecutionLog	{
 
 	};
 }

@@ -17,11 +17,12 @@ namespace PEParserNamespace {
 	constexpr inline PIMAGE_SECTION_HEADER SECHDROFFSET(void* a) noexcept {
 		return (PIMAGE_SECTION_HEADER)((LPVOID)((LPBYTE)a + DOSHDROFFSET(a)->e_lfanew + sizeof(IMAGE_NT_HEADERS)));
 	}
-	constexpr inline DWORD SecVSize(void* a) noexcept {
-		return PIMAGE_SECTION_HEADER(a)->Misc.VirtualSize;
+	//just some Helper Functions
+	constexpr inline DWORD SecVSize(PIMAGE_SECTION_HEADER a) noexcept {
+		return a->Misc.VirtualSize;
 	}
-	constexpr inline DWORD SecRawSize(void* a) noexcept {
-		return PIMAGE_SECTION_HEADER(a)->SizeOfRawData;
+	constexpr inline DWORD SecRawSize(PIMAGE_SECTION_HEADER a) noexcept {
+		return a->SizeOfRawData;
 	}
 }
 // I am not sure if that constexpr works like makros
