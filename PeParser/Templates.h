@@ -43,12 +43,14 @@ namespace PEParserNamespace {
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& allocMemory(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		pPEParserBaseImpl->fileBuffer = new char[pPEParserBaseImpl->dwFileSize];							//could cause some problems (pPEParserBaseImpl->dwFileSize)-1 ?
+		pPEParserBaseImpl->failed = false;
 		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& readFile(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
-		ReadFile(pPEParserBaseImpl->hFile, pPEParserBaseImpl->fileBuffer, pPEParserBaseImpl->dwFileSize, &pPEParserBaseImpl->bytes, 0);
+		bool succes = ReadFile(pPEParserBaseImpl->hFile, pPEParserBaseImpl->fileBuffer, pPEParserBaseImpl->dwFileSize, &pPEParserBaseImpl->bytes, 0);
+		pPEParserBaseImpl->failed = succes;
 		return *pPEParserBaseImpl;
 	}
 	//___________________________________________________________________________________________________________________PEHEADER
@@ -60,7 +62,7 @@ namespace PEParserNamespace {
 		pPEParserBaseImpl->FileH = FILEHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->OptH = OPTHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->pSecH = SECHDROFFSET(pPEParserBaseImpl->fileBuffer);
-
+		pPEParserBaseImpl->failed = false;
 		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl>
