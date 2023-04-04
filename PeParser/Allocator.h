@@ -18,3 +18,9 @@ namespace PEParserNamespace {
 
 	};
 }
+
+/*
+Anforderungen
+- Alignment
+- muss Memory selber managen oder dem Aufrufer überlassen können
+*/
