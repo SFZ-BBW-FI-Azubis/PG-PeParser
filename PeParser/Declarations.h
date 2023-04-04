@@ -10,6 +10,7 @@ namespace PEParserNamespace {
 	class PEParserBase;
 	class PEHEADER;
 	class PEParser;
+	class functionExecutionLog;
 	template<typename T = const wchar_t*, class PEParserBaseImpl = PEParser>
 	requires (is_char<T> || is_wchar_t<T>) && impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& _call openFile (T lpFileName, PEParserBaseImpl* pPEParserBaseImpl) noexcept;

@@ -21,8 +21,8 @@ namespace PEParserNamespace {
 	};
 	class functionExecutionLog {
 	public:
-		bool failed;
 		void* code;
+		bool failed;
 	};
 	class PEParser : public PEParserBase, public PEHEADER, public functionExecutionLog	{
 

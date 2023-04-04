@@ -38,11 +38,13 @@ namespace PEParserNamespace {
 			return *pPEParserBaseImpl;
 		}
 		pPEParserBaseImpl->failed = false;
+		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& allocMemory(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		pPEParserBaseImpl->fileBuffer = new char[pPEParserBaseImpl->dwFileSize];							//could cause some problems (pPEParserBaseImpl->dwFileSize)-1 ?
+		pPEParserBaseImpl->code = new char[8];		//alignment could cause problems	PROBLEMATIC SEMANTIK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		pPEParserBaseImpl->failed = false;
 		return *pPEParserBaseImpl;
 	}
@@ -127,9 +129,15 @@ namespace PEParserNamespace {
 		std::cout << pPEParserBaseImpl->pSecHSingle->Name << "	found"<< std::endl;
 		return *pPEParserBaseImpl;
 	}
-	template<class PEParserBaseImpl, typename T = const unsigned char*>
+	template<class PEParserBaseImpl, typename T>
 	requires impl_PEParserBase<PEParserBaseImpl> && (is_uchar<T> || is_byte<T>)
 		PEParserBaseImpl& getDataDirectoryEntry(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
+
+		return *pPEParserBaseImpl;
+	}
+	template<class PEParserBaseImpl>
+	requires impl_PEParserBase<PEParserBaseImpl>
+		PEParserBaseImpl& getLastError(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 
 		return *pPEParserBaseImpl;
 	}
