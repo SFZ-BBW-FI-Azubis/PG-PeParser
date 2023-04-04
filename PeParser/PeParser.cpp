@@ -1,7 +1,8 @@
 ﻿// PeParser.cpp: Definiert den Einstiegspunkt für die Anwendung.
 //
 #pragma once
-#include "PeParser.h"
+#define _call // use standart calling convention 
+#include "Declarations.h"
 #include <Windows.h>
 using namespace std;
 int main()

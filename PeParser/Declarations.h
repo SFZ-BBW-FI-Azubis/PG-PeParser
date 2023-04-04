@@ -2,41 +2,45 @@
 #include "DataStructures.h"
 #include "Concepts.h"
 #include "Templates.h"
+#ifndef _call
+	#define _call _cdecl
+#endif // !_call
+
 namespace PEParserNamespace {
 	class PEParserBase;
 	class PEHEADER;
 	class PEParser;
 	template<typename T = const wchar_t*, class PEParserBaseImpl = PEParser>
 	requires (is_char<T> || is_wchar_t<T>) && impl_PEParserBase<PEParserBaseImpl>
-		inline PEParserBaseImpl& openFile(T lpFileName, PEParserBaseImpl* pPEParserBaseImpl) noexcept;
+		inline PEParserBaseImpl& _call openFile (T lpFileName, PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
 	template<class PEParserBaseImpl = PEParser>
 	requires impl_PEParserBase<PEParserBaseImpl>
-		inline PEParserBaseImpl& getFileSize(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
+		inline PEParserBaseImpl& _call getFileSize(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
-		inline PEParserBaseImpl& allocMemory(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
+		inline PEParserBaseImpl& _call allocMemory(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
-		inline PEParserBaseImpl& readFile(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
+		inline PEParserBaseImpl& _call readFile(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
-		inline PEParserBaseImpl& getImageHeaders(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
+		inline PEParserBaseImpl& _call getImageHeaders(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
-		inline PEParserBaseImpl& checkHeader(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
+		inline PEParserBaseImpl& _call checkHeader(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
 	template<class PEParserBaseImpl, typename T = const unsigned char*>
 	requires impl_PEParserBase<PEParserBaseImpl> && (is_uchar<T> || is_byte<T>)
-		PEParserBaseImpl& getSection(PEParserBaseImpl*, T) noexcept;
+		PEParserBaseImpl& _call getSection(PEParserBaseImpl*, T) noexcept;
 
 	template<class PEParserBaseImpl, typename T = const unsigned char*>
 	requires impl_PEParserBase<PEParserBaseImpl> && (is_uchar<T> || is_byte<T>)
-		PEParserBaseImpl& getDataDirectoryEntry(PEParserBaseImpl*, T) noexcept;
+		PEParserBaseImpl& _call getDataDirectoryEntry(PEParserBaseImpl*, T) noexcept;
 
 	constexpr inline PIMAGE_DOS_HEADER DOSHDROFFSET(void*) noexcept;
 	constexpr inline PIMAGE_NT_HEADERS NTHDROFFSET(void*) noexcept;

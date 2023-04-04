@@ -22,6 +22,7 @@ namespace PEParserNamespace {
 		if (pPEParserBaseImpl->hFile == INVALID_HANDLE_VALUE)	{
 			std::cout << "INVALID_HANDLE_VALUE\n";
 			pPEParserBaseImpl->failed = true;
+			//pPEParserBaseImpl->code = (unsigned long)INVALID_HANDLE_VALUE;
 			return *pPEParserBaseImpl;
 		}
 		pPEParserBaseImpl->failed = false;
@@ -37,7 +38,6 @@ namespace PEParserNamespace {
 			return *pPEParserBaseImpl;
 		}
 		pPEParserBaseImpl->failed = false;
-		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>

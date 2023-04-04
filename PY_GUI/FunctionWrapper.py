@@ -1,5 +1,6 @@
 import DataStructures
 import ctypes
+
 class FunctionWraper:
     #@classmethod
     def testWrapper(self, peParserBase, _instanceDLL):
