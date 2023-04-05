@@ -21,7 +21,11 @@ namespace PEParserNamespace {
 	};
 	class functionExecutionLog {
 	public:
-		void* code;
+		union alignas(64){
+			void* codeVoidptr;
+			unsigned long codeUlong;
+			int codeInt;
+		} code;
 		bool failed;
 	};
 	class PEParser : public PEParserBase, public PEHEADER, public functionExecutionLog	{

@@ -26,7 +26,7 @@ namespace PEParserNamespace {
 		}
 		if (pPEParserBaseImpl->hFile == INVALID_HANDLE_VALUE)	{
 			pPEParserBaseImpl->failed = true;
-			pPEParserBaseImpl->code = INVALID_HANDLE_VALUE;
+			pPEParserBaseImpl->code.codeVoidptr = INVALID_HANDLE_VALUE;
 			return *pPEParserBaseImpl;
 		}
 		pPEParserBaseImpl->failed = false;
@@ -39,7 +39,7 @@ namespace PEParserNamespace {
 		if (pPEParserBaseImpl->dwFileSize == INVALID_FILE_SIZE) {
 			std::cout << "INVALID_FILE_SIZE\n";
 			pPEParserBaseImpl->failed = true;
-			//pPEParserBaseImpl->code = (void*)&INVALID_FILE_SIZE;					//I hate that one. HEADACKE :(
+			pPEParserBaseImpl->code.codeUlong = INVALID_FILE_SIZE;					//I hate that one. HEADACKE :( I could try some nasty typepunning tricks, but thats far from Elegant, and could cause sneaky Bugs (for ea. Unaligned Memory)
 			return *pPEParserBaseImpl;
 		}
 		pPEParserBaseImpl->failed = false;
@@ -49,7 +49,7 @@ namespace PEParserNamespace {
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& allocMemory(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		pPEParserBaseImpl->fileBuffer = new char[pPEParserBaseImpl->dwFileSize];							//could cause some problems (pPEParserBaseImpl->dwFileSize)-1 ?
-		pPEParserBaseImpl->code = new char[8];		//alignment could cause problems	PROBLEMATIC SEMANTIK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		//pPEParserBaseImpl->code = new char[8];		//alignment could cause problems	PROBLEMATIC SEMANTIK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		pPEParserBaseImpl->failed = false;
 		return *pPEParserBaseImpl;
 	}
@@ -143,7 +143,6 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		PEParserBaseImpl& getLastError(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
-
 		return *pPEParserBaseImpl;
 	}
 }
