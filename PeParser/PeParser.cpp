@@ -31,10 +31,10 @@ int main()
 	wchar_t fileName[UINT16_MAX] = L"C:/NeuerOrdner(2)/depends.exe";
 	cout <<
 		PEParserNamespace::openFile<const wchar_t*>(fileName, &peparser).hFile
-		<< endl;
+		<<"	"<<int(peparser.code) << endl;
 	cout <<
 		PEParserNamespace::getFileSize<>(&peparser).dwFileSize
-		<< endl;
+		<< "	" << int(peparser.code) << endl;
 	std::cout << sizeof(IMAGE_SECTION_HEADER) << std::endl;
 	return 0;
 }

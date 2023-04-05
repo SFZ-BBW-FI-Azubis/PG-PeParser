@@ -5,6 +5,11 @@
 #include <Windows.h>
 #include <iostream>
 namespace PEParserNamespace {
+	template<class PEParserBaseImpl>
+	requires impl_PEParserBase<PEParserBaseImpl>
+		inline PEParserBaseImpl& init(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
+		*(pPEParserBaseImpl->code) = new char[16];		// = 128 bit may be unaligned
+	};
 	template<typename T, class PEParserBaseImpl>
 	requires (is_char<T> || is_wchar_t<T>) && impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& openFile(T lpFileName, PEParserBaseImpl* pPEParserBaseImpl) noexcept {
@@ -20,9 +25,8 @@ namespace PEParserNamespace {
 			std::wcout << std::endl << lpFileName << std::endl;
 		}
 		if (pPEParserBaseImpl->hFile == INVALID_HANDLE_VALUE)	{
-			std::cout << "INVALID_HANDLE_VALUE\n";
 			pPEParserBaseImpl->failed = true;
-			//pPEParserBaseImpl->code = (unsigned long)INVALID_HANDLE_VALUE;
+			pPEParserBaseImpl->code = INVALID_HANDLE_VALUE;
 			return *pPEParserBaseImpl;
 		}
 		pPEParserBaseImpl->failed = false;
@@ -35,6 +39,7 @@ namespace PEParserNamespace {
 		if (pPEParserBaseImpl->dwFileSize == INVALID_FILE_SIZE) {
 			std::cout << "INVALID_FILE_SIZE\n";
 			pPEParserBaseImpl->failed = true;
+			//pPEParserBaseImpl->code = (void*)&INVALID_FILE_SIZE;					//I hate that one. HEADACKE :(
 			return *pPEParserBaseImpl;
 		}
 		pPEParserBaseImpl->failed = false;

@@ -7,12 +7,15 @@ namespace PEParserNamespace {
 	public:
 		int initialized;
 		Allocator(size_t size) :size(size),initialized(ALLOCATOR_INITIALIZED) {
-			
+	
 		}
 		~Allocator() {
 
 		}
 		void* operator()() {
+			if (initialized == ALLOCATOR_INITIALIZED)	{
+				return;
+			}
 			return new char[size];
 		}
 
