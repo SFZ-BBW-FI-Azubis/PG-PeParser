@@ -2,11 +2,13 @@
 #include "pch.h"
 #include <windows.h>
 #include <stdio.h>
+// use pointers that point to every single explicite instantiation of template function or build some ugly wrappers
+// write Linkerscripts, to resolve extern "C" problem when overloading by providing my own "namemangaling system" (overwrite old ones and replace with my own names, with comb of code_sec(...))
 //__declspec(code_seg("ffopenFile"))    except, I am not even sure how this could help
-// work with .def Files                 export by ordinal
-// write Linkerscripts, to resolve extern "C" problem when overloading by providing my own "namemangaling system"
-// use pointers that point to every single explicite instantiation of template function
-#define USEDEF
+// work with .def Files                 export by ordinal (map mangaled Names to ordinal)
+// WHY DONT I JUST USE THIS PARSER ITSELF, TO JUST RENAME THE MANGALED Names IN THE (FROM THIS FILE) RESULTING DLL
+
+// #define USEDEF
 #ifdef USEDEF
     #define EXPORT
 #endif // USEDEF
@@ -14,7 +16,7 @@
 namespace PEParserNamespace {
     template EXPORT PEParser & _call openFile<>(
         const wchar_t*, PEParser*) noexcept;
-    extern "C" template EXPORT PEParser & _call openFile<>(
+    template EXPORT PEParser & _call openFile<>(
         const char*, PEParser*) noexcept;
 }
 
