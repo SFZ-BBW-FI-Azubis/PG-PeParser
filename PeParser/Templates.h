@@ -94,7 +94,7 @@ namespace PEParserNamespace {
 		case 0x20b:
 			std::cout << "PE32+ format\n";
 			return *pPEParserBaseImpl;
-		case: 0x107:
+		case 0x107:
 			std::cout << "ROM format\n";
 			return *pPEParserBaseImpl;
 		default:

@@ -2,10 +2,13 @@
 #include "DataStructures.h"
 #include "Concepts.h"
 #include "Templates.h"
+#ifndef EXPORT
+	#define EXPORT __declspec(dllexport)
+#endif // !API
+
 #ifndef _call
 	#define _call _cdecl
 #endif // !_call
-
 namespace PEParserNamespace {
 	class PEParserBase;
 	class PEHEADER;
