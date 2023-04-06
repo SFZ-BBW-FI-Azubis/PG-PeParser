@@ -1,0 +1,3 @@
+LIBRARY Python_wrapper.cpp
+EXPORTS
+	test2	@1
