@@ -49,7 +49,6 @@ namespace PEParserNamespace {
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& allocMemory(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		pPEParserBaseImpl->fileBuffer = new char[pPEParserBaseImpl->dwFileSize];							//could cause some problems (pPEParserBaseImpl->dwFileSize)-1 ?
-		//pPEParserBaseImpl->code = new char[8];		//alignment could cause problems	PROBLEMATIC SEMANTIK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		pPEParserBaseImpl->failed = false;
 		return *pPEParserBaseImpl;
 	}
@@ -76,10 +75,14 @@ namespace PEParserNamespace {
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& checkHeader(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		if (pPEParserBaseImpl->pDosH->e_magic != IMAGE_DOS_SIGNATURE) {
+			pPEParserBaseImpl->code.codeInt = IMAGE_DOS_SIGNATURE;
+			pPEParserBaseImpl->failed = true;
 			std::cout << "IMAGE_DOS_SIGNATURE not found";
 			return *pPEParserBaseImpl;
 		}
 		if (pPEParserBaseImpl->pNtH->Signature != IMAGE_NT_SIGNATURE) {
+			pPEParserBaseImpl->code.codeInt = IMAGE_NT_SIGNATURE;
+			pPEParserBaseImpl->failed = true;
 			std::cout << "IMAGE_NT_SIGNATURE not found";
 			return *pPEParserBaseImpl;
 		}
@@ -91,8 +94,12 @@ namespace PEParserNamespace {
 		case 0x20b:
 			std::cout << "PE32+ format\n";
 			return *pPEParserBaseImpl;
+		case: 0x107:
+			std::cout << "ROM format\n";
+			return *pPEParserBaseImpl;
 		default:
 			std::cout << "invalid format\n";
+			pPEParserBaseImpl->failed = true;
 			return *pPEParserBaseImpl;
 		}
 		//dont care about Rich Header, its undocumented anyways
@@ -103,7 +110,7 @@ namespace PEParserNamespace {
 
 	template<class PEParserBaseImpl, typename T>
 	requires impl_PEParserBase<PEParserBaseImpl> && (is_byte<T> || is_uchar<T>)
-		inline bool mcompare(PEParserBaseImpl* pPEParserBaseImpl, size_t i, T n) {
+		inline bool mcompare(PEParserBaseImpl* pPEParserBaseImpl, size_t i, T n) noexcept {
 		size_t totalSectionCount = pPEParserBaseImpl->FileH.NumberOfSections;
 		if (i >= totalSectionCount)	{
 			pPEParserBaseImpl->pSecHSingle--;
@@ -143,6 +150,7 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		PEParserBaseImpl& getLastError(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
+		pPEParserBaseImpl->code = ::GetLastError();
 		return *pPEParserBaseImpl;
 	}
 }

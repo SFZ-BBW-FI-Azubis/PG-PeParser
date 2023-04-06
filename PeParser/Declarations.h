@@ -19,27 +19,31 @@ namespace PEParserNamespace {
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& _call getFileSize(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
-	template<class PEParserBaseImpl>
+	template<class PEParserBaseImpl = PEParser>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& _call allocMemory(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
-	template<class PEParserBaseImpl>
+	template<class PEParserBaseImpl = PEParser>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& _call readFile(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
-	template<class PEParserBaseImpl>
+	template<class PEParserBaseImpl = PEParser>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& _call getImageHeaders(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
-	template<class PEParserBaseImpl>
+	template<class PEParserBaseImpl = PEParser>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& _call checkHeader(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
-	template<class PEParserBaseImpl, typename T = const unsigned char*>
+	template<class PEParserBaseImpl = PEParser, typename T>
+	requires impl_PEParserBase<PEParserBaseImpl> && (is_byte<T> || is_uchar<T>)
+		inline bool mcompare(PEParserBaseImpl*, size_t, T) noexcept;
+
+	template<class PEParserBaseImpl = PEParser, typename T = const unsigned char*>
 	requires impl_PEParserBase<PEParserBaseImpl> && (is_uchar<T> || is_byte<T>)
 		PEParserBaseImpl& _call getSection(PEParserBaseImpl*, T) noexcept;
 
-	template<class PEParserBaseImpl, typename T = const unsigned char*>
+	template<class PEParserBaseImpl = PEParser, typename T = const unsigned char*>
 	requires impl_PEParserBase<PEParserBaseImpl> && (is_uchar<T> || is_byte<T>)
 		PEParserBaseImpl& _call getDataDirectoryEntry(PEParserBaseImpl*, T) noexcept;
 
