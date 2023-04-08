@@ -1,0 +1,1 @@
+#pragma comment(linker, "/EXPORT:" __FUNCTION__"5" "=" __FUNCDNAME__  )
