@@ -13,8 +13,7 @@ namespace PEParserNamespace {
 	template<typename T, class PEParserBaseImpl>
 	requires (is_char<T> || is_wchar_t<T>) && impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& openFile(T lpFileName, PEParserBaseImpl* pPEParserBaseImpl) noexcept {
-//#include "Python_wrapper/LINKEREXPORT.h"
-		_Pragma("comment(linker, /EXPORT: "__FUNCTION__" = " __FUNCDNAME__")");
+#pragma comment(linker, "/EXPORT:" __FUNCTION__"5" "=" __FUNCDNAME__  )
 		std::cout << __FUNCTION__ << "\n"<<__func__ << "\n" << __FUNCDNAME__ << "\n";
 		if constexpr (is_char<T>) {
 			pPEParserBaseImpl->hFile = CreateFileA(lpFileName, GENERIC_READ | GENERIC_WRITE,

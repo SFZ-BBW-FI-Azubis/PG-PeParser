@@ -15,14 +15,14 @@
 #endif // USEDEF
 
 namespace PEParserNamespace {
-    //template EXPORT PEParser & _call openFile<>(const wchar_t*, PEParser*) noexcept;
-    //template EXPORT PEParser & _call openFile<>(const char*, PEParser*) noexcept;
+    template __declspec(dllexport) PEParser & _call openFile<const wchar_t*, PEParser>(const wchar_t*, PEParser*) noexcept;
+    template EXPORT PEParser & _call openFile<const char*, PEParser>(const char*, PEParser*) noexcept;
     template EXPORT PEParser & _call getFileSize(PEParser*) noexcept;
     template EXPORT PEParser & _call allocMemory(PEParser*) noexcept;
     template EXPORT PEParser & _call readFile(PEParser*) noexcept;
 }
 
-extern "C" EXPORT PEParserNamespace::PEParserBase& _cdecl test(PEParserNamespace::PEParserBase* base) {
+extern "C" EXPORT PEParserNamespace::PEParserBase & _cdecl test(PEParserNamespace::PEParserBase * base) {
     typedef PEParserNamespace::PEParser PEParser;
     PEParser peparser;
 
