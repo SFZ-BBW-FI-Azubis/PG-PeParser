@@ -1,15 +1,16 @@
 #pragma once
+#include "Preprocessor.h"
 #include "DataStructures.h"
 #include "Concepts.h"
 #include "Templates.h"
 
-#ifndef EXPORT
+/*#ifndef EXPORT
 	#define EXPORT
 #endif // !API
 
 #ifndef _call
 	#define _call
-#endif // !_call
+#endif // !_call*/ //moved to Preprocessor.h
 namespace PEParserNamespace {
 	class PEParserBase;
 	class PEHEADER;

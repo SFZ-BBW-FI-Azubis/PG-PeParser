@@ -1,4 +1,5 @@
 #pragma once
+#include "Preprocessor.h"
 #include "DataStructures.h"
 namespace PEParserNamespace {
 	constexpr inline PIMAGE_DOS_HEADER DOSHDROFFSET(void* a) noexcept {

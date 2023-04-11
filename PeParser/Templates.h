@@ -1,4 +1,5 @@
 #pragma once
+#include "Preprocessor.h"
 #include "DataStructures.h"
 #include "Concepts.h"
 #include "Offsets.h"
@@ -9,13 +10,13 @@
 		pPEParserBaseImpl->UnmangledSig = __func__;		\
 		return *pPEParserBaseImpl;*/
 //#define disable	return {};
-#ifndef disable
+/*#ifndef disable
 #define disable
 #endif // !disable
 
 #ifndef returnSignatur
 #define returnSignatur
-#endif // !returnSignatur
+#endif // !returnSignatur*/ //moved to Preprocessor.h
 namespace PEParserNamespace {
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
