@@ -26,7 +26,7 @@ namespace PEParserNamespace {
 		return *pPEParserBaseImpl;
 	};
 	template<typename T, class PEParserBaseImpl>
-	requires (is_char<T> || is_wchar_t<T>) && impl_PEParserBase<PEParserBaseImpl>
+	requires (is_Const_Char_Ptr<T> || is_Const_Wchar_t_Ptr<T>) && impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& openFile(T lpFileName, PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		returnSignatur
 		//#pragma comment(linker, "/EXPORT:" __FUNCTION__"5" "=" __FUNCDNAME__  )

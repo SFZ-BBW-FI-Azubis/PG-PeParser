@@ -9,7 +9,7 @@ namespace PEParserNamespace {
 		DWORD bytes;
 		void* fileBuffer;
 	};
-	class PEHEADER {
+	typedef class PEHEADER {
 	public:
 		PIMAGE_DOS_HEADER		pDosH;
 		PIMAGE_NT_HEADERS		pNtH;
@@ -17,8 +17,8 @@ namespace PEParserNamespace {
 		PIMAGE_SECTION_HEADER	pSecHSingle;			//points to a selected SecH
 		IMAGE_FILE_HEADER		FileH;
 		IMAGE_OPTIONAL_HEADER	OptH;
-	};
-	class functionExecutionLog {
+	} PEParserHeader;
+	typedef class functionExecutionLog {
 	public:
 		bool failed;
 		union alignas(64){
@@ -26,13 +26,13 @@ namespace PEParserNamespace {
 			unsigned long codeUlong;
 			int codeInt;
 		} code;			//64bit alignment
-	};
+	} PEParserfunctionExecutionLog;
 	class signatur {
 	public:
 		const char* Signatur;
 		const char* UnmangledSig;
 	};
-	class PEParser : public PEParserBase, public PEHEADER, public functionExecutionLog, public signatur	{
+	class PEParser : public PEParserBase, public PEParserHeader, public functionExecutionLog, public signatur	{
 
 	};
 }
