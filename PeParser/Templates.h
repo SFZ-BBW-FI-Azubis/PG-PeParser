@@ -4,16 +4,31 @@
 #include "Offsets.h"
 #include <Windows.h>
 #include <iostream>
+/*#define returnSignatur	\
+		pPEParserBaseImpl->Signatur = __FUNCDNAME__;	\
+		pPEParserBaseImpl->UnmangledSig = __func__;		\
+		return *pPEParserBaseImpl;*/
+//#define disable	return {};
+#ifndef disable
+#define disable
+#endif // !disable
+
+#ifndef returnSignatur
+#define returnSignatur
+#endif // !returnSignatur
 namespace PEParserNamespace {
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& init(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
+		returnSignatur
 		*(pPEParserBaseImpl->code) = new char[8];		// = (64 bit) meight cause alignment problems
+		return *pPEParserBaseImpl;
 	};
 	template<typename T, class PEParserBaseImpl>
 	requires (is_char<T> || is_wchar_t<T>) && impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& openFile(T lpFileName, PEParserBaseImpl* pPEParserBaseImpl) noexcept {
-#pragma comment(linker, "/EXPORT:" __FUNCTION__"5" "=" __FUNCDNAME__  )
+		returnSignatur
+		//#pragma comment(linker, "/EXPORT:" __FUNCTION__"5" "=" __FUNCDNAME__  )
 		std::cout << __FUNCTION__ << "\n"<<__func__ << "\n" << __FUNCDNAME__ << "\n";
 		if constexpr (is_char<T>) {
 			pPEParserBaseImpl->hFile = CreateFileA(lpFileName, GENERIC_READ | GENERIC_WRITE,
@@ -37,6 +52,7 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& getFileSize(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
+		returnSignatur
 		pPEParserBaseImpl->dwFileSize = GetFileSize(pPEParserBaseImpl->hFile, 0);
 		if (pPEParserBaseImpl->dwFileSize == INVALID_FILE_SIZE) {
 			std::cout << "INVALID_FILE_SIZE\n";
@@ -50,6 +66,7 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& allocMemory(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
+		returnSignatur
 		pPEParserBaseImpl->fileBuffer = new char[pPEParserBaseImpl->dwFileSize];							//could cause some problems (pPEParserBaseImpl->dwFileSize)-1 ?
 		pPEParserBaseImpl->failed = false;
 		return *pPEParserBaseImpl;
@@ -57,6 +74,7 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& readFile(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
+		returnSignatur
 		bool succes = ReadFile(pPEParserBaseImpl->hFile, pPEParserBaseImpl->fileBuffer, pPEParserBaseImpl->dwFileSize, &pPEParserBaseImpl->bytes, 0);
 		pPEParserBaseImpl->failed = succes;
 		return *pPEParserBaseImpl;
@@ -65,6 +83,7 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& getImageHeaders(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
+		returnSignatur
 		pPEParserBaseImpl->pDosH = DOSHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->pNtH = NTHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->FileH = FILEHDROFFSET(pPEParserBaseImpl->fileBuffer);
@@ -76,6 +95,7 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& checkHeader(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
+		returnSignatur
 		if (pPEParserBaseImpl->pDosH->e_magic != IMAGE_DOS_SIGNATURE) {
 			pPEParserBaseImpl->code.codeInt = IMAGE_DOS_SIGNATURE;
 			pPEParserBaseImpl->failed = true;
@@ -113,6 +133,7 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl, typename T>
 	requires impl_PEParserBase<PEParserBaseImpl> && (is_byte<T> || is_uchar<T>)
 		inline bool mcompare(PEParserBaseImpl* pPEParserBaseImpl, size_t i, T n) noexcept {
+		disable
 		size_t totalSectionCount = pPEParserBaseImpl->FileH.NumberOfSections;
 		if (i >= totalSectionCount)	{
 			pPEParserBaseImpl->pSecHSingle--;
@@ -130,6 +151,7 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl, typename T>
 	requires impl_PEParserBase<PEParserBaseImpl> && (is_uchar<T> || is_byte<T>)	/*inline is propably not the best option*/
 		PEParserBaseImpl& getSection(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
+		returnSignatur
 		unsigned short& totalSectionCount = pPEParserBaseImpl->FileH.NumberOfSections;
 		pPEParserBaseImpl->pSecHSingle = pPEParserBaseImpl->pSecH;							//reset secHSingle to firstSecH
 		size_t i;
@@ -146,12 +168,13 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl, typename T>
 	requires impl_PEParserBase<PEParserBaseImpl> && (is_uchar<T> || is_byte<T>)
 		PEParserBaseImpl& getDataDirectoryEntry(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
-
+		returnSignatur
 		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		PEParserBaseImpl& getLastError(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
+		returnSignatur
 		pPEParserBaseImpl->code = ::GetLastError();
 		return *pPEParserBaseImpl;
 	}

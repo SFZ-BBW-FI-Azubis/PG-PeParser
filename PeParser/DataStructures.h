@@ -26,7 +26,12 @@ namespace PEParserNamespace {
 			int codeInt;
 		} code;			//64bit alignment
 	};
-	class PEParser : public PEParserBase, public PEHEADER, public functionExecutionLog	{
+	class signatur {
+	public:
+		const char* Signatur;
+		const char* UnmangledSig;
+	};
+	class PEParser : public PEParserBase, public PEHEADER, public functionExecutionLog, public signatur	{
 
 	};
 }

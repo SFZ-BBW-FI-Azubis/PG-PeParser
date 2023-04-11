@@ -2,18 +2,20 @@
 #include "DataStructures.h"
 #include "Concepts.h"
 #include "Templates.h"
+
 #ifndef EXPORT
-	#define EXPORT __declspec(dllexport)
+	#define EXPORT
 #endif // !API
 
 #ifndef _call
-	#define _call _cdecl
+	#define _call
 #endif // !_call
 namespace PEParserNamespace {
 	class PEParserBase;
 	class PEHEADER;
 	class PEParser;
 	class functionExecutionLog;
+	class signatur;
 	template<typename T = const wchar_t*, class PEParserBaseImpl = PEParser>
 	requires (is_char<T> || is_wchar_t<T>) && impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& _call openFile (T lpFileName, PEParserBaseImpl* pPEParserBaseImpl) noexcept;

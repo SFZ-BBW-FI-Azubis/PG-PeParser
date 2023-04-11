@@ -9,13 +9,12 @@
 // WHY DONT I JUST USE THIS PARSER ITSELF, TO JUST RENAME THE MANGALED Names IN THE (FROM THIS FILE) RESULTING DLL
 //      but I think I ll still need the Dummy.cpp to find the right signature(mangeled Name)
 // pragma comment (linker, ...)     -> looks promesing
-#define USEDEF
-#ifdef USEDEF
-    #define EXPORT
-#endif // USEDEF
+#define EXPORT __declspec(dllexport)
+#define _call _cdecl
+
 
 namespace PEParserNamespace {
-    template __declspec(dllexport) PEParser & _call openFile<const wchar_t*, PEParser>(const wchar_t*, PEParser*) noexcept;
+    template EXPORT PEParser & _call openFile<const wchar_t*, PEParser>(const wchar_t*, PEParser*) noexcept;
     template EXPORT PEParser & _call openFile<const char*, PEParser>(const char*, PEParser*) noexcept;
     template EXPORT PEParser & _call getFileSize(PEParser*) noexcept;
     template EXPORT PEParser & _call allocMemory(PEParser*) noexcept;
