@@ -4,8 +4,8 @@
 #include <concepts>
 namespace PEParserNamespace {
 	template<typename T> concept is_Const_Char_Ptr = std::same_as<T, const char*>;
-	template<typename T> concept is_Const_Unsigned_Char_Ptr = std::same_as<T, const unsigned char*>;
 	template<typename T> concept is_Const_Wchar_t_Ptr = std::same_as<T, const wchar_t*>;
+	template<typename T> concept is_Const_Unsigned_Char_Ptr = std::same_as<T, const unsigned char*>;
 	template<typename T> concept is_Unsigned_Char = std::same_as<T, unsigned char>;
 	template<class T> concept impl_PEParserHeader = requires(T type) {
 		{type.pDosH} -> std::convertible_to<PIMAGE_DOS_HEADER>;
@@ -31,8 +31,8 @@ namespace PEParserNamespace {
 	PIMAGE_SECTION_HEADER	pSecHSingle;			//points to a selected SecH
 	IMAGE_FILE_HEADER		FileH;
 	IMAGE_OPTIONAL_HEADER	OptH;*/
-	template<typename T> concept is_char = std::same_as<T, const char*>;
+/*	template<typename T> concept is_char = std::same_as<T, const char*>;
 	template<typename T> concept is_uchar = std::same_as<T, const unsigned char*>;
 	template<typename T> concept is_wchar_t = std::same_as<T, const wchar_t*>;
-	template<typename T> concept is_byte = std::same_as<T, unsigned char>;
+	template<typename T> concept is_byte = std::same_as<T, unsigned char>;*/
 }

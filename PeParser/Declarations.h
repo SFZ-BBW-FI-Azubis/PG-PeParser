@@ -18,7 +18,8 @@ namespace PEParserNamespace {
 	class functionExecutionLog;
 	class signatur;
 	template<typename T = const wchar_t*, class PEParserBaseImpl = PEParser>
-	requires (is_Const_Char_Ptr<T> || is_Const_Wchar_t_Ptr<T>) && impl_PEParserBase<PEParserBaseImpl>
+	requires impl_PEParserBase<PEParserBaseImpl> && 
+		(is_Const_Char_Ptr<T> || is_Const_Wchar_t_Ptr<T>)
 		inline PEParserBaseImpl& _call openFile (T lpFileName, PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
 	template<class PEParserBaseImpl = PEParser>
@@ -34,23 +35,23 @@ namespace PEParserNamespace {
 		inline PEParserBaseImpl& _call readFile(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
 	template<class PEParserBaseImpl = PEParser>
-	requires impl_PEParserBase<PEParserBaseImpl>
+	requires impl_PEParserHeader<PEParserBaseImpl>
 		inline PEParserBaseImpl& _call getImageHeaders(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
 	template<class PEParserBaseImpl = PEParser>
-	requires impl_PEParserBase<PEParserBaseImpl>
+	requires impl_PEParserHeader<PEParserBaseImpl>
 		inline PEParserBaseImpl& _call checkHeader(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
 	template<class PEParserBaseImpl = PEParser, typename T>
-	requires impl_PEParserBase<PEParserBaseImpl> && (is_byte<T> || is_uchar<T>)
+	requires impl_PEParserHeader<PEParserBaseImpl> && (is_Unsigned_Char<T> || is_Const_Unsigned_Char_Ptr<T>)
 		inline bool mcompare(PEParserBaseImpl*, size_t, T) noexcept;
 
 	template<class PEParserBaseImpl = PEParser, typename T = const unsigned char*>
-	requires impl_PEParserBase<PEParserBaseImpl> && (is_uchar<T> || is_byte<T>)
+	requires impl_PEParserHeader<PEParserBaseImpl> && (is_Const_Unsigned_Char_Ptr<T> || is_Unsigned_Char<T>)
 		PEParserBaseImpl& _call getSection(PEParserBaseImpl*, T) noexcept;
 
 	template<class PEParserBaseImpl = PEParser, typename T = const unsigned char*>
-	requires impl_PEParserBase<PEParserBaseImpl> && (is_uchar<T> || is_byte<T>)
+	requires impl_PEParserBase<PEParserBaseImpl> && (is_Unsigned_Char<T> || is_Unsigned_Char<T>)
 		PEParserBaseImpl& _call getDataDirectoryEntry(PEParserBaseImpl*, T) noexcept;
 
 	constexpr inline PIMAGE_DOS_HEADER DOSHDROFFSET(void*) noexcept;

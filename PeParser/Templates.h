@@ -18,20 +18,14 @@
 #define returnSignatur
 #endif // !returnSignatur*/ //moved to Preprocessor.h
 namespace PEParserNamespace {
-	template<class PEParserBaseImpl>
-	requires impl_PEParserBase<PEParserBaseImpl>
-		inline PEParserBaseImpl& init(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
-		returnSignatur
-		*(pPEParserBaseImpl->code) = new char[8];		// = (64 bit) meight cause alignment problems
-		return *pPEParserBaseImpl;
-	};
 	template<typename T, class PEParserBaseImpl>
-	requires (is_Const_Char_Ptr<T> || is_Const_Wchar_t_Ptr<T>) && impl_PEParserBase<PEParserBaseImpl>
+	requires impl_PEParserBase<PEParserBaseImpl> &&
+		(is_Const_Char_Ptr<T> || is_Const_Wchar_t_Ptr<T>)
 		inline PEParserBaseImpl& openFile(T lpFileName, PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		returnSignatur
 		//#pragma comment(linker, "/EXPORT:" __FUNCTION__"5" "=" __FUNCDNAME__  )
 		std::cout << __FUNCTION__ << "\n"<<__func__ << "\n" << __FUNCDNAME__ << "\n";
-		if constexpr (is_char<T>) {
+		if constexpr (is_Const_Char_Ptr<T>) {
 			pPEParserBaseImpl->hFile = CreateFileA(lpFileName, GENERIC_READ | GENERIC_WRITE,
 				0, nullptr, OPEN_EXISTING,
 				FILE_ATTRIBUTE_NORMAL, NULL);
@@ -64,6 +58,7 @@ namespace PEParserNamespace {
 		pPEParserBaseImpl->failed = false;
 		return *pPEParserBaseImpl;
 	}
+
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		inline PEParserBaseImpl& allocMemory(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
@@ -82,7 +77,7 @@ namespace PEParserNamespace {
 	}
 	//___________________________________________________________________________________________________________________PEHEADER
 	template<class PEParserBaseImpl>
-	requires impl_PEParserBase<PEParserBaseImpl>
+	requires impl_PEParserHeader<PEParserBaseImpl>
 		inline PEParserBaseImpl& getImageHeaders(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		returnSignatur
 		pPEParserBaseImpl->pDosH = DOSHDROFFSET(pPEParserBaseImpl->fileBuffer);
@@ -94,7 +89,7 @@ namespace PEParserNamespace {
 		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl>
-	requires impl_PEParserBase<PEParserBaseImpl>
+	requires impl_PEParserHeader<PEParserBaseImpl>
 		inline PEParserBaseImpl& checkHeader(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		returnSignatur
 		if (pPEParserBaseImpl->pDosH->e_magic != IMAGE_DOS_SIGNATURE) {
@@ -132,7 +127,7 @@ namespace PEParserNamespace {
 		//this is ugly kind of but its working :)
 
 	template<class PEParserBaseImpl, typename T>
-	requires impl_PEParserBase<PEParserBaseImpl> && (is_byte<T> || is_uchar<T>)
+	requires impl_PEParserHeader<PEParserBaseImpl> && (is_Unsigned_Char<T> || is_Const_Unsigned_Char_Ptr<T>)
 		inline bool mcompare(PEParserBaseImpl* pPEParserBaseImpl, size_t i, T n) noexcept {
 		disable
 		size_t totalSectionCount = pPEParserBaseImpl->FileH.NumberOfSections;
@@ -140,7 +135,7 @@ namespace PEParserNamespace {
 			pPEParserBaseImpl->pSecHSingle--;
 			return false;
 		}
-		if constexpr (is_byte<T>) {
+		if constexpr (is_Unsigned_Char<T>) {
 			return (i < n);
 		} else	{
 			size_t nLength = strlen((const char*)n);
@@ -150,7 +145,7 @@ namespace PEParserNamespace {
 	}
 
 	template<class PEParserBaseImpl, typename T>
-	requires impl_PEParserBase<PEParserBaseImpl> && (is_uchar<T> || is_byte<T>)	/*inline is propably not the best option*/
+	requires impl_PEParserHeader<PEParserBaseImpl> && (is_Const_Unsigned_Char_Ptr<T> || is_Unsigned_Char<T>)	/*inline is propably not the best option*/
 		PEParserBaseImpl& getSection(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
 		returnSignatur
 		unsigned short& totalSectionCount = pPEParserBaseImpl->FileH.NumberOfSections;
@@ -167,7 +162,7 @@ namespace PEParserNamespace {
 		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl, typename T>
-	requires impl_PEParserBase<PEParserBaseImpl> && (is_uchar<T> || is_byte<T>)
+	requires impl_PEParserBase<PEParserBaseImpl> && (is_Unsigned_Char<T> || is_Unsigned_Char<T>)
 		PEParserBaseImpl& getDataDirectoryEntry(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
 		returnSignatur
 		return *pPEParserBaseImpl;
