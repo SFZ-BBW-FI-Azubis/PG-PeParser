@@ -25,6 +25,9 @@ namespace PEParserNamespace {
 	constexpr inline DWORD SecRawSize(PIMAGE_SECTION_HEADER a) noexcept {
 		return a->SizeOfRawData;
 	}
+	constexpr inline DWORD NumberOfRvaAndSizes(PIMAGE_OPTIONAL_HEADER a) noexcept {
+		return a->NumberOfRvaAndSizes;
+	}
 	constexpr inline void setErrorCode(void* a) noexcept {
 
 	}
