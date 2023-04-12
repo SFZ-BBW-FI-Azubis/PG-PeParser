@@ -165,6 +165,13 @@ namespace PEParserNamespace {
 	requires impl_PEParserBase<PEParserBaseImpl> && (is_Unsigned_Char<T> || is_Unsigned_Char<T>)
 		PEParserBaseImpl& getDataDirectoryEntry(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
 		returnSignatur
+		/*each Datadirectory is 8 bytes long sizeof(_IMAGE_DATA_DIRECTORY) -> 8 byte
+		* there are always 16 Directory entries (#define IMAGE_NUMBEROF_DIRECTORY_ENTRIES 16)
+		* but there are not always 16 Directorys, there can be lesss
+		* check pPEParserBaseImpl->OptH.NumberOfRvaAndSizes
+		* 
+		* The Field, the RVA is pointing in each Data directory can be a Table or String
+		*/
 		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl>

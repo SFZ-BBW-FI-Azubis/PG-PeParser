@@ -24,7 +24,7 @@ namespace PEParserNamespace {
 	template<class T> concept impl_PEParserfunctionExecutionLog = requires(T type) {
 		{type.failed} -> std::convertible_to<bool>;
 	};
-
+	//#deprecatet
 	/*PIMAGE_DOS_HEADER		pDosH;
 	PIMAGE_NT_HEADERS		pNtH;
 	PIMAGE_SECTION_HEADER	pSecH;					//points to the first SecH
