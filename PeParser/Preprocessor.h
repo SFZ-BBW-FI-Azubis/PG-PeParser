@@ -1,15 +1,19 @@
+
 #pragma once
-/*#define returnSignatur	\
-		pPEParserBaseImpl->Signatur = __FUNCDNAME__;	\
-		pPEParserBaseImpl->UnmangledSig = __func__;		\
+#ifdef PEParserReturnSignatur
+	#define returnSignatur											\
+		pPEParserBaseImpl->Signatur = __FUNCDNAME__;				\
+		pPEParserBaseImpl->sizeOfSignatur = sizeof(__FUNCDNAME__);	\
+		pPEParserBaseImpl->UnmangledSig = __func__;					\
+		pPEParserBaseImpl->sizeOfUnmangledSig = sizeof(__func__);	\
 		return *pPEParserBaseImpl;
-#define disable return{};*/
-#ifndef returnSignatur
+	#define disable return{};
+	#define CONSTEXPR constexpr
+#else
 	#define returnSignatur
-#endif // !returnSignatur
-#ifndef disable
 	#define disable
-#endif // !disables
+	#define CONSTEXPR
+#endif // PEParserReturnSignatur
 #ifndef EXPORT
 	#define EXPORT
 #endif // !API

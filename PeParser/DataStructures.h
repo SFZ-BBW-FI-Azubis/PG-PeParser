@@ -23,15 +23,15 @@ namespace PEParserNamespace {
 		bool failed;
 		union alignas(64){
 			void* codeVoidptr;
-			unsigned long codeUlong;
+			unsigned long codeUnsignedLong;
 			int codeInt;
 		} code;			//64bit alignment
 	} PEParserfunctionExecutionLog;
-	class signatur {
+	typedef class signatur{
 	public:
 		const char* Signatur;
 		const char* UnmangledSig;
-	};
+	} PEParsersignatur;
 	class PEParser : public PEParserBase, public PEParserHeader, public functionExecutionLog, public signatur	{
 
 	};
