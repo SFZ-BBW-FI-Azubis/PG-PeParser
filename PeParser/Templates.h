@@ -119,7 +119,14 @@ namespace PEParserNamespace {
 		int arrayy[5] = {1,2,3,4,5};
 		Iterable iterate(&pPEParserBaseImpl->pSecH, totalSectionCount);
 		iterate([](auto single){
-			
+			/*
+			if constexpr (is_Unsigned_Char<T>) {
+			return (i < n);
+		} else {
+			size_t nLength = strlen((const char*)n);
+			constexpr size_t nMaxLength = (size_t)IMAGE_SIZEOF_SHORT_NAME;
+			return (nLength <= nMaxLength)&&(memcmp((const char*)pPEParserBaseImpl->pSecHSingle->Name, (const char*)n, nLength) != 0);
+		}*/
 			});
 		for (i = 0; mcompare<PEParserBaseImpl, T>(pPEParserBaseImpl, i, n); i++) {
 			pPEParserBaseImpl->pSecHSingle++;
