@@ -4,7 +4,7 @@
 #define _call // use standart calling convention, that is __thiscall
 #include "Declarations.h"
 #include <Windows.h>
-
+/*
 template <class InIt, class Fn>
 void for_each(InIt _First, InIt _Last, Fn _Func) {
 	auto _UFirst = _First;
@@ -37,18 +37,19 @@ public:
 		return for_each(begin, end, callback);
 	}
 };
+*/
 using namespace std;
 int main()	{
 	typedef PEParserNamespace::PEParser PEParser;
 	PEParser peparser;
 	
 	int myvector[5] = {0,1,2,3,4};
-	Iterable iterable(myvector, 5);
+	PEParserNamespace::Iterable<int*> iterable(myvector, 5);
 	iterable([](int &single)->void {
 		std::cout << single << std::endl;
 		});
 	int myvector2[5] = { 5,6,7,8,9 };
-	Iterable iterable2(myvector2, 5, [](int& single)->void {
+	PEParserNamespace::Iterable<int*> iterable2(myvector2, 5, [](int& single)->void {
 		std::cout << single << std::endl;
 		});
 	iterable2();	// I called iterable() -> that small mistake cost me a whole day to find :(

@@ -3,20 +3,22 @@
 #include "DataStructures.h"
 #include "Concepts.h"
 #include "Templates.h"
+#include "Iterable.h"
 
-/*#ifndef EXPORT
-	#define EXPORT
-#endif // !API
-
-#ifndef _call
-	#define _call
-#endif // !_call*/ //moved to Preprocessor.h
 namespace PEParserNamespace {
+	
 	class PEParserBase;
 	class PEHEADER;
 	class PEParser;
 	class functionExecutionLog;
 	class signatur;
+
+	template <class InIt, class Fn>
+	void for_each(InIt, InIt, Fn) noexcept;
+
+	template<typename T>
+	class Iterable;
+
 	template<typename T = const wchar_t*, class PEParserBaseImpl = PEParser>
 	requires impl_PEParserBase<PEParserBaseImpl> && 
 		(is_Const_Char_Ptr<T> || is_Const_Wchar_t_Ptr<T>)
