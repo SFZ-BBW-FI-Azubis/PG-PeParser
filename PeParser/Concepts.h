@@ -12,8 +12,8 @@ namespace PEParserNamespace {
 		{type.pNtH} -> std::convertible_to<PIMAGE_NT_HEADERS>;
 		{type.pSecH} -> std::convertible_to<PIMAGE_SECTION_HEADER>;
 		{type.pSecHSingle} -> std::convertible_to<PIMAGE_SECTION_HEADER>;
-		{type.FileH} -> std::convertible_to<IMAGE_FILE_HEADER>;
-		{type.OptH} -> std::convertible_to<IMAGE_OPTIONAL_HEADER>;
+		{type.FileH} -> std::convertible_to<PIMAGE_FILE_HEADER>;
+		{type.OptH} -> std::convertible_to<PIMAGE_OPTIONAL_HEADER>;
 	};
 	template<class T> concept impl_PEParserBase = requires(T type) {
 		{type.hFile} -> std::convertible_to<HANDLE>;

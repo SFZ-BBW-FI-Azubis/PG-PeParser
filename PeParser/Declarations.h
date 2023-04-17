@@ -56,8 +56,8 @@ namespace PEParserNamespace {
 
 	constexpr inline PIMAGE_DOS_HEADER DOSHDROFFSET(void*) noexcept;
 	constexpr inline PIMAGE_NT_HEADERS NTHDROFFSET(void*) noexcept;
-	constexpr inline IMAGE_FILE_HEADER FILEHDROFFSET(void*) noexcept;
-	constexpr inline IMAGE_OPTIONAL_HEADER OPTHDROFFSET(void*) noexcept;
+	constexpr inline PIMAGE_FILE_HEADER FILEHDROFFSET(void*) noexcept;
+	constexpr inline PIMAGE_OPTIONAL_HEADER OPTHDROFFSET(void*) noexcept;
 	constexpr inline PIMAGE_SECTION_HEADER SECHDROFFSET(void*) noexcept;
 	constexpr inline DWORD SecVSize(void*) noexcept;
 }
