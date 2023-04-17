@@ -46,7 +46,7 @@ namespace PEParserNamespace {
 
 	template<class PEParserBaseImpl = PEParser, typename T>
 	requires impl_PEParserHeader<PEParserBaseImpl> && (is_Unsigned_Char<T> || is_Const_Unsigned_Char_Ptr<T>)
-		inline bool mcompare(PEParserBaseImpl*, size_t, T) noexcept;
+		inline bool mcompare(T, T) noexcept;
 
 	template<class PEParserBaseImpl = PEParser, typename T = const unsigned char*>
 	requires impl_PEParserHeader<PEParserBaseImpl> && (is_Const_Unsigned_Char_Ptr<T> || is_Unsigned_Char<T>)

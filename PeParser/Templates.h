@@ -90,21 +90,13 @@ namespace PEParserNamespace {
 	}
 
 	template<class PEParserBaseImpl, typename T>
-		requires impl_PEParserHeader<PEParserBaseImpl> && 
-		(is_Unsigned_Char<T> || is_Const_Unsigned_Char_Ptr<T>)
-	inline bool mcompare(PEParserBaseImpl* pPEParserBaseImpl, size_t i, T n) noexcept {
-		disable
-		size_t totalSectionCount = pPEParserBaseImpl->pFileH->NumberOfSections;
-		if (i >= totalSectionCount)	{
-			pPEParserBaseImpl->pSecHSingle--;
-			return false;
-		}
+		requires (is_Unsigned_Char<T> || is_Const_Unsigned_Char_Ptr<T>)
+	inline bool mcompare(T left, T right) noexcept {
 		if constexpr (is_Unsigned_Char<T>) {
-			return (i < n);
+			return (left == right);
 		} /*constexprs*/else {
-			size_t nLength = strlen((const char*)n);
-			constexpr size_t nMaxLength = (size_t)IMAGE_SIZEOF_SHORT_NAME;
-			return (nLength <= nMaxLength)&&(memcmp((const char*)pPEParserBaseImpl->pSecHSingle->Name, (const char*)n, nLength) != 0);
+			size_t nLength = strlen((const char*)right);
+			return (memcmp((const char*)left, (const char*)right, nLength) == 0);
 		}
 	}
 
@@ -115,26 +107,25 @@ namespace PEParserNamespace {
 		returnSignatur
 		unsigned short& totalSectionCount = pPEParserBaseImpl->pFileH->NumberOfSections;
 		pPEParserBaseImpl->pSecHSingle = pPEParserBaseImpl->pSecH;							//reset secHSingle to firstSecH
-		size_t i;
-		int arrayy[5] = {1,2,3,4,5};
 		Iterable iterate(&pPEParserBaseImpl->pSecH, totalSectionCount);
 		iterate([](auto single){
-			/*
-			if constexpr (is_Unsigned_Char<T>) {
-			return (i < n);
-		} else {
-			size_t nLength = strlen((const char*)n);
-			constexpr size_t nMaxLength = (size_t)IMAGE_SIZEOF_SHORT_NAME;
-			return (nLength <= nMaxLength)&&(memcmp((const char*)pPEParserBaseImpl->pSecHSingle->Name, (const char*)n, nLength) != 0);
-		}*/
-			});
-		for (i = 0; mcompare<PEParserBaseImpl, T>(pPEParserBaseImpl, i, n); i++) {
+			if constexpr(is_Const_Unsigned_Char_Ptr<T>)	{
+				if (mcompare(single->Name, n)) {
+					pPEParserBaseImpl->pSecHSingle = single;
+					std::cout << n << " found" << std::endl;
+				}
+			} else {
+				if (mcompare(single, n)) {
+					pPEParserBaseImpl->pSecHSingle = single;
+					std::cout << n << " found" << std::endl;
+				}
+			}
+		});
+		/*for (i = 0; mcompare<PEParserBaseImpl, T>(pPEParserBaseImpl, i, n); i++) {
 			pPEParserBaseImpl->pSecHSingle++;
-		}
-		if (i == pPEParserBaseImpl->pFileH->NumberOfSections)	{
-			std::cout << n <<"	not found" << std::endl;
-			return *pPEParserBaseImpl;
-		}
+		}*/
+		std::cout << n <<"	not found" << std::endl;
+		return *pPEParserBaseImpl;
 		std::cout << pPEParserBaseImpl->pSecHSingle->Name << "	found"<< std::endl;
 		return *pPEParserBaseImpl;
 	}
