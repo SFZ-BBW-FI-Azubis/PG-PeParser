@@ -60,8 +60,8 @@ namespace PEParserNamespace {
 		returnSignatur
 		pPEParserBaseImpl->pDosH = DOSHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->pNtH = NTHDROFFSET(pPEParserBaseImpl->fileBuffer);
-		pPEParserBaseImpl->FileH = FILEHDROFFSET(pPEParserBaseImpl->fileBuffer);
-		pPEParserBaseImpl->OptH = OPTHDROFFSET(pPEParserBaseImpl->fileBuffer);
+		pPEParserBaseImpl->pFileH = FILEHDROFFSET(pPEParserBaseImpl->fileBuffer);
+		pPEParserBaseImpl->pOptH = OPTHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->pSecH = SECHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->failed = false;
 		pPEParserBaseImpl->code.codeUnsignedLong = 0;
@@ -93,7 +93,7 @@ namespace PEParserNamespace {
 		(is_Unsigned_Char<T> || is_Const_Unsigned_Char_Ptr<T>)
 	inline bool mcompare(PEParserBaseImpl* pPEParserBaseImpl, size_t i, T n) noexcept {
 		disable
-		size_t totalSectionCount = pPEParserBaseImpl->FileH->NumberOfSections;
+		size_t totalSectionCount = pPEParserBaseImpl->pFileH->NumberOfSections;
 		if (i >= totalSectionCount)	{
 			pPEParserBaseImpl->pSecHSingle--;
 			return false;
@@ -112,13 +112,13 @@ namespace PEParserNamespace {
 		(is_Const_Unsigned_Char_Ptr<T> || is_Unsigned_Char<T>)	/*inline is propably not the best option*/
 	PEParserBaseImpl& getSection(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
 		returnSignatur
-		unsigned short& totalSectionCount = pPEParserBaseImpl->FileH->NumberOfSections;
+		unsigned short& totalSectionCount = pPEParserBaseImpl->pFileH->NumberOfSections;
 		pPEParserBaseImpl->pSecHSingle = pPEParserBaseImpl->pSecH;							//reset secHSingle to firstSecH
 		size_t i;
 		for (i = 0; mcompare<PEParserBaseImpl, T>(pPEParserBaseImpl, i, n); i++) {
 			pPEParserBaseImpl->pSecHSingle++;
 		}
-		if (i == pPEParserBaseImpl->FileH->NumberOfSections)	{
+		if (i == pPEParserBaseImpl->pFileH->NumberOfSections)	{
 			std::cout << n <<"	not found" << std::endl;
 			return *pPEParserBaseImpl;
 		}

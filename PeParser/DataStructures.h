@@ -15,8 +15,8 @@ namespace PEParserNamespace {
 		PIMAGE_NT_HEADERS		pNtH;
 		PIMAGE_SECTION_HEADER	pSecH;					//points to the first SecH
 		PIMAGE_SECTION_HEADER	pSecHSingle;			//points to a selected SecH
-		PIMAGE_FILE_HEADER		FileH;					//why dont I use Pointer ?????
-		PIMAGE_OPTIONAL_HEADER	OptH;
+		PIMAGE_FILE_HEADER		pFileH;					//why dont I use Pointer ?????
+		PIMAGE_OPTIONAL_HEADER	pOptH;
 		//(P)IMAGE_DATA_DIRECTORY	...
 	} PEParserHeader;
 	typedef class functionExecutionLog {
