@@ -3,6 +3,7 @@
 #include "DataStructures.h"
 #include "Concepts.h"
 #include "Offsets.h"
+#include "Iterable.h"
 #include <Windows.h>
 #include <iostream>
 namespace PEParserNamespace {
@@ -115,6 +116,9 @@ namespace PEParserNamespace {
 		unsigned short& totalSectionCount = pPEParserBaseImpl->pFileH->NumberOfSections;
 		pPEParserBaseImpl->pSecHSingle = pPEParserBaseImpl->pSecH;							//reset secHSingle to firstSecH
 		size_t i;
+		int arrayy[5] = {1,2,3,4,5};
+		Iterable iterate(&pPEParserBaseImpl->pSecH, totalSectionCount);
+		iterate([](auto){});
 		for (i = 0; mcompare<PEParserBaseImpl, T>(pPEParserBaseImpl, i, n); i++) {
 			pPEParserBaseImpl->pSecHSingle++;
 		}

@@ -1,11 +1,13 @@
+#pragma once
 #include "Preprocessor.h"
 namespace PEParserNamespace {
 	template <class InIt, class Fn>
-	void for_each(InIt _First, InIt _Last, Fn _Func) noexcept {
+	inline void for_each(InIt _First, InIt _Last, Fn _Func) noexcept {
+		disable
 		auto _UFirst = _First;
 		auto _ULast = _Last;
 		for (; _UFirst <= _ULast; ++_UFirst) {
-			_Func(*_UFirst);
+			_Func(/***/_UFirst);
 		}
 
 		return;
@@ -13,7 +15,7 @@ namespace PEParserNamespace {
 
 	template<typename T>
 	class Iterable {
-		typedef void(__cdecl* Callback)(int&);
+		typedef void(__cdecl* Callback)(T);
 		T begin;
 		T end;
 		Callback callback;
