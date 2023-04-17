@@ -118,7 +118,9 @@ namespace PEParserNamespace {
 		size_t i;
 		int arrayy[5] = {1,2,3,4,5};
 		Iterable iterate(&pPEParserBaseImpl->pSecH, totalSectionCount);
-		iterate([](auto){});
+		iterate([](auto single){
+			
+			});
 		for (i = 0; mcompare<PEParserBaseImpl, T>(pPEParserBaseImpl, i, n); i++) {
 			pPEParserBaseImpl->pSecHSingle++;
 		}
