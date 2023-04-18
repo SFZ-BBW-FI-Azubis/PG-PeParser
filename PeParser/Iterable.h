@@ -30,23 +30,23 @@ namespace PEParserNamespace {
 		using type = _Ty;
 		using _Const_thru_ref_type = const _Ty&&;
 	};
-	template<typename T, typename lambda>
+	template<typename T, typename lambda = void*>
 	class Iterable {
 		//typedef void(__cdecl* Callback)(T);
-		using lambdaNoRef = typename remove_reference<lambda>::_Const_thru_ref_type;
+		using lambdaNoRef = typename remove_reference<lambda>::type;//_Const_thru_ref_type;
 		T begin;
 		T end;
 		lambdaNoRef callback;
 	public:
 		Iterable(T t, size_t size) noexcept :
 			begin(&t[0]),
-			end(&t[size - 1])/*,
-			callback([](T) ->void{}) */{};
+			end(&t[size - 1])/*, callback([](T) ->void{}) // this wont work callback is not the same type!!!*/
+		{};
 		Iterable(T t, size_t size, lambdaNoRef callback) noexcept :
 			begin(&t[0]),
 			end(&t[size - 1]),
 			callback(callback) {}
-		auto operator()(lambda callback) noexcept {
+		auto operator()(/*lambda*/auto callback) noexcept {
 			return for_each(begin, end, callback);
 		}
 		auto operator()() noexcept {
