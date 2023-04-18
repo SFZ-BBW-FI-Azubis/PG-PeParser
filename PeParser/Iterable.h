@@ -4,7 +4,7 @@
 #include <iostream>
 namespace PEParserNamespace {
 	template <typename InIt, class Fn>
-	inline bool for_each(InIt _First, InIt _Last, Fn _Func) noexcept {
+	inline bool Iterable_for_each(InIt _First, InIt _Last, Fn _Func) noexcept {
 		disable
 			auto _UFirst = _First;
 			auto _ULast = _Last;
@@ -38,10 +38,10 @@ namespace PEParserNamespace {
 			callback(callback) {}*/
 		template<typename opT>
 		bool operator()(opT callback) noexcept {
-			return for_each<T>(begin, end, callback);
+			return Iterable_for_each<T>(begin, end, callback);
 		}
 		bool operator()() noexcept {
-			return for_each<T,lambdaNoRef>(begin, end, callback);
+			return Iterable_for_each<T,lambdaNoRef>(begin, end, callback);
 		}
 	};
 	/*
