@@ -36,12 +36,12 @@ namespace PEParserNamespace {
 			begin(&t[0]),
 			end(&t[size - 1]),
 			callback(callback) {}*/
-		//template<typename opT>
-		bool operator()(/*opT*/auto callback) noexcept {
+		template<typename opT>
+		bool operator()(opT callback) noexcept {
 			return for_each<T>(begin, end, callback);
 		}
 		bool operator()() noexcept {
-			return for_each<T>(begin, end, callback);
+			return for_each<T,lambdaNoRef>(begin, end, callback);
 		}
 	};
 	/*

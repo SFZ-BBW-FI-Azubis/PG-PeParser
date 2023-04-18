@@ -108,7 +108,7 @@ namespace PEParserNamespace {
 		unsigned short& totalSectionCount = pPEParserBaseImpl->pFileH->NumberOfSections;
 		pPEParserBaseImpl->pSecHSingle = nullptr;							//reset secHSingle to nullptr
 		Iterable/*<PIMAGE_SECTION_HEADER>*/ iterate(pPEParserBaseImpl->pSecH, totalSectionCount);
-		pPEParserBaseImpl->failed = !iterate([&](PIMAGE_SECTION_HEADER single, auto counter)->bool{	//!!! I get absolute garbage
+		pPEParserBaseImpl->failed = !iterate([&](PIMAGE_SECTION_HEADER single, auto counter)->bool {	//!!! I get absolute garbage
 			if constexpr(is_Const_Unsigned_Char_Ptr<T>)	{
 				if (mcompare<T>(single->Name, n)) {
 					pPEParserBaseImpl->pSecHSingle = single;
