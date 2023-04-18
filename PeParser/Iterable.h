@@ -1,17 +1,15 @@
 #pragma once
 #include "Preprocessor.h"
-#include <type_traits>
 #include <concepts>
-#include <iostream>
 namespace PEParserNamespace {
-	template <class InIt, class Fn>
+	template <typename InIt, class Fn>
 	inline void for_each(InIt _First, InIt _Last, Fn _Func) noexcept {
 		disable
-		auto _UFirst = _First;
-		auto _ULast = _Last;
-		for (; _UFirst <= _ULast; ++_UFirst) {
-			_Func(/***/_UFirst);
-		}
+			auto _UFirst = _First;
+			auto _ULast = _Last;
+			for (; _UFirst <= _ULast; ++_UFirst) {
+				_Func(_UFirst);
+			}
 
 		return;
 	}
@@ -37,14 +35,16 @@ namespace PEParserNamespace {
 			end(&t[size - 1]),
 			callback(callback) {}*/
 		template<typename opT>
-		auto operator()(/*lambda*/opT callback) noexcept {
-			if constexpr(is_Pointer<opT>||is_Left_Value_Reference<opT>||is_Right_Value_Reference<opT>)	{
-				std::cout << "is a pointer\n";
-			}
-			return for_each(begin, end, callback);
+		auto operator()(opT callback) noexcept {
+			return for_each<T>(begin, end, callback);
 		}
 		auto operator()() noexcept {
-			return for_each(begin, end, callback);
+			return for_each<T>(begin, end, callback);
 		}
 	};
+	/*
+	* for future: generic class Calable
+	*		template<typename CallableType, typename AlgorithmType, typename ...AlgorithmParamsType>
+	*		auto operator()(CallableType callback, AlgorithmType algorithm)
+	*/
 }

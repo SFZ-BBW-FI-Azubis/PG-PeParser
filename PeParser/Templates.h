@@ -89,7 +89,7 @@ namespace PEParserNamespace {
 		return *pPEParserBaseImpl;
 	}
 
-	template<class PEParserBaseImpl, typename T>
+	template<typename T>
 		requires (is_Unsigned_Char<T> || is_Const_Unsigned_Char_Ptr<T>)
 	inline bool mcompare(T left, T right) noexcept {
 		if constexpr (is_Unsigned_Char<T>) {
@@ -107,20 +107,20 @@ namespace PEParserNamespace {
 		returnSignatur
 		unsigned short& totalSectionCount = pPEParserBaseImpl->pFileH->NumberOfSections;
 		pPEParserBaseImpl->pSecHSingle = pPEParserBaseImpl->pSecH;							//reset secHSingle to firstSecH
-		/*Iterable iterate(&pPEParserBaseImpl->pSecH, totalSectionCount);
-		iterate([](auto single){
+		Iterable/*<PIMAGE_SECTION_HEADER>*/ iterate(pPEParserBaseImpl->pSecH, totalSectionCount);
+		iterate([&](PIMAGE_SECTION_HEADER single){	//!!! I get absolute garbage
 			if constexpr(is_Const_Unsigned_Char_Ptr<T>)	{
-				if (mcompare(single->Name, n)) {
-					//pPEParserBaseImpl->pSecHSingle = single;
+				/*if (mcompare<T>(single->Name, n)) {
+					pPEParserBaseImpl->pSecHSingle = single;
 					std::cout << n << " found" << std::endl;
-				}
+				}*/
 			} else {
-				if (mcompare(single, n)) {
-					//pPEParserBaseImpl->pSecHSingle = single;
+				/*if (mcompare<T>(single, n)) {
+					pPEParserBaseImpl->pSecHSingle = single;
 					std::cout << n << " found" << std::endl;
-				}
+				}*/
 			}
-		});*/
+		});
 		/*for (i = 0; mcompare<PEParserBaseImpl, T>(pPEParserBaseImpl, i, n); i++) {
 			pPEParserBaseImpl->pSecHSingle++;
 		}*/

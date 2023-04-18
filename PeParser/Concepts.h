@@ -21,12 +21,23 @@ namespace PEParserNamespace {
 		using type = _Ty;
 		using thru_ref_type = _Ty&&;
 	};
+
+	template <class _Ty>
+	struct append_pointer {
+		using type = _Ty*;
+		using thru_noPtr_type = _Ty;
+	};
+	template <class _Ty>
+	struct append_pointer<_Ty*> {
+		using type = _Ty;
+		using thru_noPtr_type = _Ty;
+	};
 	template<typename T> concept is_Const_Char_Ptr = std::same_as<T, const char*>;
 	template<typename T> concept is_Const_Wchar_t_Ptr = std::same_as<T, const wchar_t*>;
 	template<typename T> concept is_Const_Unsigned_Char_Ptr = std::same_as<T, const unsigned char*>;
 	template<typename T> concept is_Unsigned_Char = std::same_as<T, unsigned char>;
 
-	template<typename T> concept is_Pointer = std::same_as<typename remove_reference<T>::thru_ref_type, T*>;
+	//template<typename T> concept is_Pointer = std::same_as<typename append_pointer<typename T>, T*>;
 	template<typename T> concept is_Right_Value_Reference = std::same_as<typename remove_reference<T>::thru_ref_type, T&>;
 	template<typename T> concept is_Left_Value_Reference = std::same_as<typename remove_reference<T>::thru_ref_type, T&&>;
 	
