@@ -40,9 +40,9 @@ namespace PEParserNamespace {
 	public:
 		Iterable(T t, size_t size) noexcept :
 			begin(&t[0]),
-			end(&t[size - 1]),
-			callback([](T) {}) {};
-		Iterable(T t, size_t size, lambda callback) noexcept :
+			end(&t[size - 1])/*,
+			callback([](T) ->void{}) */{};
+		Iterable(T t, size_t size, lambdaNoRef callback) noexcept :
 			begin(&t[0]),
 			end(&t[size - 1]),
 			callback(callback) {}
