@@ -1,6 +1,8 @@
 #pragma once
 #include "Preprocessor.h"
 #include <type_traits>
+#include <concepts>
+#include <iostream>
 namespace PEParserNamespace {
 	template <class InIt, class Fn>
 	inline void for_each(InIt _First, InIt _Last, Fn _Func) noexcept {
@@ -13,24 +15,6 @@ namespace PEParserNamespace {
 
 		return;
 	}
-	//remove_reference_t<_Dx>
-	template <class _Ty>
-	struct remove_reference {
-		using type = _Ty;
-		using _Const_thru_ref_type = const _Ty;
-	};
-
-	template <class _Ty>
-	struct remove_reference<_Ty&> {
-		using type = _Ty;
-		using _Const_thru_ref_type = const _Ty&;
-	};
-
-	template <class _Ty>
-	struct remove_reference<_Ty&&> {
-		using type = _Ty;
-		using _Const_thru_ref_type = const _Ty&&;
-	};
 	template<typename T, typename lambda = void*>
 	class Iterable {
 		typedef void(__cdecl* Function)(T);
@@ -52,7 +36,11 @@ namespace PEParserNamespace {
 			begin(&t[0]),
 			end(&t[size - 1]),
 			callback(callback) {}*/
-		auto operator()(/*lambda*/auto callback) noexcept {
+		template<typename opT>
+		auto operator()(/*lambda*/opT callback) noexcept {
+			if constexpr(is_Pointer<opT>||is_Left_Value_Reference<opT>||is_Right_Value_Reference<opT>)	{
+				std::cout << "is a pointer\n";
+			}
 			return for_each(begin, end, callback);
 		}
 		auto operator()() noexcept {
