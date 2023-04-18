@@ -114,6 +114,7 @@ namespace PEParserNamespace {
 					pPEParserBaseImpl->pSecHSingle = single;
 					std::cout << n << " found" << std::endl;
 				}*/
+				std::cout << single->Name;
 			} else {
 				/*if (mcompare<T>(single, n)) {
 					pPEParserBaseImpl->pSecHSingle = single;
