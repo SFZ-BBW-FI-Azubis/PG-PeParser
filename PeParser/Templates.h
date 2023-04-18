@@ -90,13 +90,13 @@ namespace PEParserNamespace {
 	}
 
 	template<typename T>
-		requires (is_Unsigned_Char<T> || is_Const_Unsigned_Char_Ptr<T>)
+		//requires (is_Unsigned_Char<T> || is_Const_Unsigned_Char_Ptr<T>)
 	inline bool mcompare(T left, T right) noexcept {
-		if constexpr (is_Unsigned_Char<T>) {
-			return (left == right);
-		} /*constexprs*/else {
+		if constexpr (is_Const_Unsigned_Char_Ptr<T>) {
 			size_t nLength = strlen((const char*)right);
 			return (memcmp((const char*)left, (const char*)right, nLength) == 0);
+		} /*constexprs*/else {
+			return (left == right);
 		}
 	}
 
@@ -106,28 +106,26 @@ namespace PEParserNamespace {
 	PEParserBaseImpl& getSection(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
 		returnSignatur
 		unsigned short& totalSectionCount = pPEParserBaseImpl->pFileH->NumberOfSections;
-		pPEParserBaseImpl->pSecHSingle = pPEParserBaseImpl->pSecH;							//reset secHSingle to firstSecH
+		pPEParserBaseImpl->pSecHSingle = nullptr;							//reset secHSingle to nullptr
 		Iterable/*<PIMAGE_SECTION_HEADER>*/ iterate(pPEParserBaseImpl->pSecH, totalSectionCount);
-		iterate([&](PIMAGE_SECTION_HEADER single){	//!!! I get absolute garbage
+		pPEParserBaseImpl->failed = !iterate([&](PIMAGE_SECTION_HEADER single, auto counter)->bool{	//!!! I get absolute garbage
 			if constexpr(is_Const_Unsigned_Char_Ptr<T>)	{
-				/*if (mcompare<T>(single->Name, n)) {
+				if (mcompare<T>(single->Name, n)) {
 					pPEParserBaseImpl->pSecHSingle = single;
 					std::cout << n << " found" << std::endl;
-				}*/
-				std::cout << single->Name;
+					return true;	//found
+				} return false;		//not found
 			} else {
-				/*if (mcompare<T>(single, n)) {
+				if (mcompare(counter, n)) {
 					pPEParserBaseImpl->pSecHSingle = single;
-					std::cout << n << " found" << std::endl;
-				}*/
+					std::cout << (unsigned int)n << " found" << std::endl;
+					return true;	//found
+				} return false;		//not found
 			}
 		});
-		/*for (i = 0; mcompare<PEParserBaseImpl, T>(pPEParserBaseImpl, i, n); i++) {
-			pPEParserBaseImpl->pSecHSingle++;
-		}*/
-		std::cout << n <<"	not found" << std::endl;
-		return *pPEParserBaseImpl;
-		std::cout << pPEParserBaseImpl->pSecHSingle->Name << "	found"<< std::endl;
+		if(pPEParserBaseImpl->failed)	{
+			std::cout <<n<< " Sectio not found\n";
+		}
 		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl, typename T>

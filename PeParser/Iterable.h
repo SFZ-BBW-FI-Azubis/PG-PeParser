@@ -1,21 +1,23 @@
 #pragma once
 #include "Preprocessor.h"
 #include <concepts>
+#include <iostream>
 namespace PEParserNamespace {
 	template <typename InIt, class Fn>
-	inline void for_each(InIt _First, InIt _Last, Fn _Func) noexcept {
+	inline bool for_each(InIt _First, InIt _Last, Fn _Func) noexcept {
 		disable
 			auto _UFirst = _First;
 			auto _ULast = _Last;
+			unsigned char counter = 0;	//byte
 			for (; _UFirst <= _ULast; ++_UFirst) {
-				_Func(_UFirst);
+				if(_Func(_UFirst, counter)) return true;
+				counter++;
 			}
-
-		return;
+		return false;
 	}
 	template<typename T, typename lambda = void*>
 	class Iterable {
-		typedef void(__cdecl* Function)(T);
+		typedef bool(__cdecl* Function)(T);
 		using lambdaNoRef = typename remove_reference<lambda>::type;//_Const_thru_ref_type;
 		T begin;
 		T end;
@@ -34,11 +36,11 @@ namespace PEParserNamespace {
 			begin(&t[0]),
 			end(&t[size - 1]),
 			callback(callback) {}*/
-		template<typename opT>
-		auto operator()(opT callback) noexcept {
+		//template<typename opT>
+		bool operator()(/*opT*/auto callback) noexcept {
 			return for_each<T>(begin, end, callback);
 		}
-		auto operator()() noexcept {
+		bool operator()() noexcept {
 			return for_each<T>(begin, end, callback);
 		}
 	};
