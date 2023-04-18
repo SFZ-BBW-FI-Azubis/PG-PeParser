@@ -42,18 +42,20 @@ using namespace std;
 int main()	{
 	typedef PEParserNamespace::PEParser PEParser;
 	PEParser peparser;
-	
+	std::string lol = "Hallo welt";
 	int myvector[5] = {0,1,2,3,4};
 	PEParserNamespace::Iterable<int*, decltype([](int* single)->void {
 		std::cout << *single << std::endl;
+		//std::cout << lol << std::endl;
 		})> iterable(myvector, 5);
 	iterable();
-	int myvector2[5] = { 5,6,7,8,9 }; //std::unique_ptr
+	int myvector2[5] = { 5,6,7,8,9 };
 	PEParserNamespace::Iterable<int*> iterable2(myvector2, 5);
-	iterable2([](int* single)->void {
+	iterable2([&](int* single)->void {
 		std::cout << *single << std::endl;
+		std::cout << lol << std::endl;
 		});	// I called iterable() -> that small mistake cost me a whole day to find :(
-	
+	//std::unique_ptr
 	char fileNamee[UINT16_MAX] = "C:/NeuerOrdner(2)/depends.exe";
 	cout <<
 		PEParserNamespace::openFile<const char*>(fileNamee, &peparser).hFile
