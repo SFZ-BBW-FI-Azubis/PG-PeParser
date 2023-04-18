@@ -16,7 +16,7 @@ namespace PEParserNamespace {
 	template <class InIt, class Fn>
 	void for_each(InIt, InIt, Fn) noexcept;
 
-	template<typename T>
+	template<typename T, typename lambda>
 	class Iterable;
 
 	template<typename T = const wchar_t*, class PEParserBaseImpl = PEParser>

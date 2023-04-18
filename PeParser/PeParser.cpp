@@ -44,16 +44,16 @@ int main()	{
 	PEParser peparser;
 	
 	int myvector[5] = {0,1,2,3,4};
-	PEParserNamespace::Iterable<int*> iterable(myvector, 5);
-	iterable([](int *single)->void {
+	PEParserNamespace::Iterable<int*, decltype([](int* single)->void {
 		std::cout << *single << std::endl;
-		});
-	int myvector2[5] = { 5,6,7,8,9 };
-	PEParserNamespace::Iterable<int*> iterable2(myvector2, 5, [](int* single)->void {
+		})> iterable(myvector, 5);
+	iterable();
+	int myvector2[5] = { 5,6,7,8,9 }; //std::unique_ptr
+	/*PEParserNamespace::Iterable<int*> iterable2(myvector2, 5, [](int* single)->void {
 		std::cout << *single << std::endl;
 		});
 	iterable2();	// I called iterable() -> that small mistake cost me a whole day to find :(
-	
+	*/
 	char fileNamee[UINT16_MAX] = "C:/NeuerOrdner(2)/depends.exe";
 	cout <<
 		PEParserNamespace::openFile<const char*>(fileNamee, &peparser).hFile

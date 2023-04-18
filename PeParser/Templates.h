@@ -107,20 +107,20 @@ namespace PEParserNamespace {
 		returnSignatur
 		unsigned short& totalSectionCount = pPEParserBaseImpl->pFileH->NumberOfSections;
 		pPEParserBaseImpl->pSecHSingle = pPEParserBaseImpl->pSecH;							//reset secHSingle to firstSecH
-		Iterable iterate(&pPEParserBaseImpl->pSecH, totalSectionCount);
+		/*Iterable iterate(&pPEParserBaseImpl->pSecH, totalSectionCount);
 		iterate([](auto single){
 			if constexpr(is_Const_Unsigned_Char_Ptr<T>)	{
 				if (mcompare(single->Name, n)) {
-					pPEParserBaseImpl->pSecHSingle = single;
+					//pPEParserBaseImpl->pSecHSingle = single;
 					std::cout << n << " found" << std::endl;
 				}
 			} else {
 				if (mcompare(single, n)) {
-					pPEParserBaseImpl->pSecHSingle = single;
+					//pPEParserBaseImpl->pSecHSingle = single;
 					std::cout << n << " found" << std::endl;
 				}
 			}
-		});
+		});*/
 		/*for (i = 0; mcompare<PEParserBaseImpl, T>(pPEParserBaseImpl, i, n); i++) {
 			pPEParserBaseImpl->pSecHSingle++;
 		}*/
