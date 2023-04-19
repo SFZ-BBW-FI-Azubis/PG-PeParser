@@ -57,12 +57,18 @@ int main()	{
 	std::cout << std::endl;
 	PEParserNamespace::getSection<>(&peparser, (const unsigned char*)"dataas");
 	std::cout << std::endl;
+	if (peparser.failed) {
+		std::cout << "not found\n";
+	}
 	PEParserNamespace::getSection<>(&peparser, (const unsigned char*)".text");
 	std::cout << std::endl;
-	PEParserNamespace::getSection<>(&peparser, (BYTE)1);
+	PEParserNamespace::getSection<>(&peparser, (BYTE)0);
 	std::cout << std::endl;
-	PEParserNamespace::getDataDirectoryEntry<>(&peparser, (BYTE)14);
+	PEParserNamespace::getDataDirectoryEntry<>(&peparser, (BYTE)15);
 	std::cout << std::endl;
+	if (peparser.failed)	{
+		std::cout << "not found\n";
+	}
 	//std::cout <<"SecVSize  "<<PEParserNamespace::SecVSize(peparser.pSecH) << std::endl;
 	return 0;
 }

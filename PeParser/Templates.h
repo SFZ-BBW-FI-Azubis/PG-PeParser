@@ -132,14 +132,13 @@ namespace PEParserNamespace {
 			returnSignatur
 			pPEParserBaseImpl->pDataDirSingle = nullptr;
 			Iterable<PIMAGE_DATA_DIRECTORY> iterator (pPEParserBaseImpl->pDataDir, IMAGE_NUMBEROF_DIRECTORY_ENTRIES);
-			iterator([&](PIMAGE_DATA_DIRECTORY single, auto counter)->bool {
-				std::cout << (unsigned int)counter <<"	"<< single->Size << std::endl<<single->VirtualAddress << std::endl;
+			pPEParserBaseImpl->failed = !iterator([&](PIMAGE_DATA_DIRECTORY single, auto counter)->bool {
+				std::cout << (unsigned int)counter <<"	"<< single->Size << std::endl<<"	"<< single->VirtualAddress << std::endl;
 				if (mcompare(counter, n)) {
 					pPEParserBaseImpl->pDataDirSingle = single;
 					return true;	//found
 				} return false;		//not found
 				});
-			pPEParserBaseImpl->failed = false;
 			/*for (size_t i = 0; i < IMAGE_NUMBEROF_DIRECTORY_ENTRIES; i++) {
 				
 			}*/
