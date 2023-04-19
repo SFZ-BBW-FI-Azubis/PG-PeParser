@@ -109,7 +109,7 @@ namespace PEParserNamespace {
 		unsigned short& totalSectionCount = pPEParserBaseImpl->pFileH->NumberOfSections;
 		pPEParserBaseImpl->pSecHSingle = nullptr;							//reset secHSingle to nullptr
 		Iterable<PIMAGE_SECTION_HEADER> iterate(pPEParserBaseImpl->pSecH, totalSectionCount);
-		pPEParserBaseImpl->failed = !iterate([&](PIMAGE_SECTION_HEADER single, auto counter)->bool {	//!!! I get absolute garbage
+		pPEParserBaseImpl->failed = !iterate([&](PIMAGE_SECTION_HEADER single, auto counter)->bool {
 			std::cout << (unsigned int)counter << "	" << single->Name << std::endl;
 			if constexpr(is_Const_Unsigned_Char_Ptr<T>)	{
 				if (mcompare<T>(single->Name, n)) {
@@ -133,7 +133,7 @@ namespace PEParserNamespace {
 			pPEParserBaseImpl->pDataDirSingle = nullptr;
 			Iterable<PIMAGE_DATA_DIRECTORY> iterator (pPEParserBaseImpl->pDataDir, IMAGE_NUMBEROF_DIRECTORY_ENTRIES);
 			iterator([&](PIMAGE_DATA_DIRECTORY single, auto counter)->bool {
-				std::cout << (unsigned int)counter <<"	"<< single->Size << std::endl;
+				std::cout << (unsigned int)counter <<"	"<< single->Size << std::endl<<single->VirtualAddress << std::endl;
 				if (mcompare(counter, n)) {
 					pPEParserBaseImpl->pDataDirSingle = single;
 					return true;	//found
