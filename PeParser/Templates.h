@@ -110,12 +110,13 @@ namespace PEParserNamespace {
 		pPEParserBaseImpl->pSecHSingle = nullptr;							//reset secHSingle to nullptr
 		Iterable<PIMAGE_SECTION_HEADER> iterate(pPEParserBaseImpl->pSecH, totalSectionCount);
 		pPEParserBaseImpl->failed = !iterate([&](PIMAGE_SECTION_HEADER single, auto counter)->bool {	//!!! I get absolute garbage
+			std::cout << (unsigned int)counter << "	" << single->Name << std::endl;
 			if constexpr(is_Const_Unsigned_Char_Ptr<T>)	{
 				if (mcompare<T>(single->Name, n)) {
 					pPEParserBaseImpl->pSecHSingle = single;
 					return true;	//found
 				} return false;		//not found
-			} else {
+			} else {			
 				if (mcompare(counter, n)) {
 					pPEParserBaseImpl->pSecHSingle = single;
 					return true;	//found
@@ -130,11 +131,14 @@ namespace PEParserNamespace {
 	PEParserBaseImpl& getDataDirectoryEntry(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
 			returnSignatur
 			pPEParserBaseImpl->pDataDirSingle = nullptr;
-			Iterable<PIMAGE_DATA_DIRECTORY, decltype([](PIMAGE_DATA_DIRECTORY single, auto counter)->bool {
-				std::cout <<(unsigned int) counter<<"  "<< single->Size << std::endl;
-				return false;
-				})> iterator (pPEParserBaseImpl->pDataDir, IMAGE_NUMBEROF_DIRECTORY_ENTRIES);
-			iterator();
+			Iterable<PIMAGE_DATA_DIRECTORY> iterator (pPEParserBaseImpl->pDataDir, IMAGE_NUMBEROF_DIRECTORY_ENTRIES);
+			iterator([&](PIMAGE_DATA_DIRECTORY single, auto counter)->bool {
+				std::cout << (unsigned int)counter <<"	"<< single->Size << std::endl;
+				if (mcompare(counter, n)) {
+					pPEParserBaseImpl->pDataDirSingle = single;
+					return true;	//found
+				} return false;		//not found
+				});
 			pPEParserBaseImpl->failed = false;
 			/*for (size_t i = 0; i < IMAGE_NUMBEROF_DIRECTORY_ENTRIES; i++) {
 				

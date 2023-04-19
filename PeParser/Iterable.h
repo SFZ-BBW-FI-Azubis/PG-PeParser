@@ -10,8 +10,7 @@ namespace PEParserNamespace {
 			auto _ULast = _Last;
 			unsigned char counter = 0;	//byte
 			for (; _UFirst <= _ULast; ++_UFirst) {
-				if(_Func(_UFirst, counter)) return true;
-				counter++;
+				if(_Func(_UFirst, ++counter)) return true;
 			}
 		return false;
 	}

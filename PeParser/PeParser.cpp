@@ -68,11 +68,11 @@ int main()	{
 	PEParserNamespace::readFile<>(&peparser);
 	PEParserNamespace::getImageHeaders<>(&peparser);
 	PEParserNamespace::checkHeader<>(&peparser);
-	PEParserNamespace::getSection<>(&peparser, (const unsigned char*)".data");
-	PEParserNamespace::getSection<>(&peparser, (const unsigned char*)"dataas");
-	PEParserNamespace::getSection<>(&peparser, (BYTE)4);
-	PEParserNamespace::getSection<>(&peparser, (const unsigned char*)".text");
-	PEParserNamespace::getDataDirectoryEntry<>(&peparser, (BYTE)4);
+	//PEParserNamespace::getSection<>(&peparser, (const unsigned char*)".data");
+	//PEParserNamespace::getSection<>(&peparser, (const unsigned char*)"dataas");
+	PEParserNamespace::getSection<>(&peparser, (BYTE)1);
+	//PEParserNamespace::getSection<>(&peparser, (const unsigned char*)".text");
+	PEParserNamespace::getDataDirectoryEntry<>(&peparser, (BYTE)1);
 	//std::cout <<"SecVSize  "<<PEParserNamespace::SecVSize(peparser.pSecH) << std::endl;
 	
 	wchar_t fileName[UINT16_MAX] = L"C:/NeuerOrdner(2)/depends.exe";
