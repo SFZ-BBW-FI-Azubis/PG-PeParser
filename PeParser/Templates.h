@@ -113,21 +113,15 @@ namespace PEParserNamespace {
 			if constexpr(is_Const_Unsigned_Char_Ptr<T>)	{
 				if (mcompare<T>(single->Name, n)) {
 					pPEParserBaseImpl->pSecHSingle = single;
-					std::cout << n << " found" << std::endl;
 					return true;	//found
 				} return false;		//not found
 			} else {
 				if (mcompare(counter, n)) {
 					pPEParserBaseImpl->pSecHSingle = single;
-					std::cout << (unsigned int)n << " found" << std::endl;
 					return true;	//found
 				} return false;		//not found
 			}
 		});
-
-		if(pPEParserBaseImpl->failed)	{
-			std::cout <<n<< " Sectio not found\n";
-		}
 		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl, typename T>
@@ -136,9 +130,11 @@ namespace PEParserNamespace {
 	PEParserBaseImpl& getDataDirectoryEntry(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
 			returnSignatur
 			pPEParserBaseImpl->pDataDirSingle = nullptr;
-			Iterable iterator < PIMAGE_DATA_DIRECTORY, decltype([](int* single, auto counter)->bool {
+			Iterable<PIMAGE_DATA_DIRECTORY, decltype([](PIMAGE_DATA_DIRECTORY single, auto counter)->bool {
+				std::cout <<(unsigned int) counter<<"  "<< single->Size << std::endl;
 				return false;
-				})> (pPEParserBaseImpl->pDataDir, IMAGE_NUMBEROF_DIRECTORY_ENTRIES);
+				})> iterator (pPEParserBaseImpl->pDataDir, IMAGE_NUMBEROF_DIRECTORY_ENTRIES);
+			iterator();
 			pPEParserBaseImpl->failed = false;
 			/*for (size_t i = 0; i < IMAGE_NUMBEROF_DIRECTORY_ENTRIES; i++) {
 				
