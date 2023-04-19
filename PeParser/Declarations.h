@@ -4,6 +4,7 @@
 #include "Concepts.h"
 #include "Templates.h"
 #include "Iterable.h"
+#include "GetPEB.h"
 
 namespace PEParserNamespace {
 	
