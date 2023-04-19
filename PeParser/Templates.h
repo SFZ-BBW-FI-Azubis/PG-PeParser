@@ -64,6 +64,7 @@ namespace PEParserNamespace {
 		pPEParserBaseImpl->pFileH = FILEHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->pOptH = OPTHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->pSecH = SECHDROFFSET(pPEParserBaseImpl->fileBuffer);
+		pPEParserBaseImpl->pDataDir = DATADIROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->failed = false;
 		pPEParserBaseImpl->code.codeUnsignedLong = 0;
 		return *pPEParserBaseImpl;
@@ -90,7 +91,7 @@ namespace PEParserNamespace {
 	}
 
 	template<typename T>
-		//requires (is_Unsigned_Char<T> || is_Const_Unsigned_Char_Ptr<T>)
+		requires (is_Unsigned_Char<T> || is_Const_Unsigned_Char_Ptr<T>)
 	inline bool mcompare(T left, T right) noexcept {
 		if constexpr (is_Const_Unsigned_Char_Ptr<T>) {
 			size_t nLength = strlen((const char*)right);
@@ -107,7 +108,7 @@ namespace PEParserNamespace {
 		returnSignatur
 		unsigned short& totalSectionCount = pPEParserBaseImpl->pFileH->NumberOfSections;
 		pPEParserBaseImpl->pSecHSingle = nullptr;							//reset secHSingle to nullptr
-		Iterable/*<PIMAGE_SECTION_HEADER>*/ iterate(pPEParserBaseImpl->pSecH, totalSectionCount);
+		Iterable<PIMAGE_SECTION_HEADER> iterate(pPEParserBaseImpl->pSecH, totalSectionCount);
 		pPEParserBaseImpl->failed = !iterate([&](PIMAGE_SECTION_HEADER single, auto counter)->bool {	//!!! I get absolute garbage
 			if constexpr(is_Const_Unsigned_Char_Ptr<T>)	{
 				if (mcompare<T>(single->Name, n)) {
@@ -133,10 +134,15 @@ namespace PEParserNamespace {
 		requires impl_PEParserBase<PEParserBaseImpl> && 
 		(is_Unsigned_Char<T> || is_Unsigned_Char<T>)
 	PEParserBaseImpl& getDataDirectoryEntry(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
-		returnSignatur
-			for (size_t i = 0; i < IMAGE_NUMBEROF_DIRECTORY_ENTRIES; i++)	{
+			returnSignatur
+			pPEParserBaseImpl->pDataDirSingle = nullptr;
+			Iterable iterator < PIMAGE_DATA_DIRECTORY, decltype([](int* single, auto counter)->bool {
+				return false;
+				})> (pPEParserBaseImpl->pDataDir, IMAGE_NUMBEROF_DIRECTORY_ENTRIES);
+			pPEParserBaseImpl->failed = false;
+			/*for (size_t i = 0; i < IMAGE_NUMBEROF_DIRECTORY_ENTRIES; i++) {
 				
-			}
+			}*/
 		/*each Datadirectory is 8 bytes long sizeof(_IMAGE_DATA_DIRECTORY) -> 8 byte
 		* there are always 16 Directory entries (#define IMAGE_NUMBEROF_DIRECTORY_ENTRIES 16)
 		* but there are not always 16 Directorys, there can be lesss

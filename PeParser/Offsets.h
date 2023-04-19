@@ -14,6 +14,9 @@ namespace PEParserNamespace {
 	constexpr inline PIMAGE_OPTIONAL_HEADER OPTHDROFFSET(void* a) noexcept {
 		return &NTHDROFFSET(a)->OptionalHeader;
 	}
+	constexpr inline PIMAGE_DATA_DIRECTORY DATADIROFFSET(void* a) noexcept {
+		return OPTHDROFFSET(a)->DataDirectory;
+	}
 	/*(PIMAGE_DOS_HEADER)->e_lfanew = last member of DOS Header / beginning of NT Header*/
 	constexpr inline PIMAGE_SECTION_HEADER SECHDROFFSET(void* a) noexcept {
 		return (PIMAGE_SECTION_HEADER)((LPVOID)((LPBYTE)a + DOSHDROFFSET(a)->e_lfanew + sizeof(IMAGE_NT_HEADERS)));
