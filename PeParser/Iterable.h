@@ -5,7 +5,7 @@
 namespace PEParserNamespace {
 	template <typename InIt, class Fn>
 	inline bool Iterable_for_each(InIt _First, InIt _Last, Fn _Func) noexcept {
-		disable
+		disable;
 			auto _UFirst = _First;
 			auto _ULast = _Last;
 			unsigned char counter = 0;	//byte

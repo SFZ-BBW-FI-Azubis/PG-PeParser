@@ -11,7 +11,7 @@ namespace PEParserNamespace {
 		requires impl_PEParserBase<PEParserBaseImpl> && 
 		(is_Const_Char_Ptr<T> || is_Const_Wchar_t_Ptr<T>)
 	inline PEParserBaseImpl& openFile(T lpFileName, PEParserBaseImpl* pPEParserBaseImpl) noexcept {
-		returnSignatur
+		returnSignatur;
 		if constexpr (is_Const_Char_Ptr<T>) {
 			pPEParserBaseImpl->hFile = ::CreateFileA(lpFileName, GENERIC_READ | GENERIC_WRITE,
 				0, nullptr, OPEN_EXISTING,
@@ -29,7 +29,7 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl>
 		requires impl_PEParserBase<PEParserBaseImpl>
 	inline PEParserBaseImpl& getFileSize(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
-		returnSignatur
+		returnSignatur;
 		pPEParserBaseImpl->dwFileSize = ::GetFileSize(pPEParserBaseImpl->hFile, 0);
 		pPEParserBaseImpl->failed = (pPEParserBaseImpl->dwFileSize == INVALID_FILE_SIZE);
 		pPEParserBaseImpl->code.codeUnsignedLong = ::GetLastError();
@@ -39,7 +39,7 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl>
 		requires impl_PEParserBase<PEParserBaseImpl>
 	inline PEParserBaseImpl& allocMemory(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
-		returnSignatur
+		returnSignatur;
 		pPEParserBaseImpl->fileBuffer = new char[pPEParserBaseImpl->dwFileSize];							//could cause some problems (pPEParserBaseImpl->dwFileSize)-1 ?
 		pPEParserBaseImpl->failed = false;
 		pPEParserBaseImpl->code.codeUnsignedLong = 0;
@@ -48,7 +48,7 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl>
 		requires impl_PEParserBase<PEParserBaseImpl>
 	inline PEParserBaseImpl& readFile(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
-		returnSignatur
+		returnSignatur;
 		pPEParserBaseImpl->failed =
 			!ReadFile(pPEParserBaseImpl->hFile, pPEParserBaseImpl->fileBuffer, pPEParserBaseImpl->dwFileSize, &pPEParserBaseImpl->bytes, 0);
 		pPEParserBaseImpl->code.codeUnsignedLong = ::GetLastError();
@@ -58,7 +58,7 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl>
 		requires impl_PEParserHeader<PEParserBaseImpl>
 	inline PEParserBaseImpl& getImageHeaders(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
-		returnSignatur
+		returnSignatur;
 		pPEParserBaseImpl->pDosH = DOSHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->pNtH = NTHDROFFSET(pPEParserBaseImpl->fileBuffer);
 		pPEParserBaseImpl->pFileH = FILEHDROFFSET(pPEParserBaseImpl->fileBuffer);
@@ -72,7 +72,7 @@ namespace PEParserNamespace {
 	template<class PEParserBaseImpl>
 		requires impl_PEParserHeader<PEParserBaseImpl>
 	inline PEParserBaseImpl& checkHeader(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
-		returnSignatur
+		returnSignatur;
 		if (pPEParserBaseImpl->pDosH->e_magic != IMAGE_DOS_SIGNATURE) {
 			pPEParserBaseImpl->code.codeInt = IMAGE_DOS_SIGNATURE;
 			pPEParserBaseImpl->failed = true;
@@ -105,7 +105,7 @@ namespace PEParserNamespace {
 		requires impl_PEParserHeader<PEParserBaseImpl> && 
 		(is_Const_Unsigned_Char_Ptr<T> || is_Unsigned_Char<T>)	/*inline is propably not the best option*/
 	PEParserBaseImpl& getSection(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
-		returnSignatur
+		returnSignatur;
 		unsigned short& totalSectionCount = pPEParserBaseImpl->pFileH->NumberOfSections;
 		pPEParserBaseImpl->pSecHSingle = nullptr;							//reset secHSingle to nullptr
 		Iterable<PIMAGE_SECTION_HEADER> iterate(pPEParserBaseImpl->pSecH, totalSectionCount);
@@ -125,11 +125,11 @@ namespace PEParserNamespace {
 		});
 		return *pPEParserBaseImpl;
 	}
-	template<class PEParserBaseImpl, typename T>
+	/*template<class PEParserBaseImpl, typename T>
 		requires impl_PEParserBase<PEParserBaseImpl> && 
 		(is_Unsigned_Char<T> || is_Unsigned_Char<T>)
 	PEParserBaseImpl& getDataDirectoryEntry(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
-			returnSignatur
+			returnSignatur;
 			pPEParserBaseImpl->pDataDirSingle = nullptr;
 			Iterable<PIMAGE_DATA_DIRECTORY> iterator (pPEParserBaseImpl->pDataDir, IMAGE_NUMBEROF_DIRECTORY_ENTRIES);
 			pPEParserBaseImpl->failed = !iterator([&](PIMAGE_DATA_DIRECTORY single, auto counter)->bool {
@@ -139,25 +139,21 @@ namespace PEParserNamespace {
 					return true;	//found
 				} return false;		//not found
 				});
-			/*for (size_t i = 0; i < IMAGE_NUMBEROF_DIRECTORY_ENTRIES; i++) {
-				
-			}*/
-		/*each Datadirectory is 8 bytes long sizeof(_IMAGE_DATA_DIRECTORY) -> 8 byte
-		* there are always 16 Directory entries (#define IMAGE_NUMBEROF_DIRECTORY_ENTRIES 16)
-		* but there are not always 16 Directorys, there can be lesss
-		* check pPEParserBaseImpl->OptH.NumberOfRvaAndSizes
-		* 
-		* The Field, the RVA is pointing in each Data directory can be a Table or String
+		return *pPEParserBaseImpl;
+	}
 		*/
-		//	IMAGE_EXPORT_DIRECTORY
-		//	IMAGE_DIRECTORY_ENTRY_EXPORT
-		//IMAGE_OPTIONAL_HEADER.DataDirectory
+	template<class PEParserBaseImpl, typename T>
+		requires impl_PEParserBase<PEParserBaseImpl>
+	PEParserBaseImpl& getDataDirectoryEntry(PEParserBaseImpl* pPEParserBaseImpl, unsigned int index) noexcept {
+			returnSignatur;
+			pPEParserBaseImpl->pDataDirSingle = nullptr;
+			pPEParserBaseImpl->pDataDirSingle = DataDir(pPEParserBaseImpl->pDataDir, index);
 		return *pPEParserBaseImpl;
 	}
 	template<class PEParserBaseImpl>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		PEParserBaseImpl& getLastError(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
-		returnSignatur
+		returnSignatur;
 		pPEParserBaseImpl->code = ::GetLastError();
 		return *pPEParserBaseImpl;
 	}

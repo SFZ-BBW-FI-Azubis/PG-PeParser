@@ -6,8 +6,8 @@
 		pPEParserBaseImpl->sizeOfSignatur = sizeof(__FUNCDNAME__);	\
 		pPEParserBaseImpl->UnmangledSig = __func__;					\
 		pPEParserBaseImpl->sizeOfUnmangledSig = sizeof(__func__);	\
-		return *pPEParserBaseImpl;
-	#define disable return{};
+		return *pPEParserBaseImpl
+	#define disable return{}
 	#define CONSTEXPR constexpr
 #else
 	#define returnSignatur

@@ -31,6 +31,9 @@ namespace PEParserNamespace {
 	constexpr inline DWORD NumberOfRvaAndSizes(PIMAGE_OPTIONAL_HEADER a) noexcept {
 		return a->NumberOfRvaAndSizes;
 	}
+	constexpr inline PIMAGE_DATA_DIRECTORY DataDir(PIMAGE_DATA_DIRECTORY dataDirArray ,unsigned int dataDir) noexcept {
+		return &dataDirArray[dataDir];
+	}
 	constexpr inline void setErrorCode(void* a) noexcept {
 
 	}

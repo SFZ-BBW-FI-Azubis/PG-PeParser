@@ -15,7 +15,7 @@ namespace PEParserNamespace {
 	class signatur;
 
 	template <class InIt, class Fn>
-	void for_each(InIt, InIt, Fn) noexcept;
+	inline bool Iterable_for_each(InIt, InIt, Fn) noexcept;
 
 	template<typename T, typename lambda>
 	class Iterable;
@@ -54,8 +54,8 @@ namespace PEParserNamespace {
 		PEParserBaseImpl& _call getSection(PEParserBaseImpl*, T) noexcept;
 
 	template<class PEParserBaseImpl = PEParser, typename T = const unsigned char*>
-	requires impl_PEParserBase<PEParserBaseImpl> && (is_Unsigned_Char<T> || is_Unsigned_Char<T>)
-		PEParserBaseImpl& _call getDataDirectoryEntry(PEParserBaseImpl*, T) noexcept;
+	requires impl_PEParserBase<PEParserBaseImpl>
+		PEParserBaseImpl& _call getDataDirectoryEntry(PEParserBaseImpl*, unsigned int) noexcept;
 
 	constexpr inline PIMAGE_DOS_HEADER DOSHDROFFSET(void*) noexcept;
 	constexpr inline PIMAGE_NT_HEADERS NTHDROFFSET(void*) noexcept;

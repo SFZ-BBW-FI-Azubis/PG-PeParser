@@ -40,7 +40,9 @@ int main()	{
 	NTDLL = PEParserNamespace::PEParserLoadNTDLL();
 	std::cout << NTDLL<<"\n";
 	PEParserNamespace::peb;
+	PEParserNamespace::peb2;
 	std::wcout << PEParserNamespace::peb->ProcessParameters->ImagePathName.Buffer << "\n";
+	std::wcout << PEParserNamespace::peb2->ProcessParameters->ImagePathName.Buffer << "\n";
 	//std::cout <<"SecVSize  "<<PEParserNamespace::SecVSize(peparser.pSecH) << std::endl;
 	return 0;
 }
