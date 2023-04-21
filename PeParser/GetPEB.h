@@ -30,8 +30,11 @@ namespace PEParserNamespace {
 	HINSTANCE PEParserLoadNTDLL() {
 		return LoadLibrary("NTDLL.dll");
 	}
+	constexpr _PEB* RTL_GET_CURRENT_PEB() {
+		return RtlGetCurrentPeb(GetProcAddress(LoadLibrary("NTDLL.dll"), "RtlGetCurrentPeb"))();
+	}
 	//_TEB;
-	_PEB* peb = RtlGetCurrentPeb(GetProcAddress(LoadLibrary("NTDLL.dll"), "RtlGetCurrentPeb"))();
+	_PEB* peb = RTL_GET_CURRENT_PEB();
 	_PEB* peb2 = NtCurrentPeb();
 }
 //FIELD_OFFSET()

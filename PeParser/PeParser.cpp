@@ -31,7 +31,12 @@ int main()	{
 	std::cout << std::endl;
 	PEParserNamespace::getSection<>(&peparser, (BYTE)0);
 	std::cout << std::endl;
-	PEParserNamespace::getDataDirectoryEntry<>(&peparser, (BYTE)IMAGE_DIRECTORY_ENTRY_IMPORT);
+	PEParserNamespace::getDataDirectoryEntry<>(&peparser, IMAGE_DIRECTORY_ENTRY_EXPORT);
+	std::cout << std::endl;
+	if (peparser.failed) {
+		std::cout << "not found\n";
+	}
+	PEParserNamespace::getDataDirectoryEntry<>(&peparser, IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR);
 	std::cout << std::endl;
 	if (peparser.failed)	{
 		std::cout << "not found\n";

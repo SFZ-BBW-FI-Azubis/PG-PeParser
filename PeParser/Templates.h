@@ -125,28 +125,25 @@ namespace PEParserNamespace {
 		});
 		return *pPEParserBaseImpl;
 	}
-	/*template<class PEParserBaseImpl, typename T>
-		requires impl_PEParserBase<PEParserBaseImpl> && 
-		(is_Unsigned_Char<T> || is_Unsigned_Char<T>)
-	PEParserBaseImpl& getDataDirectoryEntry(PEParserBaseImpl* pPEParserBaseImpl, T n) noexcept {
-			returnSignatur;
-			pPEParserBaseImpl->pDataDirSingle = nullptr;
-			Iterable<PIMAGE_DATA_DIRECTORY> iterator (pPEParserBaseImpl->pDataDir, IMAGE_NUMBEROF_DIRECTORY_ENTRIES);
-			pPEParserBaseImpl->failed = !iterator([&](PIMAGE_DATA_DIRECTORY single, auto counter)->bool {
-				std::cout << (unsigned int)counter <<"	"<< single->Size << std::endl<<"	"<< single->VirtualAddress << std::endl;
-				if (mcompare(counter, n)) {
-					pPEParserBaseImpl->pDataDirSingle = single;
-					return true;	//found
-				} return false;		//not found
-				});
-		return *pPEParserBaseImpl;
-	}
-		*/
 	template<class PEParserBaseImpl, typename T>
 		requires impl_PEParserBase<PEParserBaseImpl>
 	PEParserBaseImpl& getDataDirectoryEntry(PEParserBaseImpl* pPEParserBaseImpl, unsigned int index) noexcept {
 			returnSignatur;
 			pPEParserBaseImpl->pDataDirSingle = nullptr;
+			pPEParserBaseImpl->failed = !(index < (IMAGE_NUMBEROF_DIRECTORY_ENTRIES - 1));
+			if (pPEParserBaseImpl->failed)	{
+				return *pPEParserBaseImpl;
+			}
+			//Array of (below)
+			IMAGE_IMPORT_DESCRIPTOR	A;
+			//last element zerod out
+
+			//array of IMAGE_BOUND_... with first element being (belos)
+			IMAGE_BOUND_IMPORT_DESCRIPTOR a;
+			//emidiatly foolowed by NumberOfModuleForwarderRefs * (below)
+			IMAGE_BOUND_FORWARDER_REF ab;
+
+
 			pPEParserBaseImpl->pDataDirSingle = DataDir(pPEParserBaseImpl->pDataDir, index);
 		return *pPEParserBaseImpl;
 	}
