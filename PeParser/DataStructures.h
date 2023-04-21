@@ -3,15 +3,32 @@
 #include <Windows.h>
 //#include "PEParser.h"
 namespace PEParserNamespace {
-	class PEParserBase {
-	public:
+	typedef struct functionExecutionLog {
+		bool failed;
+		union alignas(64) {
+			void* codeVoidptr;
+			unsigned long codeUnsignedLong;
+			int codeInt;
+		} code;			//64bit alignment
+	} PEParserfunctionExecutionLog;
+	typedef struct signatur {
+		const char* Signatur;
+		const char* UnmangledSig;
+	} PEParsersignatur;
+
+	struct PEParserBase :
+		virtual public functionExecutionLog,
+		virtual public signatur 
+	{
 		HANDLE hFile;
 		DWORD dwFileSize;
 		DWORD bytes;
 		void* fileBuffer;
 	};
-	typedef class PEHEADER {
-	public:
+	typedef struct PEHEADER : 
+		virtual public functionExecutionLog,
+		virtual public signatur	
+	{
 		PIMAGE_DOS_HEADER		pDosH;
 		PIMAGE_NT_HEADERS		pNtH;
 		PIMAGE_SECTION_HEADER	pSecH;					//points to the first SecH
@@ -21,21 +38,10 @@ namespace PEParserNamespace {
 		PIMAGE_DATA_DIRECTORY	pDataDir;
 		PIMAGE_DATA_DIRECTORY	pDataDirSingle;
 	} PEParserHeader;
-	typedef class functionExecutionLog {
-	public:
-		bool failed;
-		union alignas(64){
-			void* codeVoidptr;
-			unsigned long codeUnsignedLong;
-			int codeInt;
-		} code;			//64bit alignment
-	} PEParserfunctionExecutionLog;
-	typedef class signatur{
-	public:
-		const char* Signatur;
-		const char* UnmangledSig;
-	} PEParsersignatur;
-	class PEParser : public PEParserBase, public PEParserHeader, public functionExecutionLog, public signatur	{
+	struct PEParser : 
+		public PEParserBase, 
+		public PEParserHeader
+	{
 
 	};
 }
