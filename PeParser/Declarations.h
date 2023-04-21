@@ -15,7 +15,7 @@ namespace PEParserNamespace {
 	class signatur;
 
 	template <class InIt, class Fn>
-	inline bool Iterable_for_each(InIt, InIt, Fn) noexcept;
+	extern inline bool Iterable_for_each(InIt, InIt, Fn) noexcept;
 
 	template<typename T, typename lambda>
 	class Iterable;
@@ -23,7 +23,7 @@ namespace PEParserNamespace {
 	template<typename T = const wchar_t*, class PEParserBaseImpl = PEParser>
 	requires impl_PEParserBase<PEParserBaseImpl> && 
 		(is_Const_Char_Ptr<T> || is_Const_Wchar_t_Ptr<T>)
-		inline PEParserBaseImpl& _call openFile (T lpFileName, PEParserBaseImpl* pPEParserBaseImpl) noexcept;
+		extern inline PEParserBaseImpl& _call openFile (T lpFileName, PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
 	template<class PEParserBaseImpl = PEParser>
 	requires impl_PEParserBase<PEParserBaseImpl>
@@ -45,17 +45,21 @@ namespace PEParserNamespace {
 	requires impl_PEParserHeader<PEParserBaseImpl>
 		inline PEParserBaseImpl& _call checkHeader(PEParserBaseImpl* pPEParserBaseImpl) noexcept;
 
-	template<class PEParserBaseImpl = PEParser, typename T>
-	requires impl_PEParserHeader<PEParserBaseImpl> && (is_Unsigned_Char<T> || is_Const_Unsigned_Char_Ptr<T>)
+	template<typename T>
+	requires (is_Unsigned_Char<T> || is_Const_Unsigned_Char_Ptr<T>)
 		inline bool mcompare(T, T) noexcept;
 
 	template<class PEParserBaseImpl = PEParser, typename T = const unsigned char*>
 	requires impl_PEParserHeader<PEParserBaseImpl> && (is_Const_Unsigned_Char_Ptr<T> || is_Unsigned_Char<T>)
 		PEParserBaseImpl& _call getSection(PEParserBaseImpl*, T) noexcept;
 
-	template<class PEParserBaseImpl = PEParser, typename T = const unsigned char*>
+	template<class PEParserBaseImpl = PEParser>
 	requires impl_PEParserBase<PEParserBaseImpl>
 		PEParserBaseImpl& _call getDataDirectoryEntry(PEParserBaseImpl*, unsigned int) noexcept;
+
+	template<class PEParserBaseImpl>
+	requires impl_PEParserBase<PEParserBaseImpl>
+		PEParserBaseImpl& _call getLastError(PEParserBaseImpl*) noexcept;
 
 	constexpr inline PIMAGE_DOS_HEADER DOSHDROFFSET(void*) noexcept;
 	constexpr inline PIMAGE_NT_HEADERS NTHDROFFSET(void*) noexcept;

@@ -1,5 +1,12 @@
-
 #pragma once
+#ifdef PEParserLibrary
+	#define EXPORT __declspec(dllexport)
+	#define _call _cdecl
+#else
+	#define EXPORT
+	#define _call
+#endif // PEParserLibrary
+
 #ifdef PEParserReturnSignatur
 	#define returnSignatur											\
 		pPEParserBaseImpl->Signatur = __FUNCDNAME__;				\
@@ -14,9 +21,3 @@
 	#define disable
 	#define CONSTEXPR
 #endif // PEParserReturnSignatur
-#ifndef EXPORT
-	#define EXPORT
-#endif // !API
-#ifndef _call
-	#define _call
-#endif // !_call

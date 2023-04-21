@@ -1,4 +1,5 @@
 #pragma once
+#ifndef PEParserLibrary
 #include "Preprocessor.h"
 #include "DataStructures.h"
 #include "Concepts.h"
@@ -125,7 +126,7 @@ namespace PEParserNamespace {
 		});
 		return *pPEParserBaseImpl;
 	}
-	template<class PEParserBaseImpl, typename T>
+	template<class PEParserBaseImpl>
 		requires impl_PEParserBase<PEParserBaseImpl>
 	PEParserBaseImpl& getDataDirectoryEntry(PEParserBaseImpl* pPEParserBaseImpl, unsigned int index) noexcept {
 			returnSignatur;
@@ -151,7 +152,8 @@ namespace PEParserNamespace {
 	requires impl_PEParserBase<PEParserBaseImpl>
 		PEParserBaseImpl& getLastError(PEParserBaseImpl* pPEParserBaseImpl) noexcept {
 		returnSignatur;
-		pPEParserBaseImpl->code = ::GetLastError();
+		pPEParserBaseImpl->code.codeUnsignedLong = ::GetLastError();
 		return *pPEParserBaseImpl;
 	}
 }
+#endif // !PEParserLibrary
