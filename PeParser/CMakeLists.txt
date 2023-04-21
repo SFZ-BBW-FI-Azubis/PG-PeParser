@@ -4,12 +4,12 @@
 cmake_minimum_required (VERSION 3.8)
 
 # Fügen Sie der ausführbaren Datei dieses Projekts eine Quelle hinzu.
-add_executable (PeParser "PeParser.cpp")
-add_library(PeParserPythonWrapper SHARED "Python_wrapper/Python_wrapper.cpp")
-add_library(PEParserCPPDLL SHARED "PEParserDLL/PEParserCPPDLL.cpp")
+add_executable (PeParser "PeParser.cpp" "ExplicitTemplateInstances.h")
+add_library(PeParserPythonWrapper SHARED "Python_wrapper/Python_wrapper.cpp" "ExplicitTemplateInstances.h")
+add_library(PEParserCPPDLL SHARED "PEParserDLL/PEParserCPPDLL.cpp" "ExplicitTemplateInstances.h")
 add_executable (TestCPP 
 				"PEParserDLL/Test.cpp"  
-				"${CMAKE_BINARY_DIR}/PeParser/PEParserCPPDLL.lib")
+				"${CMAKE_BINARY_DIR}/PeParser/PEParserCPPDLL.lib" "ExplicitTemplateInstances.h")
 target_link_libraries(TestCPP "${CMAKE_BINARY_DIR}/PeParser/PEParserCPPDLL.lib")
 add_dependencies(TestCPP PEParserCPPDLL)
 #set_property(TARGET PeParserPythonWrapper PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

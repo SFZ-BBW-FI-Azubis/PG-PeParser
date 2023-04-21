@@ -9,7 +9,7 @@
 	#define _call _cdecl
 #endif
 #if !defined(PEPARSER_IMPORT_LIBRARY) && !defined(PEPARSER_EXPORT_LIBRARY)
-	#define EXPORT
+//	#define PEP_LIB_API		// when someone forgets to define PEPARSER_..._LIBRARY there will be syntax errors
 	#define _call
 #endif
 
