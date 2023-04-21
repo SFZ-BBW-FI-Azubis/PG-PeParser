@@ -1,10 +1,12 @@
 #include "../Declarations.h"
 #define EXPORT __declspec(dllexport)
 #define _call _cdecl
-
+extern "C" __declspec(dllexport) void __cdecl test() {
+    
+}
 namespace PEParserNamespace {
     template __declspec(dllexport) PEParser& _call openFile<const wchar_t*, PEParser>(const wchar_t*, PEParser*) noexcept;
-    template EXPORT PEParser& _call openFile<const char*, PEParser>(const char*, PEParser*) noexcept;
+    template __declspec(dllexport) PEParser& _call openFile<const char*, PEParser>(const char*, PEParser*) noexcept;
     template EXPORT PEParser& _call getFileSize(PEParser*) noexcept;
     template EXPORT PEParser& _call allocMemory(PEParser*) noexcept;
     template EXPORT PEParser& _call readFile(PEParser*) noexcept;

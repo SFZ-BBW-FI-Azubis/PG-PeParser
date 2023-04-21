@@ -12,6 +12,7 @@ add_executable (TestCPP
 				"${CMAKE_BINARY_DIR}/PeParser/PEParserCPPDLL.exp" 
 				"${CMAKE_BINARY_DIR}/PeParser/PEParserCPPDLL.lib" 
 				"${CMAKE_BINARY_DIR}/PeParser/PEParserCPPDLL.dll")
+target_link_libraries(TestCPP "${CMAKE_BINARY_DIR}/PeParser/PEParserCPPDLL.lib")
 add_dependencies(TestCPP PEParserCPPDLL)
 #set_property(TARGET PeParserPythonWrapper PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 add_custom_command(TARGET PeParserPythonWrapper POST_BUILD COMMAND powershell -Command copy "${CMAKE_BINARY_DIR}/PeParser/PeParserPythonWrapper.dll" "${CMAKE_SOURCE_DIR}/PY_GUI")
