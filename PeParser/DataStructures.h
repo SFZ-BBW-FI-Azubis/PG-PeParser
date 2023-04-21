@@ -1,6 +1,7 @@
 #pragma once
 #include "Preprocessor.h"
 #include <Windows.h>
+//#include "PEParser.h"
 namespace PEParserNamespace {
 	class PEParserBase {
 	public:
