@@ -8,10 +8,8 @@ add_executable (PeParser "PeParser.cpp")
 add_library(PeParserPythonWrapper SHARED "Python_wrapper/Python_wrapper.cpp")
 add_library(PEParserCPPDLL SHARED "PEParserDLL/PEParserCPPDLL.cpp")
 add_executable (TestCPP 
-				"PEParserDLL/Test.cpp" 
-				"${CMAKE_BINARY_DIR}/PeParser/PEParserCPPDLL.exp" 
-				"${CMAKE_BINARY_DIR}/PeParser/PEParserCPPDLL.lib" 
-				"${CMAKE_BINARY_DIR}/PeParser/PEParserCPPDLL.dll")
+				"PEParserDLL/Test.cpp"  
+				"${CMAKE_BINARY_DIR}/PeParser/PEParserCPPDLL.lib")
 target_link_libraries(TestCPP "${CMAKE_BINARY_DIR}/PeParser/PEParserCPPDLL.lib")
 add_dependencies(TestCPP PEParserCPPDLL)
 #set_property(TARGET PeParserPythonWrapper PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

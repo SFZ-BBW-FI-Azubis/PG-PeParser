@@ -1,11 +1,17 @@
 #pragma once
-#ifdef PEParserLibrary
-	#define EXPORT __declspec(dllexport)
+
+#ifdef PEPARSER_IMPORT_LIBRARY
+	#define PEP_LIB_API __declspec(dllimport)
 	#define _call _cdecl
-#else
+#endif
+#ifdef PEPARSER_EXPORT_LIBRARY
+	#define PEP_LIB_API __declspec(dllexport)
+	#define _call _cdecl
+#endif
+#if !defined(PEPARSER_IMPORT_LIBRARY) && !defined(PEPARSER_EXPORT_LIBRARY)
 	#define EXPORT
 	#define _call
-#endif // PEParserLibrary
+#endif
 
 #ifdef PEParserReturnSignatur
 	#define returnSignatur											\

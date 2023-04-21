@@ -1,5 +1,5 @@
-#pragma once
-#ifndef PEParserLibrary
+#pragma onces
+#ifndef PEPARSER_IMPORT_LIBRARY
 #include "Preprocessor.h"
 #include "DataStructures.h"
 #include "Concepts.h"
