@@ -1,5 +1,7 @@
 #pragma once
-
+/*
+* build cooler Preprocessor tricks
+*/
 #ifdef PEPARSER_IMPORT_LIBRARY
 	#define PEP_LIB_API __declspec(dllimport)
 	#define _call _cdecl
@@ -27,3 +29,8 @@
 	#define disable
 	#define CONSTEXPR
 #endif // PEParserReturnSignatur
+
+#define EMPTY()
+#define DEFER(id) id EMPTY()
+#define OBSTRUCT(...) __VA_ARGS__ DEFER()()
+#define EXPAND(...) __VA_ARGS__

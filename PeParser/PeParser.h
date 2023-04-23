@@ -5,7 +5,7 @@ extern "C" {
 #endif
 	typedef struct PEParserFunctionExecutionLog {
 		bool failed;
-		union alignas(64) {
+		union alignas(__int64) {
 			void* codeVoidptr;
 			unsigned long codeUnsignedLong;
 			int codeInt;
@@ -32,7 +32,7 @@ extern "C" {
 		DWORD dwFileSize;
 		DWORD bytes;
 		void* fileBuffer;
-	};
+	} *pPEParserHandle;
 	typedef struct PEParserHeader
 	{
 		pPEParser ppEParser;
@@ -44,7 +44,7 @@ extern "C" {
 		PIMAGE_OPTIONAL_HEADER	pOptH;
 		PIMAGE_DATA_DIRECTORY	pDataDir;
 		PIMAGE_DATA_DIRECTORY	pDataDirSingle;
-	};
+	} *pPEParserHeader;
 
 
 	typedef struct PEParserCombined
@@ -52,7 +52,7 @@ extern "C" {
 		PEParser pEParser;
 		PEParserHandle pEParserHandle;
 		PEParserHeader pEParserHeader;
-	};
+	} *pPEParserCombined;
 #ifdef __cplusplus
 }
 #endif

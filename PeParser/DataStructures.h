@@ -5,7 +5,7 @@
 namespace PEParserNamespace {
 	typedef struct functionExecutionLog {
 		bool failed;
-		union alignas(64) {
+		union alignas(__int64) {
 			void* codeVoidptr;
 			unsigned long codeUnsignedLong;
 			int codeInt;
