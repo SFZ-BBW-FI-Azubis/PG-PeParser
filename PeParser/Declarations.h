@@ -1,16 +1,18 @@
 #pragma once
 #include "Preprocessor.h"
 #include "DataStructures.h"
-#ifndef PEPARSER_IMPORT_C_LIBRARY
+#ifdef PEPARSER_IMPORT_C_LIBRARY || PEPARSER_EXPORT_C_LIBRARY
 #include "PEParser.h"
-#endif // !PEPARSER_IMPORT_C_LIBRARY
+#endif // PEPARSER_IMPORT_C_LIBRARY
 
 #include "Concepts.h"
-#ifndef PEPARSER_IMPORT_LIBRARY
+#ifndef PEPARSER_IMPORT_LIBRARY || PEPARSER_IMPORT_C_LIBRARY
 #include "Templates.h"
-#else
+#endif //!(PEPARSER_IMPORT_LIBRARY || PEPARSER_C_IMPORT_LIBRARY)
+#if defined(PEPARSER_IMPORT_LIBRARY) || defined(PEPARSER_IMPORT_C_LIBRARY) || defined(PEPARSER_EXPORT_LIBRARY)
 #include "ExplicitTemplateInstances.h"
-#endif
+#endif // PEPARSER_IMPORT_LIBRARY || PEPARSER_C_IMPORT_LIBRARY || PEPARSER_EXPORT_LIBRARY
+
 #include "Iterable.h"
 #include "GetPEB.h"
 
