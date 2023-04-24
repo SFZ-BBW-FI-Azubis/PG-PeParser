@@ -1,15 +1,18 @@
 #define PEPARSER_IMPORT_C_LIBRARY
 #define PEPARSER_IMPORT_LIBRARY
-//do includes manualls (TODO, to find the Error)
-//#include "../Declarations.h"
+#include "../Declarations.h"
+
+/*
+* I have to manualy call each imported Function,
+* to make it show up in ILT/IAT
+* Damn it, this took me two days to figure out
+*/
 
 extern "C" __declspec(dllexport) pPEParserHandle* __cdecl openFile(pPEParserHandle ppEParserHandle) noexcept {
     //translate PEParserBase between PEParserHandle 
     const char name[] = "lololol";
     PEParserNamespace::PEParserBase ppEParserBase;
     ppEParserBase.hFile;
-    //<> meight work because it uses the defenition in Templates.h anyways
-    //but it should not because I fixed it
     PEParserNamespace::openFile<>(name, &ppEParserBase);
     std::cout << ppEParserBase.hFile << std::endl;
     return &ppEParserHandle;

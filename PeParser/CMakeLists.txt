@@ -17,7 +17,7 @@ add_dependencies(PEParserCDLL PEParserCPPDLL)
 add_executable (TestCPP
 				"PEParserDLL/Test.cpp"  
 				"ExplicitTemplateInstances.h")
-target_link_libraries(TestCPP "${CMAKE_BINARY_DIR}/PeParser/PEParserCPPDLL.lib")
+target_link_libraries(TestCPP "${CMAKE_BINARY_DIR}/PeParser/PEParserCPPDLL.lib" "${CMAKE_BINARY_DIR}/PeParser/PEParserCDLL.lib")
 add_dependencies(TestCPP PEParserCPPDLL)
 
 set_property(TARGET PeParserPythonWrapper PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

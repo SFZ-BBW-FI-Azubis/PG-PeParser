@@ -5,5 +5,5 @@
 extern "C" __declspec(dllimport) void __cdecl test();
 int main() {
     test();
-	PEParserNamespace::openFile<const wchar_t*, PEParserNamespace::PEParser>({}, {});
+	//PEParserNamespace::openFile<const wchar_t*, PEParserNamespace::PEParser>({}, {});
 }
