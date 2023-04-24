@@ -10,11 +10,11 @@
 
 extern "C" __declspec(dllexport) pPEParserHandle* __cdecl openFile(pPEParserHandle ppEParserHandle) noexcept {
     //translate PEParserBase between PEParserHandle 
-    const char name[] = "lololol";
-    PEParserNamespace::PEParserBase ppEParserBase;
-    ppEParserBase.hFile;
-    PEParserNamespace::openFile<>(name, &ppEParserBase);
-    std::cout << ppEParserBase.hFile << std::endl;
+    const char name[] = "C:/NeuerOrdner(2)/depends.exe";
+    PEParserNamespace::PEParserBase *ppEParserBase;
+    ppEParserBase->hFile = &ppEParserBase->hFile;
+    PEParserNamespace::openFile<>(name, ppEParserBase);
+    std::cout << ppEParserBase->hFile << std::endl;
     return &ppEParserHandle;
 }
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved) {
