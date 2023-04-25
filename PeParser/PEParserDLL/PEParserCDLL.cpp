@@ -8,13 +8,27 @@
 * Damn it, this took me two days to figure out
 */
 
+
+
 extern "C" __declspec(dllexport) pPEParserHandle* __cdecl openFile(pPEParserHandle ppEParserHandle) noexcept {
     //translate PEParserBase between PEParserHandle 
+    PEParserNamespace::PEParser* ppEParser = nullptr;
+    PEParserNamespace::PEParserBase* ppEParserBase = ppEParser;
+    PEParserNamespace::PEParserHeader* ppEParserHeader = ppEParser;
+
     const char name[] = "C:/NeuerOrdner(2)/depends.exe";
-    PEParserNamespace::PEParserBase *ppEParserBase;
-    ppEParserBase->hFile = &ppEParserBase->hFile;
-    PEParserNamespace::openFile<>(name, ppEParserBase);
-    std::cout << ppEParserBase->hFile << std::endl;
+    // I dont want to overwrite, ppEParserBase->hFile is pointing to (nullptr)
+    PEParserNamespace::PEParserBase pEParserBase;
+    ppEParserHandle->ppEParser->Dummy.pEParserFunctionExecutionLog.failed;
+    ppEParserHandle->ppEParser->Dummy.pEParserFunctionExecutionLog.code;
+    ppEParserHandle->ppEParser->Dummy.pEParserSignatur.Signatur;
+    ppEParserHandle->ppEParser->Dummy.pEParserSignatur.UnmangledSig;
+    ppEParserHandle->ppEParser->PEParserStructurType;
+    //ppEParserHandle->...
+    //!!!note, that the members are not always layd out in declarationorder in memory
+    //ppEParserBase->hFile = ppEParserHandle->hFile; // this does not work
+    PEParserNamespace::openFile<>(name, &pEParserBase);
+    std::cout << ppEParser->hFile << std::endl;
     return &ppEParserHandle;
 }
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved) {

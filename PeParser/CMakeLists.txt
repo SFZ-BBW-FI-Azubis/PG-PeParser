@@ -15,8 +15,7 @@ target_link_libraries(PEParserCDLL "${CMAKE_BINARY_DIR}/PeParser/PEParserCPPDLL.
 add_dependencies(PEParserCDLL PEParserCPPDLL)
 
 add_executable (TestCPP
-				"PEParserDLL/Test.cpp"  
-				"ExplicitTemplateInstances.h")
+				"PEParserDLL/Test.cpp")
 target_link_libraries(TestCPP "${CMAKE_BINARY_DIR}/PeParser/PEParserCPPDLL.lib" "${CMAKE_BINARY_DIR}/PeParser/PEParserCDLL.lib")
 add_dependencies(TestCPP PEParserCPPDLL)
 
