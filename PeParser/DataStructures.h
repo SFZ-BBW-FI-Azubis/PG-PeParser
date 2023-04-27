@@ -50,6 +50,7 @@ namespace PEParserNamespace {
 	auto ClassConverter(Type type) noexcept {
 		if constexpr (std::is_base_of_v<functionExecutionLog, Type> /*not right!!!*/) {
 			functionExecutionLog* fx;
+			void* fxVBPTR;				//Virtual Base PoinTeR (displacement/offset/RVA from base of type to begin of virtualBase instance)
 		}if constexpr (std::is_base_of_v<signatur, Type>)	{
 			signatur* sig;
 		}
