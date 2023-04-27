@@ -20,18 +20,14 @@ extern "C" __declspec(dllexport) pPEParserHandle* __cdecl openFile(pPEParserHand
     // I dont want to overwrite, ppEParserBase->hFile is pointing to (nullptr)
     PEParserNamespace::PEParserBase pEParserBase;
     //PEParserNamespace::"IntermedietCStruct" *Instance
-    ppEParserHandle->ppEParser->Dummy.pEParserFunctionExecutionLog.failed;
-    ppEParserHandle->ppEParser->Dummy.pEParserFunctionExecutionLog.code;
-    ppEParserHandle->ppEParser->Dummy.pEParserSignatur.Signatur;
-    ppEParserHandle->ppEParser->Dummy.pEParserSignatur.UnmangledSig;
-    ppEParserHandle->ppEParser->PEParserStructurType;
     //ppEParserHandle->...
     //!!!note, that the members are not always layd out in declarationorder in memory
     //ppEParserBase->hFile = ppEParserHandle->hFile; // this does not work, obviesly
     PEParserNamespace::openFile<>(name, &pEParserBase);
     std::cout << ppEParser->hFile << std::endl;
     return &ppEParserHandle;
-}
+
+}       
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved) {
     switch (fdwReason) {
     case DLL_PROCESS_ATTACH: {

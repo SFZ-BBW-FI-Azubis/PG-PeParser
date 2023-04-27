@@ -49,7 +49,7 @@ namespace PEParserNamespace {
 	template<typename Type>	//Type meight be for e.a. PEParserHeader
 	auto ClassConverter(Type type) noexcept {
 		if constexpr (std::is_base_of_v<functionExecutionLog, Type> /*not right!!!*/) {
-			functionExecutionLog* fx;	
+			functionExecutionLog* fx;
 		}if constexpr (std::is_base_of_v<signatur, Type>)	{
 			signatur* sig;
 		}
