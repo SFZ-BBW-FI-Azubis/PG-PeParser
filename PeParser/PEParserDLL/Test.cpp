@@ -7,7 +7,7 @@ extern "C" __declspec(dllexport) pPEParserHandle * __cdecl openFile(pPEParserHan
 extern "C" __declspec(dllimport) void __cdecl test();
 int main() {
     test();
-	PEParserHandle pEParserHandle = {};
+	PEParserHandleNoInheritence pEParserHandle = {};
 	openFile(&pEParserHandle);
 	//PEParserNamespace::openFile<const wchar_t*, PEParserNamespace::PEParser>({}, {});
 }

@@ -10,21 +10,25 @@
 
 
 
-extern "C" __declspec(dllexport) pPEParserHandle* __cdecl openFile(pPEParserHandle ppEParserHandle) noexcept {
-    //translate PEParserBase between PEParserHandle 
-    PEParserNamespace::PEParser* ppEParser = nullptr;
-    PEParserNamespace::PEParserBase* ppEParserBase = ppEParser;
-    PEParserNamespace::PEParserHeader* ppEParserHeader = ppEParser;
+extern "C" __declspec(dllexport) pPEParserHandleNoInheritence* __cdecl openFile(pPEParserHandleNoInheritence ppEParserHandle) noexcept {
+    PEParserNamespace::PEParser ppEParser;                                      //temporary instance
+    PEParserNamespace::PEParserBase* ppEParserBase = &ppEParser;                //bases does not resolve
+    PEParserNamespace::PEParserfunctionExecutionLog* ppEParserfx = &ppEParser;  //upcast
+    PEParserNamespace::PEParsersignatur* ppEParsersig = &ppEParser;              //upcast
 
+    ppEParserBase->hFile = ppEParserHandle->hFile;
+    ppEParserBase->dwFileSize = ppEParserHandle->dwFileSize;
+    ppEParserBase->bytes = ppEParserHandle->bytes;
+    ppEParserBase->fileBuffer = ppEParserHandle->fileBuffer;
+    //shit, does not work :(
+//    ppEParserfx->failed = ppEParserHandle->ppEParser->Dummy.pEParserFunctionExecutionLog.failed;
+//    ppEParserfx->code.codeVoidptr = ppEParserHandle->ppEParser->Dummy.pEParserFunctionExecutionLog.code.codeVoidptr;
+//    ppEParsersig->Signatur = ppEParserHandle->ppEParser->Dummy.pEParserSignatur.Signatur;
+//    ppEParsersig->UnmangledSig = ppEParserHandle->ppEParser->Dummy.pEParserSignatur.UnmangledSig;
+    
     const char name[] = "C:/NeuerOrdner(2)/depends.exe";
-    // I dont want to overwrite, ppEParserBase->hFile is pointing to (nullptr)
-    PEParserNamespace::PEParserBase pEParserBase;
-    //PEParserNamespace::"IntermedietCStruct" *Instance
-    //ppEParserHandle->...
-    //!!!note, that the members are not always layd out in declarationorder in memory
-    //ppEParserBase->hFile = ppEParserHandle->hFile; // this does not work, obviesly
-    PEParserNamespace::openFile<>(name, &pEParserBase);
-    std::cout << ppEParser->hFile << std::endl;
+    PEParserNamespace::openFile<>(name, ppEParserBase);
+    std::cout << ppEParser.hFile << std::endl;
     return &ppEParserHandle;
 
 }       
