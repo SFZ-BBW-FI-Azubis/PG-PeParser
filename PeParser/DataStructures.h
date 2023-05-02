@@ -4,6 +4,9 @@
 #include <concepts>
 #include <type_traits>
 //#include "PEParser.h"
+//I think I will have to implement getter and setter either
+//as methods in classes/structs
+//or as macros in präprocessor.h
 namespace PEParserNamespace {
 	typedef struct functionExecutionLog {
 		bool failed;

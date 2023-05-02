@@ -3,7 +3,7 @@
 #include "../Declarations.h"
 #include "../ExplicitTemplateInstances.h"
 #include "../PEParser.h"
-extern "C" __declspec(dllexport) pPEParserHandle * __cdecl openFile(pPEParserHandle);
+extern "C" __declspec(dllexport) pPEParserHandle * __cdecl openFile(pPEParserHandleNoInheritence);
 extern "C" __declspec(dllimport) void __cdecl test();
 int main() {
     test();

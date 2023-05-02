@@ -1,5 +1,8 @@
 #include "Preprocessor.h"
 #include <Windows.h>
+//I think I will implement getter and setter methods here to
+//either by using function pointers, that get initialised at runtime
+//implementing it all with ugly macros in Präprocessor.h
 #ifdef __cplusplus
 extern "C" {
 #endif
