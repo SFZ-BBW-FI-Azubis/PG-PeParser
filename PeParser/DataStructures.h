@@ -5,16 +5,45 @@
 #include <type_traits>
 //#include "PEParser.h"
 //I think I will have to implement getter and setter either
-//as methods in classes/structs
+//as methods in classes/structs (make everything privat and the compiler tells where to replace with new getter / setter)
 //or as macros in präprocessor.h
 namespace PEParserNamespace {
-	typedef struct functionExecutionLog {
-		bool failed;
-		union alignas(__int64) {
+	typedef class functionExecutionLog {
+		alignas(void*) bool failed;
+		union alignas(void*) {
 			void* codeVoidptr;
 			unsigned long codeUnsignedLong;
 			int codeInt;
 		} code;			//64bit alignment
+	public:
+		//member variable either stores Data or points to Data
+		//alignment???
+		//do all by copy
+		void setFailed(bool failed) {
+			failed = failed;
+		}
+		void setCode(void* code) {
+			code = { code };
+		}
+		bool getFailed() {
+			return failed;
+		}
+		void* getCode() {
+			return code.codeVoidptr;
+		}
+		//and now all by pointer/ref
+		void setFailed(bool *failed) {
+			void*(failed) = failed;		//now functionExecutionLog::failed contains Address of/ points to argument (passed by pointer/ref)
+		}
+		void setCode(void* code) {
+			void*(code) = code;			//--'--
+		}
+		bool getFailed() {
+			return failed;
+		}
+		void* getCode() {
+			return code.codeVoidptr;
+		}
 	} PEParserfunctionExecutionLog;
 	typedef struct signatur {
 		const char* Signatur;
