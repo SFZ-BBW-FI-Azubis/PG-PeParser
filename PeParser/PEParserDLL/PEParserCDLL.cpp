@@ -20,8 +20,8 @@ extern "C" __declspec(dllexport) pPEParserHandleNoInheritence* __cdecl openFile(
     ppEParserBase->dwFileSize = ppEParserHandle->dwFileSize;
     ppEParserBase->bytes = ppEParserHandle->bytes;
     ppEParserBase->fileBuffer = ppEParserHandle->fileBuffer;
-    ppEParserfx->setFailed(ppEParserHandle->ppEParser.Dummy.pEParserFunctionExecutionLog.failed);
-    ppEParserfx->setCode(ppEParserHandle->ppEParser.Dummy.pEParserFunctionExecutionLog.code.codeVoidptr);
+    ppEParserfx->failed = ppEParserHandle->ppEParser.Dummy.pEParserFunctionExecutionLog.failed;
+    ppEParserfx->code.codeVoidptr = ppEParserHandle->ppEParser.Dummy.pEParserFunctionExecutionLog.code.codeVoidptr;
     ppEParsersig->Signatur = ppEParserHandle->ppEParser.Dummy.pEParserSignatur.Signatur;
     ppEParsersig->UnmangledSig = ppEParserHandle->ppEParser.Dummy.pEParserSignatur.UnmangledSig;
     

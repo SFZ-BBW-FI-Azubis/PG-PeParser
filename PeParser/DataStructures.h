@@ -3,46 +3,44 @@
 #include <Windows.h>
 #include <concepts>
 #include <type_traits>
+#include <concepts>
 //#include "PEParser.h"
 //I think I will have to implement getter and setter either
 //as methods in classes/structs (make everything privat and the compiler tells where to replace with new getter / setter)
 //or as macros in präprocessor.h
 namespace PEParserNamespace {
-	typedef class functionExecutionLog {
-		alignas(void*) bool failed;
-		union alignas(void*) {
+	#define PEParser_OFFSET alignas(void*)		// first element in class gets marked with this
+												// assuming that class member(visible) get layd out in declaration order
+												// when first member marked with this, member interpreted as offset from base of derived class to real, or adress to real  class
+												// following members are ignored
+	typedef struct functionExecutionLog {
+		PEParser_OFFSET bool failed;
+		union alignas(void*) Code {
 			void* codeVoidptr;
 			unsigned long codeUnsignedLong;
 			int codeInt;
 		} code;			//64bit alignment
-	public:
-		//member variable either stores Data or points to Data
-		//alignment???
-		//do all by copy
-		void setFailed(bool failed) {
-			failed = failed;
+		template<typename T>
+		functionExecutionLog(T* ppEParserFunctionExecutionLog) {
+			this->failed = ppEParserFunctionExecutionLog->failed;
 		}
-		void setCode(void* code) {
-			code = { code };
+		functionExecutionLog() {};
+		//setter
+		template<typename ...T> bool getFailed(T... derived) {
+			if constexpr(sizeof...(derived)>1)	{
+				// dont compile
+			}
+			if constexpr(sizeof...(derived) = 1)	{
+				return
+					reinterpret_cast<functionExecutionLog*>(
+						reinterpret_cast<unsigned char>(derived)[this->failed]	//when failed = 0 then instance of base is leftmost based inherited and non virtual (base needs to be non virtual anyways)
+						)->failed;
+			}	else {
+				return reinterpret_cast<functionExecutionLog*>(this->failed)->failed;
+			}
 		}
-		bool getFailed() {
-			return failed;
-		}
-		void* getCode() {
-			return code.codeVoidptr;
-		}
-		//and now all by pointer/ref
-		void setFailed(bool *failed) {
-			void*(failed) = failed;		//now functionExecutionLog::failed contains Address of/ points to argument (passed by pointer/ref)
-		}
-		void setCode(void* code) {
-			void*(code) = code;			//--'--
-		}
-		bool getFailed() {
-			return failed;
-		}
-		void* getCode() {
-			return code.codeVoidptr;
+		functionExecutionLog::Code getCode() {
+			return reinterpret_cast<functionExecutionLog*>(this->failed)->code;
 		}
 	} PEParserfunctionExecutionLog;
 	typedef struct signatur {
