@@ -20,14 +20,21 @@ namespace PEParserNamespace {
 			unsigned long codeUnsignedLong;
 			int codeInt;
 		} code;			//64bit alignment
-		template<typename T>
-		functionExecutionLog(T* ppEParserFunctionExecutionLog) {
-			this->failed = ppEParserFunctionExecutionLog->failed;
+		template<typename ...T>
+		functionExecutionLog(functionExecutionLog* pfx, T*... pderived) {
+			static_assert(sizeof...(pderived) > 1, "to much Arguments");
+			if constexpr (sizeof...(pderived) = 1)	{
+				//calculate offset
+				this->failed = ;
+			}	else	{
+				//reinterpret_cast<functionExecutionLog*>(this->failed) = *pfx;
+				this->failed = &(pfx->failed);
+			}
 		}
 		functionExecutionLog() {};
-		//setter
+		//getter
 		template<typename ...T> bool getFailed(T... derived) {
-			static_assert(sizeof...(derived) > 1, "up to 1 argument allowed");
+			static_assert(sizeof...(derived) > 1, "to much Arguments");
 			if constexpr(sizeof...(derived) = 1)	{
 				return
 					reinterpret_cast<functionExecutionLog*>(
