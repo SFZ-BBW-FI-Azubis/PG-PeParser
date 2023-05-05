@@ -27,9 +27,7 @@ namespace PEParserNamespace {
 		functionExecutionLog() {};
 		//setter
 		template<typename ...T> bool getFailed(T... derived) {
-			if constexpr(sizeof...(derived)>1)	{
-				// dont compile
-			}
+			static_assert(sizeof...(derived) > 1, "up to 1 argument allowed");
 			if constexpr(sizeof...(derived) = 1)	{
 				return
 					reinterpret_cast<functionExecutionLog*>(
