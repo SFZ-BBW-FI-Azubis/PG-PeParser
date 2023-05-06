@@ -24,6 +24,9 @@ namespace PEParserNamespace {
 	class functionExecutionLog;
 	class signatur;
 
+	/*template <typename ...T>
+	functionExecutionLog(functionExecutionLog* pfx, T*... pderived);*/
+
 	template <class InIt, class Fn>
 	extern inline bool Iterable_for_each(InIt, InIt, Fn) noexcept;
 

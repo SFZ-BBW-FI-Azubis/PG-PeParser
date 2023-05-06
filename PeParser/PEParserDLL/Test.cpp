@@ -9,5 +9,11 @@ int main() {
     test();
 	PEParserHandleNoInheritence pEParserHandle = {};
 	openFile(&pEParserHandle);
+	PEParserHandleNoInheritence cfx = PEParserHandleNoInheritence();
+	PEParserNamespace::functionExecutionLog fx =
+		PEParserNamespace::functionExecutionLog(
+			&((PEParserNamespace::functionExecutionLog)cfx.ppEParser.Dummy.pEParserFunctionExecutionLog)
+		);
+
 	//PEParserNamespace::openFile<const wchar_t*, PEParserNamespace::PEParser>({}, {});
 }

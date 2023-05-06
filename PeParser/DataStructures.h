@@ -25,7 +25,7 @@ namespace PEParserNamespace {
 			static_assert(sizeof...(pderived) > 1, "to much Arguments");
 			if constexpr (sizeof...(pderived) = 1)	{
 				//calculate offset
-				this->failed = ;
+				this->failed = pfx - pderived; //&(*variable)
 			}	else	{
 				//reinterpret_cast<functionExecutionLog*>(this->failed) = *pfx;
 				this->failed = &(pfx->failed);
