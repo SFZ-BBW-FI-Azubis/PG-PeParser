@@ -12,7 +12,7 @@ int main() {
 	PEParserHandleNoInheritence cfx = PEParserHandleNoInheritence();
 	PEParserNamespace::functionExecutionLog fx =
 		PEParserNamespace::functionExecutionLog(
-			&((PEParserNamespace::functionExecutionLog)cfx.ppEParser.Dummy.pEParserFunctionExecutionLog)
+			reinterpret_cast<PEParserNamespace::functionExecutionLog*>(&(cfx.ppEParser.Dummy.pEParserFunctionExecutionLog))
 		);
 
 	//PEParserNamespace::openFile<const wchar_t*, PEParserNamespace::PEParser>({}, {});

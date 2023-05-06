@@ -33,7 +33,10 @@
 	#define disable
 	#define CONSTEXPR
 #endif // PEParserReturnSignatur
-
+#define PEParser_OFFSET alignas(void*)		// first element in class gets marked with this
+												// assuming that class member(visible) get layd out in declaration order
+												// when first member marked with this, member interpreted as offset from base of derived class to real, or adress to real  class
+												// following members are ignored
 #define EMPTY()
 #define DEFER(id) id EMPTY()
 #define OBSTRUCT(...) __VA_ARGS__ DEFER()()

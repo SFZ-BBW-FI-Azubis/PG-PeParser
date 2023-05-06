@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 	typedef struct PEParserFunctionExecutionLog {
-		bool failed;
+		PEParser_OFFSET bool failed;
 		union alignas(__int64) {
 			void* codeVoidptr;
 			unsigned long codeUnsignedLong;

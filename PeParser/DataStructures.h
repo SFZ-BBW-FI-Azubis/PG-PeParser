@@ -9,10 +9,13 @@
 //as methods in classes/structs (make everything privat and the compiler tells where to replace with new getter / setter)
 //or as macros in präprocessor.h
 namespace PEParserNamespace {
-	#define PEParser_OFFSET alignas(void*)		// first element in class gets marked with this
-												// assuming that class member(visible) get layd out in declaration order
-												// when first member marked with this, member interpreted as offset from base of derived class to real, or adress to real  class
-												// following members are ignored
+	template<typename Function, typename T1, typename ...Tn> 
+	constexpr T1 unpack(Function function, const unsigned int paramCount, T1 t1, Tn... tn) noexcept {
+		if constexpr (paramCount>0)	{
+			function(unpack(function, paramCount - 1, tn)...);
+		}
+		return t1;
+	}
 	typedef struct functionExecutionLog {
 		PEParser_OFFSET bool failed;
 		union alignas(void*) Code {
@@ -25,7 +28,7 @@ namespace PEParserNamespace {
 			static_assert(sizeof...(pderived) > 1, "to much Arguments");
 			if constexpr (sizeof...(pderived) = 1)	{
 				//calculate offset
-				this->failed = pfx - pderived; //&(*variable)
+				this->failed = pfx - pderived[0]; //&(*variable)
 			}	else	{
 				//reinterpret_cast<functionExecutionLog*>(this->failed) = *pfx;
 				this->failed = &(pfx->failed);
@@ -38,7 +41,7 @@ namespace PEParserNamespace {
 			if constexpr(sizeof...(derived) = 1)	{
 				return
 					reinterpret_cast<functionExecutionLog*>(
-						reinterpret_cast<unsigned char>(derived)[this->failed]	//when failed = 0 then instance of base is leftmost based inherited and non virtual (base needs to be non virtual anyways)
+						reinterpret_cast<unsigned char>(derived[0])[this->failed]	//when failed = 0 then instance of base is leftmost based inherited and non virtual (base needs to be non virtual anyways)
 						)->failed;
 			}	else {
 				return reinterpret_cast<functionExecutionLog*>(this->failed)->failed;
