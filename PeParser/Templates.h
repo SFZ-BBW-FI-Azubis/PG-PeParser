@@ -155,5 +155,18 @@ namespace PEParserNamespace {
 		pPEParserBaseImpl->code.codeUnsignedLong = ::GetLastError();
 		return *pPEParserBaseImpl;
 	}
+	/*
+	template<typename Function, typename T1, typename ...Tn> 
+	constexpr T1 unpack(Function function, 
+						const unsigned int paramCount, 
+						const unsigned paramCountOriginal, 
+						T1 t1,
+						Tn... tn) noexcept {
+		if constexpr ((paramCount>0) && (paramCount <= paramCountOriginal))	{
+			function(t1, unpack(function, paramCount - 1, paramCountOriginal, tn)...);
+		}
+		return t1;
+	}	//compiletime function, disapears after compilation
+	*/
 }
 #endif // !PEParserLibrary

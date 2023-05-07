@@ -4,20 +4,14 @@
 #include <concepts>
 #include <type_traits>
 #include <concepts>
+#include <iostream>
 //#include "PEParser.h"
 //I think I will have to implement getter and setter either
 //as methods in classes/structs (make everything privat and the compiler tells where to replace with new getter / setter)
 //or as macros in präprocessor.h
 namespace PEParserNamespace {
 	template<typename Function, typename T1, typename ...Tn> 
-	constexpr T1 unpack(Function function, 
-						const unsigned int paramCount, 
-						const unsigned paramCountOriginal, 
-						T1 t1, 
-						Tn... tn) noexcept {
-		if constexpr ((paramCount>0) && (paramCount <= paramCountOriginal))	{
-			function(t1, unpack(function, paramCount - 1, paramCountOriginal, tn)...);
-		}
+	constexpr T1 unpack(T1 t1, Tn... ) noexcept {
 		return t1;
 	}	//compiletime function, disapears after compilation
 	typedef struct functionExecutionLog {
@@ -28,13 +22,13 @@ namespace PEParserNamespace {
 			int codeInt;
 		} code;			//64bit alignment
 		template<typename ...T>
-		functionExecutionLog(functionExecutionLog* pfx, T*... pderived) {
-			static_assert(sizeof...(pderived) > 1, "to much Arguments");
-			if constexpr (sizeof...(pderived) = 1)	{
+		functionExecutionLog(functionExecutionLog* pfx, T... pderived) {
+			static_assert(!(sizeof...(pderived) > 1), "to much Arguments");
+			std::cout << sizeof...(pderived)<<"	sadasdfasdfasdfasdfasdfasdfasdf\n";
+			if constexpr (sizeof...(pderived) == 1) {
 				//expand parameterpack
-				unpack(functionExecutionLog, 2, 2, pfx, pderived...);
 				//calculate offset
-				this->failed = pfx - pderived[0]; //&(*variable)
+				this->failed = pfx - unpack(pderived...); //&(*variable)
 			}	else	{
 				//reinterpret_cast<functionExecutionLog*>(this->failed) = *pfx;
 				this->failed = &(pfx->failed);
