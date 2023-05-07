@@ -10,12 +10,16 @@
 //or as macros in präprocessor.h
 namespace PEParserNamespace {
 	template<typename Function, typename T1, typename ...Tn> 
-	constexpr T1 unpack(Function function, const unsigned int paramCount, T1 t1, Tn... tn) noexcept {
-		if constexpr (paramCount>0)	{
-			function(unpack(function, paramCount - 1, tn)...);
+	constexpr T1 unpack(Function function, 
+						const unsigned int paramCount, 
+						const unsigned paramCountOriginal, 
+						T1 t1, 
+						Tn... tn) noexcept {
+		if constexpr ((paramCount>0) && (paramCount <= paramCountOriginal))	{
+			function(t1, unpack(function, paramCount - 1, paramCountOriginal, tn)...);
 		}
 		return t1;
-	}
+	}	//compiletime function, disapears after compilation
 	typedef struct functionExecutionLog {
 		PEParser_OFFSET bool failed;
 		union alignas(void*) Code {
@@ -27,6 +31,8 @@ namespace PEParserNamespace {
 		functionExecutionLog(functionExecutionLog* pfx, T*... pderived) {
 			static_assert(sizeof...(pderived) > 1, "to much Arguments");
 			if constexpr (sizeof...(pderived) = 1)	{
+				//expand parameterpack
+				unpack(functionExecutionLog, 2, 2, pfx, pderived...);
 				//calculate offset
 				this->failed = pfx - pderived[0]; //&(*variable)
 			}	else	{
