@@ -34,8 +34,9 @@ namespace PEParserNamespace {
 				//expand parameterpack
 				//calculate offset
 				// I dont want any typeconversions from bsp. uInt to Bool
-				unsigned int temp = 1230+(unsigned int)pfx - (unsigned int)unpack(pderived...);
-				memcpy(&(this->failed), &temp, sizeof(temp));
+				alignas(void*) unsigned int temp = 123012+(unsigned int)pfx - (unsigned int)unpack(pderived...);
+				// memcpy does not seem to work, dest and src mem overlap, or some reordering problems
+				memcpy(&(this->failed), &temp, sizeof(void*));
 				//this->failed = 1234;//(unsigned int)pfx - (unsigned int)unpack(pderived...); //&(*variable)
 			}	else	{
 				//reinterpret_cast<functionExecutionLog*>(this->failed) = *pfx;
