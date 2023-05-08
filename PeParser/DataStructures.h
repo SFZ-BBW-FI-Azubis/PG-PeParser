@@ -10,7 +10,7 @@
 //as methods in classes/structs (make everything privat and the compiler tells where to replace with new getter / setter)
 //or as macros in präprocessor.h
 namespace PEParserNamespace {
-	template<typename Function, typename T1, typename ...Tn> 
+	template<typename T1, typename ...Tn> 
 	constexpr T1 unpack(T1 t1, Tn... ) noexcept {
 		return t1;
 	}	//compiletime function, disapears after compilation
@@ -22,13 +22,21 @@ namespace PEParserNamespace {
 			int codeInt;
 		} code;			//64bit alignment
 		template<typename ...T>
-		functionExecutionLog(functionExecutionLog* pfx, T... pderived) {
+		functionExecutionLog(functionExecutionLog* pfx, T*... pderived) {
 			static_assert(!(sizeof...(pderived) > 1), "to much Arguments");
 			std::cout << sizeof...(pderived)<<"	sadasdfasdfasdfasdfasdfasdfasdf\n";
+			std::cout << (pfx->code.codeInt)<<"\n";
+			std::cout << pfx<<"\n";
+			std::cout << unpack(pderived...)->ppEParser.Dummy.pEParserFunctionExecutionLog.code.codeInt <<"\n";
+			std::cout << unpack(pderived...)<<"\n";
+			std::cout << (int)pfx - (int)unpack(pderived...)<<"\n";
 			if constexpr (sizeof...(pderived) == 1) {
 				//expand parameterpack
 				//calculate offset
-				this->failed = pfx - unpack(pderived...); //&(*variable)
+				// I dont want any typeconversions from bsp. uInt to Bool
+				unsigned int temp = (unsigned int)pfx - (unsigned int)unpack(pderived...);
+				memcpy(&(this->failed), &temp, sizeof(temp));
+				//this->failed = 1234;//(unsigned int)pfx - (unsigned int)unpack(pderived...); //&(*variable)
 			}	else	{
 				//reinterpret_cast<functionExecutionLog*>(this->failed) = *pfx;
 				this->failed = &(pfx->failed);

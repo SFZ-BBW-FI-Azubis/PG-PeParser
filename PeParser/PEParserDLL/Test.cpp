@@ -10,10 +10,13 @@ int main() {
 	PEParserHandleNoInheritence pEParserHandle = {};
 	openFile(&pEParserHandle);
 	PEParserHandleNoInheritence cfx = PEParserHandleNoInheritence();
+	cfx.ppEParser.Dummy.pEParserFunctionExecutionLog.code.codeInt = 12345;
 	PEParserNamespace::functionExecutionLog fx =
 		PEParserNamespace::functionExecutionLog(
-			reinterpret_cast<PEParserNamespace::functionExecutionLog*>(&(cfx.ppEParser.Dummy.pEParserFunctionExecutionLog))
+			reinterpret_cast<PEParserNamespace::functionExecutionLog*>(&(cfx.ppEParser.Dummy.pEParserFunctionExecutionLog)),
+			&cfx
 		);
+	std::cout << reinterpret_cast<unsigned int>(&(fx.failed)) << "\n";
 
 	//PEParserNamespace::openFile<const wchar_t*, PEParserNamespace::PEParser>({}, {});
 }
