@@ -17,6 +17,8 @@ int main() {
 			&cfx
 		);
 	std::cout << unsigned int(((unsigned char*)&(fx.failed))[1]) << "\n";
+	std::cout << unsigned int(reinterpret_cast<unsigned char*>(&(fx.failed))[1]) << "\n";
+	std::cout << fx.getFailed(&cfx);
 	//std::cout << static_cast<unsigned int*>((fx.failed)) << "\n";
 	std::cout << sizeof(void*) << "\n";
 	//PEParserNamespace::openFile<const wchar_t*, PEParserNamespace::PEParser>({}, {});

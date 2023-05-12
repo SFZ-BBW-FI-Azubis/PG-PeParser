@@ -10,11 +10,7 @@
 //as methods in classes/structs (make everything privat and the compiler tells where to replace with new getter / setter)
 //or as macros in präprocessor.h
 namespace PEParserNamespace {
-	void PEParser_memcpy(volatile void* dest, volatile void* src, size_t n)	{
-		char* csrc = (char*)src;
-		char* cdest = (char*)dest;
-		for (int i = 0; i < n; i++)	cdest[i] = csrc[i];
-	}
+	void PEParser_memcpy(void* dest, void* src, size_t n) noexcept {for (int i = 0; i < n; i++)	((char*)dest)[i] = ((char*)src)[i];}
 	template<typename T1, typename ...Tn> constexpr T1 unpack(T1 t1, Tn... ) noexcept {return t1;}	//compiletime function, disapears after compilation
 	
 	typedef struct functionExecutionLog {
@@ -27,16 +23,7 @@ namespace PEParserNamespace {
 		template<typename ...T>
 		functionExecutionLog(functionExecutionLog* pfx, T*... pderived) {
 			if constexpr (sizeof...(pderived) == 1) {
-				// expand parameterpack
-				// calculate offset
-				alignas(void*) volatile unsigned int temp = 123012+(unsigned int)pfx - (unsigned int)unpack(pderived...);
-				// memcpy does not seem to work maybe because of 
-				//		dest and src mem overlap, 
-				//		or some reordering problems, 
-				//		or optimization, 
-				//		or reinterpretcast back to uint does not what I want,
-				//		or alignas does not what I want
-				// it copies only the lower byte
+				alignas(void*) unsigned int temp = 123012+(unsigned int)pfx - (unsigned int)unpack(pderived...);
 				PEParser_memcpy(&(this->failed), &temp, sizeof(temp));
 			}	else	{
 				//store address of pfx->failed in this->failed
@@ -47,15 +34,15 @@ namespace PEParserNamespace {
 		functionExecutionLog() {};
 		//getter
 		template<typename ...T> bool getFailed(T... derived) {
-			static_assert(sizeof...(derived) > 1, "to much Arguments");
-			if constexpr(sizeof...(derived) = 1)	{
+			static_assert(sizeof...(derived) == 1, "to much Arguments");
+			if constexpr(sizeof...(derived) == 1)	{
 				return
 					reinterpret_cast<functionExecutionLog*>(
-						reinterpret_cast<unsigned char>(unpack(derived))[this->failed]	//when failed = 0 then instance of base is leftmost based inherited and non virtual (base needs to be non virtual anyways)
+						reinterpret_cast<unsigned char*>(unpack(derived...))[this->failed]	//when failed = 0 then instance of base is leftmost based inherited and non virtual (base needs to be non virtual anyways)
 						)->failed;
 			}	else {
 				return reinterpret_cast<functionExecutionLog*>(this->failed)->failed;
-			}
+			}//
 		}
 		functionExecutionLog::Code getCode() {
 			//implement in same way as above
