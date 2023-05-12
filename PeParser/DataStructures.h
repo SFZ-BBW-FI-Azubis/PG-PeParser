@@ -23,7 +23,7 @@ namespace PEParserNamespace {
 		template<typename ...T>
 		functionExecutionLog(functionExecutionLog* pfx, T*... pderived) {
 			if constexpr (sizeof...(pderived) == 1) {
-				alignas(void*) unsigned int temp = 123012+(unsigned int)pfx - (unsigned int)unpack(pderived...);
+				alignas(void*) unsigned int temp = (unsigned int)pfx - (unsigned int)unpack(pderived...);
 				PEParser_memcpy(&(this->failed), &temp, sizeof(temp));
 			}	else	{
 				//store address of pfx->failed in this->failed
@@ -34,8 +34,9 @@ namespace PEParserNamespace {
 		functionExecutionLog() {};
 		//getter
 		template<typename ...T> bool getFailed(T... derived) {
-			static_assert(sizeof...(derived) == 1, "to much Arguments");
+			static_assert(sizeof...(derived) <= 1, "to much Arguments");
 			if constexpr(sizeof...(derived) == 1)	{
+				std::cout << (*unpack(derived...)).ppEParser.Dummy.pEParserFunctionExecutionLog.failed<<"\n";
 				return
 					reinterpret_cast<functionExecutionLog*>(
 						reinterpret_cast<unsigned char*>(unpack(derived...))[this->failed]	//when failed = 0 then instance of base is leftmost based inherited and non virtual (base needs to be non virtual anyways)
