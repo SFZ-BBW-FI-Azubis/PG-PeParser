@@ -37,11 +37,11 @@ namespace PEParserNamespace {
 				//		or reinterpretcast back to uint does not what I want,
 				//		or alignas does not what I want
 				// it copies only the lower byte
-				PEParser_memcpy(&(this->failed), &temp, sizeof(void*));
+				PEParser_memcpy(&(this->failed), &temp, sizeof(temp));
 			}	else	{
 				//store address of pfx->failed in this->failed
 				//reinterpret_cast<functionExecutionLog*>(this->failed) = *pfx;
-				this->failed = &(pfx->failed);
+				PEParser_memcpy(&(this->failed), &(pfx->failed), sizeof((pfx->failed)));
 			}
 		}
 		functionExecutionLog() {};

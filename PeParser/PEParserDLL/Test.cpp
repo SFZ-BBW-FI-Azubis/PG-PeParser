@@ -16,8 +16,7 @@ int main() {
 			reinterpret_cast<PEParserNamespace::functionExecutionLog*>(&(cfx.ppEParser.Dummy.pEParserFunctionExecutionLog)),
 			&cfx
 		);
-	std::cout << reinterpret_cast<unsigned int>(&(fx.failed)) << "\n";
-	std::cout << reinterpret_cast<unsigned int*>((fx.failed)) << "\n";
+	std::cout << unsigned int(((unsigned char*)&(fx.failed))[1]) << "\n";
 	//std::cout << static_cast<unsigned int*>((fx.failed)) << "\n";
 	std::cout << sizeof(void*) << "\n";
 	//PEParserNamespace::openFile<const wchar_t*, PEParserNamespace::PEParser>({}, {});
