@@ -10,10 +10,13 @@
 //as methods in classes/structs (make everything privat and the compiler tells where to replace with new getter / setter)
 //or as macros in präprocessor.h
 namespace PEParserNamespace {
-	template<typename T1, typename ...Tn> 
-	constexpr T1 unpack(T1 t1, Tn... ) noexcept {
-		return t1;
-	}	//compiletime function, disapears after compilation
+	void PEParser_memcpy(volatile void* dest, volatile void* src, size_t n)	{
+		char* csrc = (char*)src;
+		char* cdest = (char*)dest;
+		for (int i = 0; i < n; i++)	cdest[i] = csrc[i];
+	}
+	template<typename T1, typename ...Tn> constexpr T1 unpack(T1 t1, Tn... ) noexcept {return t1;}	//compiletime function, disapears after compilation
+	
 	typedef struct functionExecutionLog {
 		PEParser_OFFSET bool failed;
 		union alignas(void*) Code {
@@ -23,22 +26,20 @@ namespace PEParserNamespace {
 		} code;			//64bit alignment
 		template<typename ...T>
 		functionExecutionLog(functionExecutionLog* pfx, T*... pderived) {
-			static_assert(!(sizeof...(pderived) > 1), "to much Arguments");
-			std::cout << sizeof...(pderived)<<"	sadasdfasdfasdfasdfasdfasdfasdf\n";
-			std::cout << (pfx->code.codeInt)<<"\n";
-			std::cout << pfx<<"\n";
-			std::cout << unpack(pderived...)->ppEParser.Dummy.pEParserFunctionExecutionLog.code.codeInt <<"\n";
-			std::cout << unpack(pderived...)<<"\n";
-			std::cout << (int)pfx - (int)unpack(pderived...)<<"\n";
 			if constexpr (sizeof...(pderived) == 1) {
-				//expand parameterpack
-				//calculate offset
-				// I dont want any typeconversions from bsp. uInt to Bool
-				alignas(void*) unsigned int temp = 123012+(unsigned int)pfx - (unsigned int)unpack(pderived...);
-				// memcpy does not seem to work, dest and src mem overlap, or some reordering problems
-				memcpy(&(this->failed), &temp, sizeof(void*));
-				//this->failed = 1234;//(unsigned int)pfx - (unsigned int)unpack(pderived...); //&(*variable)
+				// expand parameterpack
+				// calculate offset
+				alignas(void*) volatile unsigned int temp = 123012+(unsigned int)pfx - (unsigned int)unpack(pderived...);
+				// memcpy does not seem to work maybe because of 
+				//		dest and src mem overlap, 
+				//		or some reordering problems, 
+				//		or optimization, 
+				//		or reinterpretcast back to uint does not what I want,
+				//		or alignas does not what I want
+				// it copies only the lower byte
+				PEParser_memcpy(&(this->failed), &temp, sizeof(void*));
 			}	else	{
+				//store address of pfx->failed in this->failed
 				//reinterpret_cast<functionExecutionLog*>(this->failed) = *pfx;
 				this->failed = &(pfx->failed);
 			}
@@ -50,13 +51,14 @@ namespace PEParserNamespace {
 			if constexpr(sizeof...(derived) = 1)	{
 				return
 					reinterpret_cast<functionExecutionLog*>(
-						reinterpret_cast<unsigned char>(derived[0])[this->failed]	//when failed = 0 then instance of base is leftmost based inherited and non virtual (base needs to be non virtual anyways)
+						reinterpret_cast<unsigned char>(unpack(derived))[this->failed]	//when failed = 0 then instance of base is leftmost based inherited and non virtual (base needs to be non virtual anyways)
 						)->failed;
 			}	else {
 				return reinterpret_cast<functionExecutionLog*>(this->failed)->failed;
 			}
 		}
 		functionExecutionLog::Code getCode() {
+			//implement in same way as above
 			return reinterpret_cast<functionExecutionLog*>(this->failed)->code;
 		}
 	} PEParserfunctionExecutionLog;
@@ -112,3 +114,12 @@ namespace PEParserNamespace {
 		return;
 	}
 }
+/*
+			static_assert(!(sizeof...(pderived) > 1), "to much Arguments");
+			std::cout << sizeof...(pderived)<<"	sadasdfasdfasdfasdfasdfasdfasdf\n";
+			std::cout << (pfx->code.codeInt)<<"\n";
+			std::cout << pfx<<"\n";
+			std::cout << unpack(pderived...)->ppEParser.Dummy.pEParserFunctionExecutionLog.code.codeInt <<"\n";
+			std::cout << unpack(pderived...)<<"\n";
+			std::cout << (int)pfx - (int)unpack(pderived...)<<"\n";
+*/
