@@ -37,14 +37,11 @@ namespace PEParserNamespace {
 			static_assert(sizeof...(derived) <= 1, "to much Arguments");
 			if constexpr(sizeof...(derived) == 1)	{
 				std::cout <<unpack(derived...)->ppEParser.Dummy.pEParserFunctionExecutionLog.failed<<"\n";
-				//when failed = 0 then instance of base is leftmost based inherited and non virtual (base needs to be non virtual anyways)
-				
-				//(reinterpret_cast<unsigned char*>(unpack(derived...))[this->failed])->failed;
 				return ((functionExecutionLog*)(
 					(void*)((unsigned char*)unpack(derived...) + this->failed)
 					))->failed;
 			}	else {
-				return reinterpret_cast<functionExecutionLog*>(this->failed)->failed;
+				return ((functionExecutionLog*)(void*)this->failed)->failed;
 			}//
 		}
 		functionExecutionLog::Code getCode() {

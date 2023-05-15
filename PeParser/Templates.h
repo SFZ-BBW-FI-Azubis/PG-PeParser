@@ -97,7 +97,7 @@ namespace PEParserNamespace {
 		if constexpr (is_Const_Unsigned_Char_Ptr<T>) {
 			size_t nLength = strlen((const char*)right);
 			return (memcmp((const char*)left, (const char*)right, nLength) == 0);
-		} /*constexprs*/else {
+		} /*constexpr*/else {
 			return (left == right);
 		}
 	}

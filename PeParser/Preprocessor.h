@@ -37,6 +37,12 @@
 												// assuming that class member(visible) get layd out in declaration order
 												// when first member marked with this, member interpreted as offset from base of derived class to real, or adress to real  class
 												// following members are ignored
+#ifdef __cplusplus
+	#define PEP_CONSTEXPR constexpr
+#else
+	#define PEP_CONSTEXPR inline
+#endif
+
 #define EMPTY()
 #define DEFER(id) id EMPTY()
 #define OBSTRUCT(...) __VA_ARGS__ DEFER()()
