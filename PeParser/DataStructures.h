@@ -10,7 +10,10 @@
 //as methods in classes/structs (make everything privat and the compiler tells where to replace with new getter / setter)
 //or as macros in präprocessor.h
 namespace PEParserNamespace {
-	void PEParser_memcpy(void* dest, void* src, size_t n) noexcept {for (int i = 0; i < n; i++)	((char*)dest)[i] = ((char*)src)[i];}
+	void PEParser_memcpy(void* dest, void* src, size_t n) noexcept {
+		for (int i = 0; i < n; i++)	
+			((char*)dest)[i] = ((char*)src)[i];
+	}
 	template<typename T1, typename ...Tn> constexpr T1 unpack(T1 t1, Tn... ) noexcept {return t1;}	//compiletime function, disapears after compilation
 	
 	typedef struct functionExecutionLog {
@@ -28,7 +31,7 @@ namespace PEParserNamespace {
 			}	else	{
 				//store address of pfx->failed in this->failed
 				//reinterpret_cast<functionExecutionLog*>(this->failed) = *pfx;
-				PEParser_memcpy(&(this->failed), &(pfx->failed), sizeof((pfx->failed)));
+				PEParser_memcpy(&(this->failed), pfx, sizeof(void*));
 			}
 		}
 		functionExecutionLog() {};
@@ -41,7 +44,7 @@ namespace PEParserNamespace {
 					(void*)((unsigned char*)unpack(derived...) + this->failed)
 					))->failed;
 			}	else {
-				return ((functionExecutionLog*)(void*)this->failed)->failed;
+				return ((functionExecutionLog*)(void*)(this->failed))->failed;
 			}//
 		}
 		functionExecutionLog::Code getCode() {
