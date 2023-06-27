@@ -11,8 +11,9 @@
 //or as macros in präprocessor.h
 namespace PEParserNamespace {
 	void PEParser_memcpy(void* dest, void* src, size_t n) noexcept {
-		for (int i = 0; i < n; i++)	
+		for (int i = 0; i < sizeof(void*); i++) {
 			((char*)dest)[i] = ((char*)src)[i];
+		}
 	}
 	template<typename T1, typename ...Tn> constexpr T1 unpack(T1 t1, Tn... ) noexcept {return t1;}	//compiletime function, disapears after compilation
 	
@@ -45,10 +46,9 @@ namespace PEParserNamespace {
 					(void*)((unsigned char*)unpack(derived...) + this->failed)
 					))->failed;
 			}	else {
-				unsigned long long address;
-				PEParser_memcpy(&address, &(this->failed), sizeof(void*));
-				return ((functionExecutionLog*)(void*)(address))->failed;
-			}//
+				return ((functionExecutionLog*)&(this->failed))->failed;
+				//return ((functionExecutionLog*)(void*)((unsigned long long*) & (this->failed)))->failed;
+			}
 		}
 		functionExecutionLog::Code getCode() {
 			//implement in same way as above
