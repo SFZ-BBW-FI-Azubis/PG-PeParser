@@ -13,12 +13,13 @@ int main() {
 	cfx.ppEParser.Dummy.pEParserFunctionExecutionLog.code.codeInt = 12345;
 	PEParserNamespace::functionExecutionLog fx =
 		PEParserNamespace::functionExecutionLog(
-			reinterpret_cast<PEParserNamespace::functionExecutionLog*>(&(cfx.ppEParser.Dummy.pEParserFunctionExecutionLog))
-			/*, &cfx*/
+			(PEParserNamespace::functionExecutionLog*)&(cfx.ppEParser.Dummy.pEParserFunctionExecutionLog)
+			// reinterpret_cast<PEParserNamespace::functionExecutionLog*>(&(cfx.ppEParser.Dummy.pEParserFunctionExecutionLog)) //(PEParserNamespace::functionExecutionLog*)(&(cfx.ppEParser.Dummy.pEParserFunctionExecutionLog))
+			, &cfx
 		);
 	std::cout << unsigned int(((unsigned char*)&(fx.failed))[0]) << "\n";
-	std::cout << unsigned int(reinterpret_cast<unsigned char*>(&(fx.failed))[0]) << "\n";
+	std::cout << unsigned int(reinterpret_cast<volatile unsigned char*>(&(fx.failed))[0]) << "\n";
 	cfx.ppEParser.Dummy.pEParserFunctionExecutionLog.failed = true;
-	std::cout << fx.getFailed(/*&cfx*/) << "\n";
+	std::cout << fx.getFailed(&cfx) << "\n";
 	//PEParserNamespace::openFile<const wchar_t*, PEParserNamespace::PEParser>({}, {});
 }

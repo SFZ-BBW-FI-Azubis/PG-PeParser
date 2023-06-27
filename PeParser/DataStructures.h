@@ -17,7 +17,7 @@ namespace PEParserNamespace {
 	template<typename T1, typename ...Tn> constexpr T1 unpack(T1 t1, Tn... ) noexcept {return t1;}	//compiletime function, disapears after compilation
 	
 	typedef struct functionExecutionLog {
-		PEParser_OFFSET bool failed;
+		PEParser_OFFSET bool failed;					// if used as dummy class, this contains either absolut adress or displacement from derived class Structure
 		union alignas(void*) Code {
 			void* codeVoidptr;
 			unsigned long codeUnsignedLong;
@@ -26,12 +26,13 @@ namespace PEParserNamespace {
 		template<typename ...T>
 		functionExecutionLog(functionExecutionLog* pfx, T*... pderived) {
 			if constexpr (sizeof...(pderived) == 1) {
-				alignas(void*) unsigned int temp = (unsigned int)pfx - (unsigned int)unpack(pderived...);
+				alignas(void*) unsigned long long temp = (unsigned long long)pfx - (unsigned long long)unpack(pderived...);
 				PEParser_memcpy(&(this->failed), &temp, sizeof(temp));
 			}	else	{
 				//store address of pfx->failed in this->failed
 				//reinterpret_cast<functionExecutionLog*>(this->failed) = *pfx;
-				PEParser_memcpy(&(this->failed), pfx, sizeof(void*));
+				alignas(void*) unsigned long long temp = (unsigned long long)pfx;
+				PEParser_memcpy(&(this->failed), &temp, sizeof(temp));
 			}
 		}
 		functionExecutionLog() {};
@@ -44,7 +45,9 @@ namespace PEParserNamespace {
 					(void*)((unsigned char*)unpack(derived...) + this->failed)
 					))->failed;
 			}	else {
-				return ((functionExecutionLog*)(void*)(this->failed))->failed;
+				unsigned long long address;
+				PEParser_memcpy(&address, &(this->failed), sizeof(void*));
+				return ((functionExecutionLog*)(void*)(address))->failed;
 			}//
 		}
 		functionExecutionLog::Code getCode() {
