@@ -10,10 +10,11 @@
 //as methods in classes/structs (make everything privat and the compiler tells where to replace with new getter / setter)
 //or as macros in präprocessor.h
 namespace PEParserNamespace {
-	void PEParser_memcpy(void* dest, void* src, size_t n) noexcept {
+	void* PEParser_memcpy(void* dst, void * const src, size_t n) noexcept {
 		for (int i = 0; i < sizeof(void*); i++) {
-			((char*)dest)[i] = ((char*)src)[i];
+			((char*)dst)[i] = ((char*)src)[i];
 		}
+		return dst;
 	}
 	template<typename T1, typename ...Tn> constexpr T1 unpack(T1 t1, Tn... ) noexcept {return t1;}	//compiletime function, disapears after compilation
 	
@@ -24,15 +25,14 @@ namespace PEParserNamespace {
 			unsigned long codeUnsignedLong;
 			int codeInt;
 		} code;			//64bit alignment
+	public:
 		template<typename ...T>
 		functionExecutionLog(functionExecutionLog* pfx, T*... pderived) {
 			if constexpr (sizeof...(pderived) == 1) {
-				alignas(void*) unsigned long long temp = (unsigned long long)pfx - (unsigned long long)unpack(pderived...);
+				unsigned long long temp = (unsigned long long)pfx - (unsigned long long)unpack(pderived...);
 				PEParser_memcpy(&(this->failed), &temp, sizeof(temp));
 			}	else	{
-				//store address of pfx->failed in this->failed
-				//reinterpret_cast<functionExecutionLog*>(this->failed) = *pfx;
-				alignas(void*) unsigned long long temp = (unsigned long long)pfx;
+				unsigned long long temp = (unsigned long long)pfx;
 				PEParser_memcpy(&(this->failed), &temp, sizeof(temp));
 			}
 		}
@@ -41,22 +41,45 @@ namespace PEParserNamespace {
 		template<typename ...T> bool getFailed(T... derived) {
 			static_assert(sizeof...(derived) <= 1, "to much Arguments");
 			if constexpr(sizeof...(derived) == 1)	{
-				std::cout <<unpack(derived...)->ppEParser.Dummy.pEParserFunctionExecutionLog.failed<<"\n";
 				return ((functionExecutionLog*)(
 					(void*)((unsigned char*)unpack(derived...) + this->failed)
 					))->failed;
 			}	else {
-				return ((functionExecutionLog*)&(this->failed))->failed;
-				//return ((functionExecutionLog*)(void*)((unsigned long long*) & (this->failed)))->failed;
+				unsigned long long temp;
+				PEParser_memcpy(&temp, &(this->failed), sizeof(temp));
+				return ((functionExecutionLog*)temp)->failed;
 			}
 		}
-		functionExecutionLog::Code getCode() {
-			//implement in same way as above
-			return reinterpret_cast<functionExecutionLog*>(this->failed)->code;
+		template<typename ...T> bool setFailed(T... derived) {
+			static_assert(sizeof...(derived) <= 1, "to much Arguments");
+			if constexpr (sizeof...(derived) == 1) {
+				return ((functionExecutionLog*)(
+					(void*)((unsigned char*)unpack(derived...) + this->failed)
+					))->failed;
+			}
+			else {
+				unsigned long long temp;
+				PEParser_memcpy(&temp, &(this->failed), sizeof(temp));
+				return ((functionExecutionLog*)temp)->failed;
+			}
+		}
+		template<typename ...T>
+		functionExecutionLog::Code getCode(T... derived) {
+			static_assert(sizeof...(derived) <= 1, "to much Arguments");
+			if constexpr (sizeof...(derived) == 1) {
+				return ((functionExecutionLog*)(
+					(void*)((unsigned char*)unpack(derived...) + this->failed)
+					))->code;
+			}
+			else {
+				unsigned long long temp;
+				PEParser_memcpy(&temp, &(this->failed), sizeof(temp));
+				return ((functionExecutionLog*)temp)->code;
+			}
 		}
 	} PEParserfunctionExecutionLog;
 	typedef struct signatur {
-		const char* Signatur;
+		PEParser_OFFSET const char* Signatur;
 		const char* UnmangledSig;
 	} PEParsersignatur;
 

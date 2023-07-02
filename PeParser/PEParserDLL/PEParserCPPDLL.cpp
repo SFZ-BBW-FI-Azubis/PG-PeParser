@@ -1,8 +1,5 @@
 #define PEPARSER_EXPORT_LIBRARY
 #include "../Declarations.h"
-extern "C" __declspec(dllexport) void __cdecl test() {
-    std::cout << " Hallo Welt\n";
-}
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved) {
     switch (fdwReason) {

@@ -37,8 +37,6 @@ extern "C" __declspec(dllexport) pPEParserHandleNoInheritence* __cdecl openFile(
     ppEParserHandle->ppEParser.Dummy.pEParserSignatur.Signatur = ppEParsersig->Signatur;
     ppEParserHandle->ppEParser.Dummy.pEParserSignatur.UnmangledSig = ppEParsersig->UnmangledSig;
 
-
-    std::cout << ppEParserHandle->hFile << std::endl;
     return &ppEParserHandle;
 
 }       
